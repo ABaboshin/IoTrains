@@ -1,0 +1,44 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "devices": {
+        "type": "array",
+        "items": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": ["train", "turnout"]
+              },
+              "functions": {
+                "type": "array",
+                "items": [
+                  {
+                    "type": "string",
+                    "enum": ["default"]
+                  }
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "type",
+              "functions"
+            ]
+          }
+        ]
+      }
+    },
+    "required": [
+      "id",
+      "devices"
+    ]
+  }
