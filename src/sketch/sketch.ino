@@ -13,7 +13,7 @@ void setup() {
   Serial.begin(115200);
 
   WiFi.mode(WIFI_STA);
-  WiFiMulti.addAP("Zosya5GHZ", "Zosya1312");
+  WiFiMulti.addAP("", "");
 }
 
 void loop() {
@@ -97,7 +97,7 @@ void loop() {
 //   waitFor("AT+CWMODE_CUR\r\n", 1000);
 
 //   waitFor("AT+CWHOSTNAME=\"rp2040\"\r\n", 2000);
-//   waitFor("AT+CWJAP_CUR=\"Zosya5GHZ\",\"Zosya1312\"\r\n", 16000);
+//   waitFor("AT+CWJAP_CUR=\"\",\"\"\r\n", 16000);
 
 //   waitFor("AT+CIFSR\r\n", 5000);
   

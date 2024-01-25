@@ -1,5 +1,5 @@
 FROM ubuntu as build
-RUN apt update && apt install -y cmake gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib git python3 build-essential wget ffmpeg
+RUN apt update && apt install -y cmake gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib git python3 build-essential wget ffmpeg protobuf-compiler
 WORKDIR /
 RUN git clone https://github.com/raspberrypi/pico-sdk.git
 WORKDIR /pico-sdk

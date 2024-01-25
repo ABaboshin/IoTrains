@@ -1,0 +1,320 @@
+// #include "json.hpp"
+
+// struct RoomData {
+//     unsigned int id;
+//     std::string name;
+//     unsigned int maxPlayers;
+//     unsigned int numOfQuestionsInGame;
+//     unsigned int timePerQuestion;
+//     unsigned int isActive;
+// };
+
+// struct GetRoomsResponse {
+//     unsigned int status;
+//     std::vector<RoomData> rooms;
+// };
+
+// using namespace nlohmann::literals;
+
+
+// NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(RoomData, id, name, maxPlayers, numOfQuestionsInGame, timePerQuestion, isActive);
+// NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(GetRoomsResponse, status, rooms);
+
+// // void to_json(nlohmann::json& nlohmann_json_j, const RoomData& nlohmann_json_t)
+// // {
+// //     nlohmann_json_j["id"] = nlohmann_json_t.id;
+// //     nlohmann_json_j["name"] = nlohmann_json_t.name;
+// //     nlohmann_json_j["maxPlayers"] = nlohmann_json_t.maxPlayers;
+// //     nlohmann_json_j["numOfQuestionsInGame"] = nlohmann_json_t.numOfQuestionsInGame;
+// //     nlohmann_json_j["timePerQuestion"] = nlohmann_json_t.timePerQuestion;
+// //     nlohmann_json_j["isActive"] = nlohmann_json_t.isActive;
+// // }
+
+// // void from_json(const nlohmann::json& nlohmann_json_j, RoomData& nlohmann_json_t)
+// // {
+// //   Serial.println(1);
+// //     nlohmann_json_t.id = nlohmann_json_j.at("id");
+// //     Serial.println(2);
+// //     nlohmann_json_t.name = nlohmann_json_j.at("name");
+// //     Serial.println(3);
+// //     nlohmann_json_t.maxPlayers = nlohmann_json_j.at("maxPlayers");
+// //     Serial.println(4);
+// //     nlohmann_json_t.numOfQuestionsInGame = nlohmann_json_j.at("numOfQuestionsInGame");
+// //     Serial.println(5);
+// //     nlohmann_json_t.timePerQuestion = nlohmann_json_j.at("timePerQuestion");
+// //     Serial.println(6);
+// //     nlohmann_json_t.isActive = nlohmann_json_j.at("isActive");
+// //     Serial.println(7);
+// // }
+
+#include "EspMQTTClient.h"
+
+EspMQTTClient client(
+  "", "",
+  "192.168.86.94",  // MQTT Broker server ip
+  "arduino",   // Can be omitted if not needed
+  "!Passw0rd",   // Can be omitted if not needed
+  "arduino",     // Client name that uniquely identify your device
+  1883              // The MQTT port, default to 1883. this line can be omitted
+);
+
+void setup()
+{
+  Serial.begin(115200);
+
+  // Optional functionalities of EspMQTTClient
+  client.enableDebuggingMessages(); // Enable debugging messages sent to serial output
+  // client.enableHTTPWebUpdater(); // Enable the web updater. User and password default to values of MQTTUsername and MQTTPassword. These can be overridded with enableHTTPWebUpdater("user", "password").
+  // client.enableOTA(); // Enable OTA (Over The Air) updates. Password defaults to MQTTPassword. Port is the default OTA port. Can be overridden with enableOTA("password", port).
+  client.enableLastWillMessage("TestClient/lastwill", "I am going offline");  // You can activate the retain flag by setting the third parameter to true
+
+  
+
+  // RoomData r0{1, "abc", 2, 3, 4, 5}, r1{6, "def", 7, 8, 9, 10};
+  //   GetRoomsResponse resp{0, {r0, r1}};
+
+  //   nlohmann::json j{resp};
+  //   Serial.println("json");
+  //   Serial.println(j.dump().c_str());
+  //   Serial.println("json");
+
+}
+
+// This function is called once everything is connected (Wifi and MQTT)
+// WARNING : YOU MUST IMPLEMENT IT IF YOU USE EspMQTTClient
+void onConnectionEstablished()
+{
+  // Subscribe to "mytopic/test" and display received message to Serial
+  client.subscribe("mytopic/test", [](const String & payload) {
+    Serial.println(payload);
+  });
+
+  // Subscribe to "mytopic/wildcardtest/#" and display received message to Serial
+  client.subscribe("mytopic/wildcardtest/#", [](const String & topic, const String & payload) {
+    Serial.println("(From wildcard) topic: " + topic + ", payload: " + payload);
+  });
+
+  // Publish a message to "mytopic/test"
+  client.publish("mytopic/test", "This is a message"); // You can activate the retain flag by setting the third parameter to true
+
+  // Execute delayed instructions
+  client.executeDelayed(5 * 1000, []() {
+    client.publish("mytopic/wildcardtest/test123", "This is a message sent 5 seconds later");
+  });
+}
+
+#include <string>
+
+void loop()
+{
+  client.loop();
+  // RoomData r0{1, "abc", 2, 3, 4, 5};
+  //     nlohmann::json j{r0};
+  //   Serial.println("json");
+  //   auto dump = j.dump();
+  //   Serial.println("json 2");
+  //   Serial.println(dump.c_str());
+  //   Serial.println("json");
+  // Serial.println(1);
+  // // std::string jsondata = "[{\"id\":1,\"isActive\":5,\"maxPlayers\":2,\"name\":\"abc\",\"numOfQuestionsInGame\":3,\"timePerQuestion\":4}]";
+  
+  // Serial.println(2);
+  // auto json = R"({"id":1,"isActive":5,"maxPlayers":2,"name":"abc","numOfQuestionsInGame":3,"timePerQuestion":4})"_json;
+  // Serial.println(3);
+  // RoomData rd;
+  // Serial.println(4);
+  // from_json(json, rd);
+  // Serial.println(5);
+  // Serial.println(rd.id);
+  // Serial.println(rd.name.c_str());
+  // Serial.println(rd.maxPlayers);
+  // Serial.println(rd.numOfQuestionsInGame);
+  // Serial.println(rd.timePerQuestion);
+  // Serial.println(rd.isActive);
+  /*
+  struct RoomData {
+    unsigned int id;
+    std::string name;
+    unsigned int c;
+    unsigned int numOfQuestionsInGame;
+    unsigned int timePerQuestion;
+    unsigned int isActive;
+};
+  */
+  // RoomData r0{1, "abc", 2, 3, 4, 5}, r1{6, "def", 7, 8, 9, 10};
+  //   GetRoomsResponse resp{0, {r0, r1}};
+
+  //   nlohmann::json j{resp};
+  //   Serial.println("json");
+  //   Serial.println(j.dump().c_str());
+  //   Serial.println("json");
+}
+
+// #include <ESP8266WiFi.h>
+// #include <WiFiClient.h>
+// // #include <ESP8266WebServer.h>
+// #include <ESP8266mDNS.h>
+
+// // // audio
+// // #include "AudioFileSourcePROGMEM.h"
+// // #include "AudioGeneratorMP3.h"
+// // #include "AudioOutputI2SNoDAC.h"
+
+// // #include "resource.h"
+
+// // AudioGeneratorMP3 *mp3;
+// // AudioFileSourcePROGMEM *in;
+// // AudioOutputI2SNoDAC *out;
+
+// // // Called when a metadata event occurs (i.e. an ID3 tag, an ICY block, etc.
+// // void MDCallback(void *cbData, const char *type, bool isUnicode, const char *string)
+// // {
+// //   const char *ptr = reinterpret_cast<const char *>(cbData);
+// //   (void) isUnicode; // Punt this ball for now
+// //   // Note that the type and string may be in PROGMEM, so copy them to RAM for printf
+// //   char s1[32], s2[64];
+// //   strncpy_P(s1, type, sizeof(s1));
+// //   s1[sizeof(s1)-1]=0;
+// //   strncpy_P(s2, string, sizeof(s2));
+// //   s2[sizeof(s2)-1]=0;
+// //   Serial.printf("METADATA(%s) '%s' = '%s'\n", ptr, s1, s2);
+// //   Serial.flush();
+// // }
+
+// // // Called when there's a warning or error (like a buffer underflow or decode hiccup)
+// // void StatusCallback(void *cbData, int code, const char *string)
+// // {
+// //   const char *ptr = reinterpret_cast<const char *>(cbData);
+// //   // Note that the string may be in PROGMEM, so copy it to RAM for printf
+// //   char s1[64];
+// //   strncpy_P(s1, string, sizeof(s1));
+// //   s1[sizeof(s1)-1]=0;
+// //   Serial.printf("STATUS(%s) '%d' = '%s'\n", ptr, code, s1);
+// //   Serial.flush();
+// // }
+
+// WiFiClient net;
+
+
+// #include <MQTT.h>
+// MQTTClient client;
+
+// // ESP8266WebServer server(80);
+
+// const int led = 13;
+
+// #define in1 14 // D0
+// #define in2 16 // D5
+
+// void messageReceived(String &topic, String &payload) {
+//   Serial.println("incoming: " + topic + " - " + payload);
+
+//   // Note: Do not use the client in the callback to publish, subscribe or
+//   // unsubscribe as it may cause deadlocks when other things arrive while
+//   // sending and receiving acknowledgments. Instead, change a global variable,
+//   // or push to a queue and handle it in the loop after calling `client.loop()`.
+// }
+
+// void setup()
+// {
+//   pinMode(in1, OUTPUT);
+//   pinMode(in2, OUTPUT);
+//   analogWrite(in1, 0);
+//   analogWrite(in2, 0);
+//   Serial.begin(115200);
+//   Serial.println();
+
+//   WiFi.begin("", "");
+
+//   Serial.print("Connecting");
+//   while (WiFi.status() != WL_CONNECTED)
+//   {
+//     delay(500);
+//     Serial.print(".");
+//   }
+//   Serial.println();
+
+//   Serial.print("Connected, IP address: ");
+//   Serial.println(WiFi.localIP());
+
+//   if (MDNS.begin("esp8266")) { Serial.println("MDNS responder started"); }
+
+//   // server.on("/f", []() {
+//   //   server.send(200, "text/plain", "forward");
+//   //   analogWrite(in1, 200);
+//   //   analogWrite(in2, 0);
+//   // });
+
+//   // server.on("/r", []() {
+//   //   server.send(200, "text/plain", "reverse");
+//   //   analogWrite(in1, 0);
+//   //   analogWrite(in2, 200);
+//   // });
+
+//   // server.on("/s", []() {
+//   //   server.send(200, "text/plain", "stop");
+//   //   analogWrite(in1, 0);
+//   //   analogWrite(in2, 0);
+//   // });
+
+//   // server.begin();
+
+//   // audioLogger = &Serial;
+//   // // RX
+//   // in = new AudioFileSourcePROGMEM(outputmp3, sizeof(outputmp3));
+//   // in->RegisterMetadataCB(MDCallback, (void*)"ICY");
+//   // out = new AudioOutputI2SNoDAC();
+//   // mp3 = new AudioGeneratorMP3();
+//   // mp3->RegisterStatusCB(StatusCallback, (void*)"mp3");
+//   // mp3->begin(in, out);
+
+//   // Serial.print("status ");
+//   // Serial.println(net.status());
+//   // Serial.print("ip ");
+//   // Serial.println(net.localIP());
+
+// while (!net.connect("192.168.86.94", 1883)) {
+//     Serial.print("n.");
+//     delay(1000);
+//   }
+
+//   client.begin("192.168.86.94", net);
+//   client.onMessage(messageReceived);
+
+  
+
+//   while (!client.connect("arduino", "arduino", "!Passw0rd")) {
+//     Serial.print("c.");
+//     delay(1000);
+//   } 
+
+//   client.subscribe("/train1");
+// }
+
+// void loop() {
+//   // server.handleClient();
+//   MDNS.update();
+
+//   client.loop();
+//   if (!client.connected()) {
+//     while (!client.connect("arduino", "arduino", "!Passw0rd")) {
+//       Serial.print(".");
+//       delay(1000);
+//     } 
+//     client.subscribe("/train1");
+//   }
+
+//   // static int lastms = 0;
+
+//   // if (mp3->isRunning()) {
+//   //   if (millis()-lastms > 1000) {
+//   //     lastms = millis();
+//   //     Serial.printf("Running for %d ms...\n", lastms);
+//   //     Serial.flush();
+//   //    }
+//   //   if (!mp3->loop()) mp3->stop();
+//   // } else {
+//   //   // Serial.printf("MP3 done\n");
+//   //   delay(1000);
+//   // }
+// }

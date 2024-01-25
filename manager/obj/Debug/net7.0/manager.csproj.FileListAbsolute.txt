@@ -1,0 +1,17 @@
+/Users/ababoshin/playground/dcc-decoder/manager/bin/Debug/net7.0/manager
+/Users/ababoshin/playground/dcc-decoder/manager/bin/Debug/net7.0/manager.deps.json
+/Users/ababoshin/playground/dcc-decoder/manager/bin/Debug/net7.0/manager.runtimeconfig.json
+/Users/ababoshin/playground/dcc-decoder/manager/bin/Debug/net7.0/manager.dll
+/Users/ababoshin/playground/dcc-decoder/manager/bin/Debug/net7.0/manager.pdb
+/Users/ababoshin/playground/dcc-decoder/manager/bin/Debug/net7.0/M2Mqtt.Net.dll
+/Users/ababoshin/playground/dcc-decoder/manager/obj/Debug/net7.0/manager.csproj.AssemblyReference.cache
+/Users/ababoshin/playground/dcc-decoder/manager/obj/Debug/net7.0/manager.GeneratedMSBuildEditorConfig.editorconfig
+/Users/ababoshin/playground/dcc-decoder/manager/obj/Debug/net7.0/manager.AssemblyInfoInputs.cache
+/Users/ababoshin/playground/dcc-decoder/manager/obj/Debug/net7.0/manager.AssemblyInfo.cs
+/Users/ababoshin/playground/dcc-decoder/manager/obj/Debug/net7.0/manager.csproj.CoreCompileInputs.cache
+/Users/ababoshin/playground/dcc-decoder/manager/obj/Debug/net7.0/manager.csproj.CopyComplete
+/Users/ababoshin/playground/dcc-decoder/manager/obj/Debug/net7.0/manager.dll
+/Users/ababoshin/playground/dcc-decoder/manager/obj/Debug/net7.0/refint/manager.dll
+/Users/ababoshin/playground/dcc-decoder/manager/obj/Debug/net7.0/manager.pdb
+/Users/ababoshin/playground/dcc-decoder/manager/obj/Debug/net7.0/manager.genruntimeconfig.cache
+/Users/ababoshin/playground/dcc-decoder/manager/obj/Debug/net7.0/ref/manager.dll
