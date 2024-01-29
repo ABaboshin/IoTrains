@@ -1,4 +1,5 @@
-#include <ESP8266WiFi.h>
+// #include <ESP8266WiFi.h>
+#include <WiFi.h>
 #include <PubSubClient.h>
 // #include "controlunit.h"
 // #include <WriteBufferFixedSize.h>
@@ -66,8 +67,12 @@ public:
 };
 
 void setup_wifi() {
-
-  delay(10);
+  for (int i = 0; i < 20; i++)
+  {
+    Serial.println("sleep");  
+    delay(500);
+  }
+  
   // We start by connecting to a WiFi network
   Serial.println();
   Serial.print("Connecting to ");
