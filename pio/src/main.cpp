@@ -1,5 +1,8 @@
-// #include <ESP8266WiFi.h>
+#ifdef ESP8266
+#include <ESP8266WiFi.h>
+#else
 #include <WiFi.h>
+#endif
 #include <PubSubClient.h>
 // #include "controlunit.h"
 // #include <WriteBufferFixedSize.h>
@@ -69,10 +72,19 @@ public:
 void setup_wifi() {
   for (int i = 0; i < 20; i++)
   {
-    Serial.println("sleep");  
+    Serial.println("sleep");
     delay(500);
   }
-  
+
+  // Serial.print("MOSI: ");
+  // Serial.println(MOSI);
+  // Serial.print("MISO: ");
+  // Serial.println(MISO);
+  // Serial.print("SCK: ");
+  // Serial.println(SCK);
+  // Serial.print("SS: ");
+  // Serial.println(SS);
+
   // We start by connecting to a WiFi network
   Serial.println();
   Serial.print("Connecting to ");
@@ -137,7 +149,7 @@ void reconnect() {
 void setup() {
   // pinMode(BUILTIN_LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
   Serial.begin(115200);
-//   delay(5000);
+  delay(5000);
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
@@ -168,7 +180,7 @@ void loop() {
     // Serial.println(1);
     // delay(500);
     // railway::ControlUnit<100, 100, 100, 100> cu;
-    
+
     // Serial.println(3);
     // delay(500);
     // // const char * const cuid = "cu1";
@@ -198,7 +210,7 @@ void loop() {
     // device.set_id(dids);
     // Serial.println(12);
     // delay(500);
-    
+
     // device.set_type(railway::DeviceType::Train);
     // Serial.println(13);
     // delay(500);
@@ -216,7 +228,7 @@ void loop() {
 
     // client.publish("outTopic", write_buffer_.get_data(), write_buffer_.get_size());
     // railway_ControlUnit cu = railway_ControlUnit_init_default;
-    
+
     // cu.id = "cu1";
     // cu.device_count = 1;
     // cu.device[0].id = "train1";
@@ -246,6 +258,6 @@ void loop() {
     //     }
     //   }
     // };
-    
+
   }
 }

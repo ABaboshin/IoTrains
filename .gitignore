@@ -11,3 +11,6 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 node_modules
+bin
+obj
+.idea
