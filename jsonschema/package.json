@@ -2,13 +2,9 @@
   "name": "jsonschema",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "generate": "npm install -g quicktype && quicktype --src schema.json --lang c++ --out ../pio/src/schema.hpp --no-boost"
   },
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@apidevtools/json-schema-ref-parser": "^11.1.0"
-  }
+  "license": "ISC"
 }

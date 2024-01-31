@@ -9,6 +9,7 @@
 #include "json.hpp"
 #include <string>
 #include <vector>
+#include "schema.hpp"
 // #include <google/protobuf/util/time_util.h>
 
 // #include "controlunit.pb.h"
