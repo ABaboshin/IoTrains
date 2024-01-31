@@ -44,11 +44,11 @@ namespace nlohmann {
 }
 #endif
 
-namespace quicktype {
+namespace railschema {
     using nlohmann::json;
 
-    #ifndef NLOHMANN_UNTYPED_quicktype_HELPER
-    #define NLOHMANN_UNTYPED_quicktype_HELPER
+    #ifndef NLOHMANN_UNTYPED_railschema_HELPER
+    #define NLOHMANN_UNTYPED_railschema_HELPER
     inline json get_untyped(const json & j, const char * property) {
         if (j.find(property) != j.end()) {
             return j.at(property).get<json>();
@@ -61,8 +61,8 @@ namespace quicktype {
     }
     #endif
 
-    #ifndef NLOHMANN_OPTIONAL_quicktype_HELPER
-    #define NLOHMANN_OPTIONAL_quicktype_HELPER
+    #ifndef NLOHMANN_OPTIONAL_railschema_HELPER
+    #define NLOHMANN_OPTIONAL_railschema_HELPER
     template <typename T>
     inline std::shared_ptr<T> get_heap_optional(const json & j, const char * property) {
         auto it = j.find(property);
@@ -100,15 +100,15 @@ namespace quicktype {
 
         private:
         Function function;
-        std::optional<std::map<std::string, nlohmann::json>> value;
+        std::optional<std::string> value;
 
         public:
         const Function & get_function() const { return function; }
         Function & get_mutable_function() { return function; }
         void set_function(const Function & value) { this->function = value; }
 
-        std::optional<std::map<std::string, nlohmann::json>> get_value() const { return value; }
-        void set_value(std::optional<std::map<std::string, nlohmann::json>> value) { this->value = value; }
+        std::optional<std::string> get_value() const { return value; }
+        void set_value(std::optional<std::string> value) { this->value = value; }
     };
 
     enum class DeviceType : int { TRAIN, TURNOUT };
@@ -134,6 +134,8 @@ namespace quicktype {
         const DeviceType & get_type() const { return type; }
         DeviceType & get_mutable_type() { return type; }
         void set_type(const DeviceType & value) { this->type = value; }
+
+        virtual void ProcessCommand(const Command& command) const {}
     };
 
     class ControlUnit {
@@ -156,7 +158,7 @@ namespace quicktype {
     };
 }
 
-namespace quicktype {
+namespace railschema {
     void from_json(const json & j, Command & x);
     void to_json(json & j, const Command & x);
 
@@ -174,7 +176,7 @@ namespace quicktype {
 
     inline void from_json(const json & j, Command& x) {
         x.set_function(j.at("function").get<Function>());
-        x.set_value(get_stack_optional<std::map<std::string, nlohmann::json>>(j, "value"));
+        x.set_value(get_stack_optional<std::string>(j, "value"));
     }
 
     inline void to_json(json & j, const Command & x) {

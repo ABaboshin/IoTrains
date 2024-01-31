@@ -24,7 +24,8 @@ async function quicktypeJSONSchema(targetLanguage : string | TargetLanguage) {
     inputData,
     lang: targetLanguage,
     rendererOptions: {
-      boost: false
+      boost: false,
+      namespace: "railschema"
     }
   });
 }

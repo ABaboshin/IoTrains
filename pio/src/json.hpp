@@ -65,9 +65,9 @@
     #endif
 #endif
 
-#define NLOHMANN_JSON_VERSION_MAJOR 3
-#define NLOHMANN_JSON_VERSION_MINOR 11
-#define NLOHMANN_JSON_VERSION_PATCH 3
+#define NLOHMANN_JSON_VERSION_MAJOR 3   // NOLINT(modernize-macro-to-enum)
+#define NLOHMANN_JSON_VERSION_MINOR 11  // NOLINT(modernize-macro-to-enum)
+#define NLOHMANN_JSON_VERSION_PATCH 3   // NOLINT(modernize-macro-to-enum)
 
 #ifndef JSON_DIAGNOSTICS
     #define JSON_DIAGNOSTICS 0
@@ -2742,7 +2742,7 @@ JSON_HEDLEY_DIAGNOSTIC_POP
 #define NLOHMANN_JSON_PASTE64(func, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23, v24, v25, v26, v27, v28, v29, v30, v31, v32, v33, v34, v35, v36, v37, v38, v39, v40, v41, v42, v43, v44, v45, v46, v47, v48, v49, v50, v51, v52, v53, v54, v55, v56, v57, v58, v59, v60, v61, v62, v63) NLOHMANN_JSON_PASTE2(func, v1) NLOHMANN_JSON_PASTE63(func, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20, v21, v22, v23, v24, v25, v26, v27, v28, v29, v30, v31, v32, v33, v34, v35, v36, v37, v38, v39, v40, v41, v42, v43, v44, v45, v46, v47, v48, v49, v50, v51, v52, v53, v54, v55, v56, v57, v58, v59, v60, v61, v62, v63)
 
 #define NLOHMANN_JSON_TO(v1) nlohmann_json_j[#v1] = nlohmann_json_t.v1;
-#define NLOHMANN_JSON_FROM(v1) nlohmann_json_j.at(#v1).get_to(nlohmann_json_t.v1); Serial.print("at "); Serial.print(#v1); Serial.println();
+#define NLOHMANN_JSON_FROM(v1) nlohmann_json_j.at(#v1).get_to(nlohmann_json_t.v1);
 #define NLOHMANN_JSON_FROM_WITH_DEFAULT(v1) nlohmann_json_t.v1 = nlohmann_json_j.value(#v1, nlohmann_json_default_obj.v1);
 
 /*!
@@ -7271,9 +7271,9 @@ class json_sax_dom_callback_parser
     /// stack to model hierarchy of values
     std::vector<BasicJsonType*> ref_stack {};
     /// stack to manage which values to keep
-    std::vector<bool> keep_stack {};
+    std::vector<bool> keep_stack {}; // NOLINT(readability-redundant-member-init)
     /// stack to manage which object keys to keep
-    std::vector<bool> key_keep_stack {};
+    std::vector<bool> key_keep_stack {}; // NOLINT(readability-redundant-member-init)
     /// helper to hold the reference for the next object element
     BasicJsonType* object_element = nullptr;
     /// whether a syntax error occurred
@@ -19112,8 +19112,6 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
     {
         for (auto it = this->begin(); it != this->end(); ++it)
         {
-          Serial.println("it");
-          Serial.println(it->first.c_str());
             if (m_compare(it->first, key))
             {
                 return it->second;
@@ -19128,8 +19126,7 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
     T & at(KeyType && key) // NOLINT(cppcoreguidelines-missing-std-forward)
     {
         for (auto it = this->begin(); it != this->end(); ++it)
-        {Serial.println("it");
-          Serial.println(it->first.c_str());
+        {
             if (m_compare(it->first, key))
             {
                 return it->second;
@@ -19143,8 +19140,6 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
     {
         for (auto it = this->begin(); it != this->end(); ++it)
         {
-        Serial.println("it");
-          Serial.println(it->first.c_str());
             if (m_compare(it->first, key))
             {
                 return it->second;
@@ -19160,8 +19155,6 @@ template <class Key, class T, class IgnoredLess = std::less<Key>,
     {
         for (auto it = this->begin(); it != this->end(); ++it)
         {
-        Serial.println("it");
-          Serial.println(it->first.c_str());
             if (m_compare(it->first, key))
             {
                 return it->second;
@@ -21293,7 +21286,6 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/at/
     reference at(const typename object_t::key_type& key)
     {
-    Serial.println("access specified object element with bounds checking 1");
         // at only works for objects
         if (JSON_HEDLEY_UNLIKELY(!is_object()))
         {
@@ -21314,7 +21306,6 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                  detail::is_usable_as_basic_json_key_type<basic_json_t, KeyType>::value, int> = 0>
     reference at(KeyType && key)
     {
-    Serial.println("access specified object element with bounds checking 2");
         // at only works for objects
         if (JSON_HEDLEY_UNLIKELY(!is_object()))
         {
@@ -21333,7 +21324,6 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/at/
     const_reference at(const typename object_t::key_type& key) const
     {
-    Serial.println("access specified object element with bounds checking 3");
         // at only works for objects
         if (JSON_HEDLEY_UNLIKELY(!is_object()))
         {
@@ -21354,20 +21344,15 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                  detail::is_usable_as_basic_json_key_type<basic_json_t, KeyType>::value, int> = 0>
     const_reference at(KeyType && key) const
     {
-    Serial.println("access specified object element with bounds checking 4");
-    Serial.println(key);
         // at only works for objects
         if (JSON_HEDLEY_UNLIKELY(!is_object()))
         {
-        Serial.println("throw 1");
-        Serial.println(type_name());
             JSON_THROW(type_error::create(304, detail::concat("cannot use at() with ", type_name()), this));
         }
 
         auto it = m_data.m_value.object->find(std::forward<KeyType>(key));
         if (it == m_data.m_value.object->end())
         {
-        Serial.println("throw 2");
             JSON_THROW(out_of_range::create(403, detail::concat("key '", string_t(std::forward<KeyType>(key)), "' not found"), this));
         }
         return it->second;
@@ -23963,7 +23948,6 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/at/
     reference at(const json_pointer& ptr)
     {
-    Serial.println("access specified element via JSON Pointer 1");
         return ptr.get_checked(this);
     }
 
@@ -23971,7 +23955,6 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     JSON_HEDLEY_DEPRECATED_FOR(3.11.0, basic_json::json_pointer or nlohmann::json_pointer<basic_json::string_t>) // NOLINT(readability/alt_tokens)
     reference at(const ::nlohmann::json_pointer<BasicJsonType>& ptr)
     {
-    Serial.println("access specified element via JSON Pointer 2");
         return ptr.get_checked(this);
     }
 
@@ -23979,7 +23962,6 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     /// @sa https://json.nlohmann.me/api/basic_json/at/
     const_reference at(const json_pointer& ptr) const
     {
-    Serial.println("access specified element via JSON Pointer 3");
         return ptr.get_checked(this);
     }
 
@@ -23987,7 +23969,6 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
     JSON_HEDLEY_DEPRECATED_FOR(3.11.0, basic_json::json_pointer or nlohmann::json_pointer<basic_json::string_t>) // NOLINT(readability/alt_tokens)
     const_reference at(const ::nlohmann::json_pointer<BasicJsonType>& ptr) const
     {
-    Serial.println("access specified element via JSON Pointer 4");
         return ptr.get_checked(this);
     }
 
@@ -24169,7 +24150,7 @@ class basic_json // NOLINT(cppcoreguidelines-special-member-functions,hicpp-spec
                 auto it = val.m_data.m_value.object->find(member);
 
                 // context-sensitive error message
-                const auto error_msg = (op == "op") ? "operation" : detail::concat("operation '", op, '\'');
+                const auto error_msg = (op == "op") ? "operation" : detail::concat("operation '", op, '\''); // NOLINT(bugprone-unused-local-non-trivial-variable)
 
                 // check if desired value is present
                 if (JSON_HEDLEY_UNLIKELY(it == val.m_data.m_value.object->end()))
