@@ -31,8 +31,11 @@ async function quicktypeJSONSchema(targetLanguage : string | TargetLanguage) {
 }
 
 async function main() {
-  const { lines } = await quicktypeJSONSchema("c++");
-  fs.writeFileSync("../pio/src/schema.hpp", lines.join("\n"));
+  const { lines: linescpp } = await quicktypeJSONSchema("c++");
+  fs.writeFileSync("../pio/src/schema.hpp", linescpp.join("\n"));
+
+  const { lines: linests } = await quicktypeJSONSchema("typescript");
+  fs.writeFileSync("../webui/server/src/schema.ts", linests.join("\n"));
 }
 
 main();
