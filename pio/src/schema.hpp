@@ -4,15 +4,45 @@
 //
 //  Then include this file, and then do
 //
-//     Schema data = nlohmann::json::parse(jsonString);
+//     Function data = nlohmann::json::parse(jsonString);
+//     DeviceType data = nlohmann::json::parse(jsonString);
+//     Command data = nlohmann::json::parse(jsonString);
+//     ControlUnit data = nlohmann::json::parse(jsonString);
 
 #pragma once
 
+#include <optional>
 #include "json.hpp"
 
 #include <optional>
 #include <stdexcept>
 #include <regex>
+
+#ifndef NLOHMANN_OPT_HELPER
+#define NLOHMANN_OPT_HELPER
+namespace nlohmann {
+    template <typename T>
+    struct adl_serializer<std::shared_ptr<T>> {
+        static void to_json(json & j, const std::shared_ptr<T> & opt) {
+            if (!opt) j = nullptr; else j = *opt;
+        }
+
+        static std::shared_ptr<T> from_json(const json & j) {
+            if (j.is_null()) return std::make_shared<T>(); else return std::make_shared<T>(j.get<T>());
+        }
+    };
+    template <typename T>
+    struct adl_serializer<std::optional<T>> {
+        static void to_json(json & j, const std::optional<T> & opt) {
+            if (!opt) j = nullptr; else j = *opt;
+        }
+
+        static std::optional<T> from_json(const json & j) {
+            if (j.is_null()) return std::make_optional<T>(); else return std::make_optional<T>(j.get<T>());
+        }
+    };
+}
+#endif
 
 namespace quicktype {
     using nlohmann::json;
@@ -31,290 +61,183 @@ namespace quicktype {
     }
     #endif
 
-    class Type {
+    #ifndef NLOHMANN_OPTIONAL_quicktype_HELPER
+    #define NLOHMANN_OPTIONAL_quicktype_HELPER
+    template <typename T>
+    inline std::shared_ptr<T> get_heap_optional(const json & j, const char * property) {
+        auto it = j.find(property);
+        if (it != j.end() && !it->is_null()) {
+            return j.at(property).get<std::shared_ptr<T>>();
+        }
+        return std::shared_ptr<T>();
+    }
+
+    template <typename T>
+    inline std::shared_ptr<T> get_heap_optional(const json & j, std::string property) {
+        return get_heap_optional<T>(j, property.data());
+    }
+    template <typename T>
+    inline std::optional<T> get_stack_optional(const json & j, const char * property) {
+        auto it = j.find(property);
+        if (it != j.end() && !it->is_null()) {
+            return j.at(property).get<std::optional<T>>();
+        }
+        return std::optional<T>();
+    }
+
+    template <typename T>
+    inline std::optional<T> get_stack_optional(const json & j, std::string property) {
+        return get_stack_optional<T>(j, property.data());
+    }
+    #endif
+
+    enum class Function : int { MOVE_BACKWARD, MOVE_FORWARD, STOP, TURNOUT_POS1, TURNOUT_POS2 };
+
+    class Command {
         public:
-        Type() = default;
-        virtual ~Type() = default;
+        Command() = default;
+        virtual ~Command() = default;
 
         private:
-        std::string type;
-        std::vector<std::string> type_enum;
+        Function function;
+        std::optional<std::map<std::string, nlohmann::json>> value;
 
         public:
-        const std::string & get_type() const { return type; }
-        std::string & get_mutable_type() { return type; }
-        void set_type(const std::string & value) { this->type = value; }
+        const Function & get_function() const { return function; }
+        Function & get_mutable_function() { return function; }
+        void set_function(const Function & value) { this->function = value; }
 
-        const std::vector<std::string> & get_type_enum() const { return type_enum; }
-        std::vector<std::string> & get_mutable_type_enum() { return type_enum; }
-        void set_type_enum(const std::vector<std::string> & value) { this->type_enum = value; }
+        std::optional<std::map<std::string, nlohmann::json>> get_value() const { return value; }
+        void set_value(std::optional<std::map<std::string, nlohmann::json>> value) { this->value = value; }
     };
 
-    class Functions {
+    enum class DeviceType : int { TRAIN, TURNOUT };
+
+    class Device {
         public:
-        Functions() = default;
-        virtual ~Functions() = default;
+        Device() = default;
+        virtual ~Device() = default;
 
         private:
-        std::string type;
-        std::vector<Type> items;
+        std::optional<std::vector<Function>> functions;
+        std::string id;
+        DeviceType type;
 
         public:
-        const std::string & get_type() const { return type; }
-        std::string & get_mutable_type() { return type; }
-        void set_type(const std::string & value) { this->type = value; }
+        std::optional<std::vector<Function>> get_functions() const { return functions; }
+        void set_functions(std::optional<std::vector<Function>> value) { this->functions = value; }
 
-        const std::vector<Type> & get_items() const { return items; }
-        std::vector<Type> & get_mutable_items() { return items; }
-        void set_items(const std::vector<Type> & value) { this->items = value; }
+        const std::string & get_id() const { return id; }
+        std::string & get_mutable_id() { return id; }
+        void set_id(const std::string & value) { this->id = value; }
+
+        const DeviceType & get_type() const { return type; }
+        DeviceType & get_mutable_type() { return type; }
+        void set_type(const DeviceType & value) { this->type = value; }
     };
 
-    class Id {
+    class ControlUnit {
         public:
-        Id() = default;
-        virtual ~Id() = default;
+        ControlUnit() = default;
+        virtual ~ControlUnit() = default;
 
         private:
-        std::string type;
+        std::vector<Device> devices;
+        std::string id;
 
         public:
-        const std::string & get_type() const { return type; }
-        std::string & get_mutable_type() { return type; }
-        void set_type(const std::string & value) { this->type = value; }
-    };
+        const std::vector<Device> & get_devices() const { return devices; }
+        std::vector<Device> & get_mutable_devices() { return devices; }
+        void set_devices(const std::vector<Device> & value) { this->devices = value; }
 
-    class ItemProperties {
-        public:
-        ItemProperties() = default;
-        virtual ~ItemProperties() = default;
-
-        private:
-        Id id;
-        Type type;
-        Functions functions;
-
-        public:
-        const Id & get_id() const { return id; }
-        Id & get_mutable_id() { return id; }
-        void set_id(const Id & value) { this->id = value; }
-
-        const Type & get_type() const { return type; }
-        Type & get_mutable_type() { return type; }
-        void set_type(const Type & value) { this->type = value; }
-
-        const Functions & get_functions() const { return functions; }
-        Functions & get_mutable_functions() { return functions; }
-        void set_functions(const Functions & value) { this->functions = value; }
-    };
-
-    class Item {
-        public:
-        Item() = default;
-        virtual ~Item() = default;
-
-        private:
-        std::string type;
-        ItemProperties properties;
-        std::vector<std::string> required;
-
-        public:
-        const std::string & get_type() const { return type; }
-        std::string & get_mutable_type() { return type; }
-        void set_type(const std::string & value) { this->type = value; }
-
-        const ItemProperties & get_properties() const { return properties; }
-        ItemProperties & get_mutable_properties() { return properties; }
-        void set_properties(const ItemProperties & value) { this->properties = value; }
-
-        const std::vector<std::string> & get_required() const { return required; }
-        std::vector<std::string> & get_mutable_required() { return required; }
-        void set_required(const std::vector<std::string> & value) { this->required = value; }
-    };
-
-    class Devices {
-        public:
-        Devices() = default;
-        virtual ~Devices() = default;
-
-        private:
-        std::string type;
-        std::vector<Item> items;
-
-        public:
-        const std::string & get_type() const { return type; }
-        std::string & get_mutable_type() { return type; }
-        void set_type(const std::string & value) { this->type = value; }
-
-        const std::vector<Item> & get_items() const { return items; }
-        std::vector<Item> & get_mutable_items() { return items; }
-        void set_items(const std::vector<Item> & value) { this->items = value; }
-    };
-
-    class SchemaProperties {
-        public:
-        SchemaProperties() = default;
-        virtual ~SchemaProperties() = default;
-
-        private:
-        Id id;
-        Devices devices;
-
-        public:
-        const Id & get_id() const { return id; }
-        Id & get_mutable_id() { return id; }
-        void set_id(const Id & value) { this->id = value; }
-
-        const Devices & get_devices() const { return devices; }
-        Devices & get_mutable_devices() { return devices; }
-        void set_devices(const Devices & value) { this->devices = value; }
-    };
-
-    class Schema {
-        public:
-        Schema() = default;
-        virtual ~Schema() = default;
-
-        private:
-        std::string schema;
-        std::string type;
-        SchemaProperties properties;
-        std::vector<std::string> required;
-
-        public:
-        const std::string & get_schema() const { return schema; }
-        std::string & get_mutable_schema() { return schema; }
-        void set_schema(const std::string & value) { this->schema = value; }
-
-        const std::string & get_type() const { return type; }
-        std::string & get_mutable_type() { return type; }
-        void set_type(const std::string & value) { this->type = value; }
-
-        const SchemaProperties & get_properties() const { return properties; }
-        SchemaProperties & get_mutable_properties() { return properties; }
-        void set_properties(const SchemaProperties & value) { this->properties = value; }
-
-        const std::vector<std::string> & get_required() const { return required; }
-        std::vector<std::string> & get_mutable_required() { return required; }
-        void set_required(const std::vector<std::string> & value) { this->required = value; }
+        const std::string & get_id() const { return id; }
+        std::string & get_mutable_id() { return id; }
+        void set_id(const std::string & value) { this->id = value; }
     };
 }
 
 namespace quicktype {
-    void from_json(const json & j, Type & x);
-    void to_json(json & j, const Type & x);
+    void from_json(const json & j, Command & x);
+    void to_json(json & j, const Command & x);
 
-    void from_json(const json & j, Functions & x);
-    void to_json(json & j, const Functions & x);
+    void from_json(const json & j, Device & x);
+    void to_json(json & j, const Device & x);
 
-    void from_json(const json & j, Id & x);
-    void to_json(json & j, const Id & x);
+    void from_json(const json & j, ControlUnit & x);
+    void to_json(json & j, const ControlUnit & x);
 
-    void from_json(const json & j, ItemProperties & x);
-    void to_json(json & j, const ItemProperties & x);
+    void from_json(const json & j, Function & x);
+    void to_json(json & j, const Function & x);
 
-    void from_json(const json & j, Item & x);
-    void to_json(json & j, const Item & x);
+    void from_json(const json & j, DeviceType & x);
+    void to_json(json & j, const DeviceType & x);
 
-    void from_json(const json & j, Devices & x);
-    void to_json(json & j, const Devices & x);
-
-    void from_json(const json & j, SchemaProperties & x);
-    void to_json(json & j, const SchemaProperties & x);
-
-    void from_json(const json & j, Schema & x);
-    void to_json(json & j, const Schema & x);
-
-    inline void from_json(const json & j, Type& x) {
-        x.set_type(j.at("type").get<std::string>());
-        x.set_type_enum(j.at("enum").get<std::vector<std::string>>());
+    inline void from_json(const json & j, Command& x) {
+        x.set_function(j.at("function").get<Function>());
+        x.set_value(get_stack_optional<std::map<std::string, nlohmann::json>>(j, "value"));
     }
 
-    inline void to_json(json & j, const Type & x) {
+    inline void to_json(json & j, const Command & x) {
         j = json::object();
-        j["type"] = x.get_type();
-        j["enum"] = x.get_type_enum();
+        j["function"] = x.get_function();
+        j["value"] = x.get_value();
     }
 
-    inline void from_json(const json & j, Functions& x) {
-        x.set_type(j.at("type").get<std::string>());
-        x.set_items(j.at("items").get<std::vector<Type>>());
+    inline void from_json(const json & j, Device& x) {
+        x.set_functions(get_stack_optional<std::vector<Function>>(j, "functions"));
+        x.set_id(j.at("id").get<std::string>());
+        x.set_type(j.at("type").get<DeviceType>());
     }
 
-    inline void to_json(json & j, const Functions & x) {
+    inline void to_json(json & j, const Device & x) {
         j = json::object();
-        j["type"] = x.get_type();
-        j["items"] = x.get_items();
-    }
-
-    inline void from_json(const json & j, Id& x) {
-        x.set_type(j.at("type").get<std::string>());
-    }
-
-    inline void to_json(json & j, const Id & x) {
-        j = json::object();
-        j["type"] = x.get_type();
-    }
-
-    inline void from_json(const json & j, ItemProperties& x) {
-        x.set_id(j.at("id").get<Id>());
-        x.set_type(j.at("type").get<Type>());
-        x.set_functions(j.at("functions").get<Functions>());
-    }
-
-    inline void to_json(json & j, const ItemProperties & x) {
-        j = json::object();
-        j["id"] = x.get_id();
-        j["type"] = x.get_type();
         j["functions"] = x.get_functions();
-    }
-
-    inline void from_json(const json & j, Item& x) {
-        x.set_type(j.at("type").get<std::string>());
-        x.set_properties(j.at("properties").get<ItemProperties>());
-        x.set_required(j.at("required").get<std::vector<std::string>>());
-    }
-
-    inline void to_json(json & j, const Item & x) {
-        j = json::object();
-        j["type"] = x.get_type();
-        j["properties"] = x.get_properties();
-        j["required"] = x.get_required();
-    }
-
-    inline void from_json(const json & j, Devices& x) {
-        x.set_type(j.at("type").get<std::string>());
-        x.set_items(j.at("items").get<std::vector<Item>>());
-    }
-
-    inline void to_json(json & j, const Devices & x) {
-        j = json::object();
-        j["type"] = x.get_type();
-        j["items"] = x.get_items();
-    }
-
-    inline void from_json(const json & j, SchemaProperties& x) {
-        x.set_id(j.at("id").get<Id>());
-        x.set_devices(j.at("devices").get<Devices>());
-    }
-
-    inline void to_json(json & j, const SchemaProperties & x) {
-        j = json::object();
         j["id"] = x.get_id();
-        j["devices"] = x.get_devices();
-    }
-
-    inline void from_json(const json & j, Schema& x) {
-        x.set_schema(j.at("$schema").get<std::string>());
-        x.set_type(j.at("type").get<std::string>());
-        x.set_properties(j.at("properties").get<SchemaProperties>());
-        x.set_required(j.at("required").get<std::vector<std::string>>());
-    }
-
-    inline void to_json(json & j, const Schema & x) {
-        j = json::object();
-        j["$schema"] = x.get_schema();
         j["type"] = x.get_type();
-        j["properties"] = x.get_properties();
-        j["required"] = x.get_required();
+    }
+
+    inline void from_json(const json & j, ControlUnit& x) {
+        x.set_devices(j.at("devices").get<std::vector<Device>>());
+        x.set_id(j.at("id").get<std::string>());
+    }
+
+    inline void to_json(json & j, const ControlUnit & x) {
+        j = json::object();
+        j["devices"] = x.get_devices();
+        j["id"] = x.get_id();
+    }
+
+    inline void from_json(const json & j, Function & x) {
+        if (j == "move_backward") x = Function::MOVE_BACKWARD;
+        else if (j == "move_forward") x = Function::MOVE_FORWARD;
+        else if (j == "stop") x = Function::STOP;
+        else if (j == "turnout_pos1") x = Function::TURNOUT_POS1;
+        else if (j == "turnout_pos2") x = Function::TURNOUT_POS2;
+        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+    }
+
+    inline void to_json(json & j, const Function & x) {
+        switch (x) {
+            case Function::MOVE_BACKWARD: j = "move_backward"; break;
+            case Function::MOVE_FORWARD: j = "move_forward"; break;
+            case Function::STOP: j = "stop"; break;
+            case Function::TURNOUT_POS1: j = "turnout_pos1"; break;
+            case Function::TURNOUT_POS2: j = "turnout_pos2"; break;
+            default: throw std::runtime_error("This should not happen");
+        }
+    }
+
+    inline void from_json(const json & j, DeviceType & x) {
+        if (j == "train") x = DeviceType::TRAIN;
+        else if (j == "turnout") x = DeviceType::TURNOUT;
+        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+    }
+
+    inline void to_json(json & j, const DeviceType & x) {
+        switch (x) {
+            case DeviceType::TRAIN: j = "train"; break;
+            case DeviceType::TURNOUT: j = "turnout"; break;
+            default: throw std::runtime_error("This should not happen");
+        }
     }
 }

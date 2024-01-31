@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #ifdef ESP8266
 #include <ESP8266WiFi.h>
 #else
@@ -6,7 +7,7 @@
 #include <PubSubClient.h>
 // #include "controlunit.h"
 // #include <WriteBufferFixedSize.h>
-#include "json.hpp"
+// #include "json.hpp"
 #include <string>
 #include <vector>
 #include "schema.hpp"
@@ -26,49 +27,49 @@ unsigned long lastMsg = 0;
 char msg[MSG_BUFFER_SIZE];
 int value = 0;
 
-enum class DeviceType : uint32_t
-{
-  Train = 0,
-  Turnout = 1
-};
+// enum class DeviceType : uint32_t
+// {
+//   Train = 0,
+//   Turnout = 1
+// };
 
-enum class Function : uint32_t
-{
-  Default = 0,
-  Music = 1
-};
+// enum class Function : uint32_t
+// {
+//   Default = 0,
+//   Music = 1
+// };
 
-enum class CommandType : uint32_t
-{
-  Move = 0
-};
+// enum class CommandType : uint32_t
+// {
+//   Move = 0
+// };
 
-class Device
-{
-    public:
-    std::string id;
-    std::vector<Function> functions;
+// class Device
+// {
+//     public:
+//     std::string id;
+//     std::vector<Function> functions;
 
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE(Device, id, functions)
-};
+//     NLOHMANN_DEFINE_TYPE_INTRUSIVE(Device, id, functions)
+// };
 
-class ControlUnit
-{
-    public:
-    std::string id;
-    std::vector<Device> devices;
+// class ControlUnit
+// {
+//     public:
+//     std::string id;
+//     std::vector<Device> devices;
 
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE(ControlUnit, id, devices)
-};
+//     NLOHMANN_DEFINE_TYPE_INTRUSIVE(ControlUnit, id, devices)
+// };
 
-class Command
-{
-public:
-    CommandType commandtype;
-    std::string value;
+// class Command
+// {
+// public:
+//     CommandType commandtype;
+//     std::string value;
 
-    NLOHMANN_DEFINE_TYPE_INTRUSIVE(Command, commandtype, value)
-};
+//     NLOHMANN_DEFINE_TYPE_INTRUSIVE(Command, commandtype, value)
+// };
 
 void setup_wifi() {
   for (int i = 0; i < 20; i++)
@@ -111,16 +112,16 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message arrived [");
   Serial.print(topic);
   Serial.print("] ");
-  std::string s ((const char*)payload, length);
-  Serial.println(s.c_str());
-  nlohmann::json j = nlohmann::json::parse(s);
-  Command cmd;
-  from_json(j, cmd);
-  Serial.print("Command ");
-  Serial.print((int)cmd.commandtype);
-  Serial.print(" value ");
-  Serial.print(cmd.value.c_str());
-  Serial.println();
+  // std::string s ((const char*)payload, length);
+  // Serial.println(s.c_str());
+  // nlohmann::json j = nlohmann::json::parse(s);
+  // Command cmd;
+  // from_json(j, cmd);
+  // Serial.print("Command ");
+  // Serial.print((int)cmd.commandtype);
+  // Serial.print(" value ");
+  // Serial.print(cmd.value.c_str());
+  // Serial.println();
 }
 
 void reconnect() {
@@ -167,17 +168,17 @@ void loop() {
   if (now - lastMsg > 2000) {
     lastMsg = now;
 
-    ControlUnit cu;
-    cu.id = "cu1";
-    Device d;
-    d.id = "d1";
-    d.functions.push_back(Function::Default);
-    cu.devices.push_back(d);
+    // ControlUnit cu;
+    // cu.id = "cu1";
+    // Device d;
+    // d.id = "d1";
+    // d.functions.push_back(Function::Default);
+    // cu.devices.push_back(d);
 
-    nlohmann::json j;
-    to_json(j, cu);
-    Serial.println(j.dump().c_str());
-    client.publish("outTopic", j.dump().c_str());
+    // nlohmann::json j;
+    // to_json(j, cu);
+    // Serial.println(j.dump().c_str());
+    // client.publish("outTopic", j.dump().c_str());
     // Serial.println(1);
     // delay(500);
     // railway::ControlUnit<100, 100, 100, 100> cu;
