@@ -20,5 +20,6 @@
   "required": [
     "id",
     "type"
-  ]
+  ],
+  "processing": true
 }

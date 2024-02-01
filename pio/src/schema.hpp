@@ -134,6 +134,8 @@ namespace railschema {
         const DeviceType & get_type() const { return type; }
         DeviceType & get_mutable_type() { return type; }
         void set_type(const DeviceType & value) { this->type = value; }
+
+        virtual void ProcessCommand(const Command& command) const {}
     };
 
     class ControlUnit {
