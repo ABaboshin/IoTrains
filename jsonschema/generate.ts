@@ -35,7 +35,7 @@ async function main() {
   fs.writeFileSync("../pio/src/schema.hpp", linescpp.join("\n"));
 
   const { lines: linests } = await quicktypeJSONSchema("typescript");
-  fs.writeFileSync("../webui/server/src/schema.ts", linests.join("\n"));
+  fs.writeFileSync("../webui/common/index.ts", linests.join("\n"));
 }
 
 main();

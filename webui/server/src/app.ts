@@ -1,7 +1,7 @@
 import path from "path";
 import express, { NextFunction, Request, RequestHandler, Response } from "express";
 import cors from "cors";
-
+import { Command, Convert } from "common";
 
 const PORT = process.env.PORT || 3001;
 
@@ -11,11 +11,12 @@ app.use(cors());
 app.use(express.json() as RequestHandler);
 
 app.get("/api", (req, res) => {
-  res.json({ message: "Hello from server!" });
+  const command: Command = Convert.toCommand(`{"function": "stop"}`);
+  res.json(command);
 });
 
 app.use((req: Request, res: Response, next: NextFunction) => {
-  if (/(.ico|.js|.css|.jpg|.png|.map|.svg)$/i.test(req.path)) {
+  if (/(.ico|.js|.css|.jpg|.png|.map|.svg|.json)$/i.test(req.path)) {
     next();
   } else {
     res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');

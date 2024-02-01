@@ -1,0 +1,11 @@
+{
+  "name": "webui",
+  "private": true,
+  "workspaces": [
+    "common"
+  ],
+  "scripts": {
+    "build": "cd common && npm run build && cd .. && npm install && cd client && npm run build && cd .. && cd server && npm run build",
+    "start": "cd server && npm run start"
+  }
+}
