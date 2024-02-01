@@ -91,19 +91,14 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
 async function quicktypeJSONSchema(targetLanguage : string | TargetLanguage) {
   const schemaInput = new JSONSchemaInput(new FetchingJSONSchemaStore(), [processAttributeProducer]);
 
-  // await schemaInput.addSource({ name: "Function", schema: await readFromFileOrURL("./function.json") });
-  // await schemaInput.addSource({ name: "DeviceType", schema: await readFromFileOrURL("./devicetype.json") });
-  // // await schemaInput.addSource({ name: "Device", schema: await readFromFileOrURL("./device.json") });
-  // await schemaInput.addSource({ name: "Command", schema: await readFromFileOrURL("./command.json") });
-  // await schemaInput.addSource({ name: "ControlUnit", schema: await readFromFileOrURL("./controlunit.json") });
-
-  await schemaInput.addSource({ "name": "ControlUnit", schema: await readFromFileOrURL("./schema.json") });
-  await schemaInput.addSource({ "name": "Command", schema: await readFromFileOrURL("./schema.json") });
-  await schemaInput.addSource({ "name": "Device", schema: await readFromFileOrURL("./schema.json") });
+  await schemaInput.addSource({ name: "Function", schema: await readFromFileOrURL("./function.json") });
+  await schemaInput.addSource({ name: "DeviceType", schema: await readFromFileOrURL("./devicetype.json") });
+  // await schemaInput.addSource({ name: "Device", schema: await readFromFileOrURL("./device.json") });
+  await schemaInput.addSource({ name: "Command", schema: await readFromFileOrURL("./command.json") });
+  await schemaInput.addSource({ name: "ControlUnit", schema: await readFromFileOrURL("./controlunit.json") });
 
   const inputData = new InputData();
   inputData.addInput(schemaInput);
-  // await inputData.addSource("schema", await readFromFileOrURL("./schema.json"), () => schemaInput);
 
   return await quicktype({
     inputData,
