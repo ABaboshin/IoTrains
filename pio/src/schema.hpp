@@ -4,10 +4,9 @@
 //
 //  Then include this file, and then do
 //
-//     Function data = nlohmann::json::parse(jsonString);
-//     DeviceType data = nlohmann::json::parse(jsonString);
-//     Command data = nlohmann::json::parse(jsonString);
 //     ControlUnit data = nlohmann::json::parse(jsonString);
+//     Command data = nlohmann::json::parse(jsonString);
+//     Device data = nlohmann::json::parse(jsonString);
 
 #pragma once
 
@@ -93,30 +92,12 @@ namespace railschema {
 
     enum class Function : int { MOVE_BACKWARD, MOVE_FORWARD, STOP, TURNOUT_POS1, TURNOUT_POS2 };
 
-    class Command {
-        public:
-        Command() = default;
-        virtual ~Command() = default;
-
-        private:
-        Function function;
-        std::optional<std::string> value;
-
-        public:
-        const Function & get_function() const { return function; }
-        Function & get_mutable_function() { return function; }
-        void set_function(const Function & value) { this->function = value; }
-
-        std::optional<std::string> get_value() const { return value; }
-        void set_value(std::optional<std::string> value) { this->value = value; }
-    };
-
     enum class DeviceType : int { TRAIN, TURNOUT };
 
-    class Device {
+    class ControlUnitDevice {
         public:
-        Device() = default;
-        virtual ~Device() = default;
+        ControlUnitDevice() = default;
+        virtual ~ControlUnitDevice() = default;
 
         private:
         std::optional<std::vector<Function>> functions;
@@ -144,13 +125,101 @@ namespace railschema {
         virtual ~ControlUnit() = default;
 
         private:
-        std::vector<Device> devices;
+        std::vector<ControlUnitDevice> devices;
         std::string id;
 
         public:
-        const std::vector<Device> & get_devices() const { return devices; }
-        std::vector<Device> & get_mutable_devices() { return devices; }
-        void set_devices(const std::vector<Device> & value) { this->devices = value; }
+        const std::vector<ControlUnitDevice> & get_devices() const { return devices; }
+        std::vector<ControlUnitDevice> & get_mutable_devices() { return devices; }
+        void set_devices(const std::vector<ControlUnitDevice> & value) { this->devices = value; }
+
+        const std::string & get_id() const { return id; }
+        std::string & get_mutable_id() { return id; }
+        void set_id(const std::string & value) { this->id = value; }
+    };
+
+    class CommandDevice {
+        public:
+        CommandDevice() = default;
+        virtual ~CommandDevice() = default;
+
+        private:
+        std::optional<std::vector<Function>> functions;
+        std::string id;
+        DeviceType type;
+
+        public:
+        std::optional<std::vector<Function>> get_functions() const { return functions; }
+        void set_functions(std::optional<std::vector<Function>> value) { this->functions = value; }
+
+        const std::string & get_id() const { return id; }
+        std::string & get_mutable_id() { return id; }
+        void set_id(const std::string & value) { this->id = value; }
+
+        const DeviceType & get_type() const { return type; }
+        DeviceType & get_mutable_type() { return type; }
+        void set_type(const DeviceType & value) { this->type = value; }
+
+        virtual void ProcessCommand(const Command& command) const {}
+    };
+
+    class Command {
+        public:
+        Command() = default;
+        virtual ~Command() = default;
+
+        private:
+        std::vector<CommandDevice> devices;
+        std::string id;
+
+        public:
+        const std::vector<CommandDevice> & get_devices() const { return devices; }
+        std::vector<CommandDevice> & get_mutable_devices() { return devices; }
+        void set_devices(const std::vector<CommandDevice> & value) { this->devices = value; }
+
+        const std::string & get_id() const { return id; }
+        std::string & get_mutable_id() { return id; }
+        void set_id(const std::string & value) { this->id = value; }
+    };
+
+    class DeviceDevice {
+        public:
+        DeviceDevice() = default;
+        virtual ~DeviceDevice() = default;
+
+        private:
+        std::optional<std::vector<Function>> functions;
+        std::string id;
+        DeviceType type;
+
+        public:
+        std::optional<std::vector<Function>> get_functions() const { return functions; }
+        void set_functions(std::optional<std::vector<Function>> value) { this->functions = value; }
+
+        const std::string & get_id() const { return id; }
+        std::string & get_mutable_id() { return id; }
+        void set_id(const std::string & value) { this->id = value; }
+
+        const DeviceType & get_type() const { return type; }
+        DeviceType & get_mutable_type() { return type; }
+        void set_type(const DeviceType & value) { this->type = value; }
+
+        virtual void ProcessCommand(const Command& command) const {}
+    };
+
+    class Device {
+        public:
+        Device() = default;
+        virtual ~Device() = default;
+
+        private:
+        std::vector<DeviceDevice> devices;
+        std::string id;
+
+        public:
+        const std::vector<DeviceDevice> & get_devices() const { return devices; }
+        std::vector<DeviceDevice> & get_mutable_devices() { return devices; }
+        void set_devices(const std::vector<DeviceDevice> & value) { this->devices = value; }
 
         const std::string & get_id() const { return id; }
         std::string & get_mutable_id() { return id; }
@@ -159,14 +228,23 @@ namespace railschema {
 }
 
 namespace railschema {
-    void from_json(const json & j, Command & x);
-    void to_json(json & j, const Command & x);
-
-    void from_json(const json & j, Device & x);
-    void to_json(json & j, const Device & x);
+    void from_json(const json & j, ControlUnitDevice & x);
+    void to_json(json & j, const ControlUnitDevice & x);
 
     void from_json(const json & j, ControlUnit & x);
     void to_json(json & j, const ControlUnit & x);
+
+    void from_json(const json & j, CommandDevice & x);
+    void to_json(json & j, const CommandDevice & x);
+
+    void from_json(const json & j, Command & x);
+    void to_json(json & j, const Command & x);
+
+    void from_json(const json & j, DeviceDevice & x);
+    void to_json(json & j, const DeviceDevice & x);
+
+    void from_json(const json & j, Device & x);
+    void to_json(json & j, const Device & x);
 
     void from_json(const json & j, Function & x);
     void to_json(json & j, const Function & x);
@@ -174,24 +252,13 @@ namespace railschema {
     void from_json(const json & j, DeviceType & x);
     void to_json(json & j, const DeviceType & x);
 
-    inline void from_json(const json & j, Command& x) {
-        x.set_function(j.at("function").get<Function>());
-        x.set_value(get_stack_optional<std::string>(j, "value"));
-    }
-
-    inline void to_json(json & j, const Command & x) {
-        j = json::object();
-        j["function"] = x.get_function();
-        j["value"] = x.get_value();
-    }
-
-    inline void from_json(const json & j, Device& x) {
+    inline void from_json(const json & j, ControlUnitDevice& x) {
         x.set_functions(get_stack_optional<std::vector<Function>>(j, "functions"));
         x.set_id(j.at("id").get<std::string>());
         x.set_type(j.at("type").get<DeviceType>());
     }
 
-    inline void to_json(json & j, const Device & x) {
+    inline void to_json(json & j, const ControlUnitDevice & x) {
         j = json::object();
         j["functions"] = x.get_functions();
         j["id"] = x.get_id();
@@ -199,11 +266,59 @@ namespace railschema {
     }
 
     inline void from_json(const json & j, ControlUnit& x) {
-        x.set_devices(j.at("devices").get<std::vector<Device>>());
+        x.set_devices(j.at("devices").get<std::vector<ControlUnitDevice>>());
         x.set_id(j.at("id").get<std::string>());
     }
 
     inline void to_json(json & j, const ControlUnit & x) {
+        j = json::object();
+        j["devices"] = x.get_devices();
+        j["id"] = x.get_id();
+    }
+
+    inline void from_json(const json & j, CommandDevice& x) {
+        x.set_functions(get_stack_optional<std::vector<Function>>(j, "functions"));
+        x.set_id(j.at("id").get<std::string>());
+        x.set_type(j.at("type").get<DeviceType>());
+    }
+
+    inline void to_json(json & j, const CommandDevice & x) {
+        j = json::object();
+        j["functions"] = x.get_functions();
+        j["id"] = x.get_id();
+        j["type"] = x.get_type();
+    }
+
+    inline void from_json(const json & j, Command& x) {
+        x.set_devices(j.at("devices").get<std::vector<CommandDevice>>());
+        x.set_id(j.at("id").get<std::string>());
+    }
+
+    inline void to_json(json & j, const Command & x) {
+        j = json::object();
+        j["devices"] = x.get_devices();
+        j["id"] = x.get_id();
+    }
+
+    inline void from_json(const json & j, DeviceDevice& x) {
+        x.set_functions(get_stack_optional<std::vector<Function>>(j, "functions"));
+        x.set_id(j.at("id").get<std::string>());
+        x.set_type(j.at("type").get<DeviceType>());
+    }
+
+    inline void to_json(json & j, const DeviceDevice & x) {
+        j = json::object();
+        j["functions"] = x.get_functions();
+        j["id"] = x.get_id();
+        j["type"] = x.get_type();
+    }
+
+    inline void from_json(const json & j, Device& x) {
+        x.set_devices(j.at("devices").get<std::vector<DeviceDevice>>());
+        x.set_id(j.at("id").get<std::string>());
+    }
+
+    inline void to_json(json & j, const Device & x) {
         j = json::object();
         j["devices"] = x.get_devices();
         j["id"] = x.get_id();

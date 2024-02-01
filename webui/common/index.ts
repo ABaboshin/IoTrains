@@ -1,18 +1,24 @@
 // To parse this data:
 //
-//   import { Convert, Function, DeviceType, Command, ControlUnit } from "./file";
+//   import { Convert, ControlUnit, Command, Device } from "./file";
 //
-//   const function = Convert.toFunction(json);
-//   const deviceType = Convert.toDeviceType(json);
-//   const command = Convert.toCommand(json);
 //   const controlUnit = Convert.toControlUnit(json);
+//   const command = Convert.toCommand(json);
+//   const device = Convert.toDevice(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
 
-export interface Command {
-    function: Function;
-    value?:   string;
+export interface ControlUnit {
+    devices: ControlUnitDevice[];
+    id:      string;
+    [property: string]: any;
+}
+
+export interface ControlUnitDevice {
+    functions?: Function[];
+    id:         string;
+    type:       DeviceType;
     [property: string]: any;
 }
 
@@ -24,41 +30,46 @@ export enum Function {
     TurnoutPos2 = "turnout_pos2",
 }
 
-export interface ControlUnit {
-    devices: Device[];
+export enum DeviceType {
+    Train = "train",
+    Turnout = "turnout",
+}
+
+export interface Command {
+    devices: CommandDevice[];
     id:      string;
     [property: string]: any;
 }
 
-export interface Device {
+export interface CommandDevice {
     functions?: Function[];
     id:         string;
     type:       DeviceType;
     [property: string]: any;
 }
 
-export enum DeviceType {
-    Train = "train",
-    Turnout = "turnout",
+export interface Device {
+    devices: DeviceDevice[];
+    id:      string;
+    [property: string]: any;
+}
+
+export interface DeviceDevice {
+    functions?: Function[];
+    id:         string;
+    type:       DeviceType;
+    [property: string]: any;
 }
 
 // Converts JSON strings to/from your types
 // and asserts the results of JSON.parse at runtime
 export class Convert {
-    public static toFunction(json: string): Function {
-        return cast(JSON.parse(json), r("Function"));
+    public static toControlUnit(json: string): ControlUnit {
+        return cast(JSON.parse(json), r("ControlUnit"));
     }
 
-    public static functionToJson(value: Function): string {
-        return JSON.stringify(uncast(value, r("Function")), null, 2);
-    }
-
-    public static toDeviceType(json: string): DeviceType {
-        return cast(JSON.parse(json), r("DeviceType"));
-    }
-
-    public static deviceTypeToJson(value: DeviceType): string {
-        return JSON.stringify(uncast(value, r("DeviceType")), null, 2);
+    public static controlUnitToJson(value: ControlUnit): string {
+        return JSON.stringify(uncast(value, r("ControlUnit")), null, 2);
     }
 
     public static toCommand(json: string): Command {
@@ -69,12 +80,12 @@ export class Convert {
         return JSON.stringify(uncast(value, r("Command")), null, 2);
     }
 
-    public static toControlUnit(json: string): ControlUnit {
-        return cast(JSON.parse(json), r("ControlUnit"));
+    public static toDevice(json: string): Device {
+        return cast(JSON.parse(json), r("Device"));
     }
 
-    public static controlUnitToJson(value: ControlUnit): string {
-        return JSON.stringify(uncast(value, r("ControlUnit")), null, 2);
+    public static deviceToJson(value: Device): string {
+        return JSON.stringify(uncast(value, r("Device")), null, 2);
     }
 }
 
@@ -231,15 +242,29 @@ function r(name: string) {
 }
 
 const typeMap: any = {
-    "Command": o([
-        { json: "function", js: "function", typ: r("Function") },
-        { json: "value", js: "value", typ: u(undefined, "") },
-    ], "any"),
     "ControlUnit": o([
-        { json: "devices", js: "devices", typ: a(r("Device")) },
+        { json: "devices", js: "devices", typ: a(r("ControlUnitDevice")) },
         { json: "id", js: "id", typ: "" },
     ], "any"),
+    "ControlUnitDevice": o([
+        { json: "functions", js: "functions", typ: u(undefined, a(r("Function"))) },
+        { json: "id", js: "id", typ: "" },
+        { json: "type", js: "type", typ: r("DeviceType") },
+    ], "any"),
+    "Command": o([
+        { json: "devices", js: "devices", typ: a(r("CommandDevice")) },
+        { json: "id", js: "id", typ: "" },
+    ], "any"),
+    "CommandDevice": o([
+        { json: "functions", js: "functions", typ: u(undefined, a(r("Function"))) },
+        { json: "id", js: "id", typ: "" },
+        { json: "type", js: "type", typ: r("DeviceType") },
+    ], "any"),
     "Device": o([
+        { json: "devices", js: "devices", typ: a(r("DeviceDevice")) },
+        { json: "id", js: "id", typ: "" },
+    ], "any"),
+    "DeviceDevice": o([
         { json: "functions", js: "functions", typ: u(undefined, a(r("Function"))) },
         { json: "id", js: "id", typ: "" },
         { json: "type", js: "type", typ: r("DeviceType") },
