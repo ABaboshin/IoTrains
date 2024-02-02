@@ -1,11 +1,11 @@
 import path from "path";
 import express, { NextFunction, Request, RequestHandler, Response } from "express";
 import cors from "cors";
-import { Command, Convert } from "common";
+import { Command, Convert, ControlUnit, Device } from "common";
 import { connect } from "mqtt";
 
 const PORT = process.env.PORT || 3001;
-const client = connect("mqtt://localhost", { username: "manager", password: "!manager"});
+const client = connect("mqtt://localhost", { username: "manager", password: "!manager" });
 
 client.on("connect", (x) => {
   console.log("connected");
@@ -18,62 +18,15 @@ client.on("connect", (x) => {
   });
 });
 
-// client.on("error", (x) => {
-//   console.log(`${x}`);
-// });
-
-// client.on("close", () => {
-//   console.log("close");
-// });
+let units = new Map<string, ControlUnit>();
 
 client.on("message", (topic, message) => {
-  // message is Buffer
-  console.log(message.toString());
+  const cu = Convert.toControlUnit(message.toString());
+
+  units.set(cu.id, cu);
+
+  console.log(JSON.stringify(cu));
 });
-
-  // client.on("connect", (x) => {
-  //   console.log(`connect`);
-  // });
-
-  // client.on("message", (x) => {
-  //   console.log(`message`);
-  // });
-
-  // client.on("packetsend", (x) => {
-  //   console.log(`packetsend ${JSON.stringify(x)}`);
-  // });
-
-  // client.on("packetreceive", (x) => {
-  //   console.log(`packetreceive`);
-  // });
-
-  // client.on("disconnect", (x) => {
-  //   console.log(`disconnect`);
-  // });
-
-  // client.on("error", (x) => {
-  //   console.log(`${x}`);
-  // });
-
-  // client.on("close", () => {
-  //   console.log(`close`);
-  // });
-
-  // client.on("end", () => {
-  //   console.log(`end`);
-  // });
-
-  // client.on("reconnect", () => {
-  //   console.log(`reconnect`);
-  // });
-
-  // client.on("offline", () => {
-  //   console.log(`offline`);
-  // });
-
-  // client.on("outgoingEmpty", () => {
-  //   console.log(`outgoingEmpty`);
-  // });
 
 const app = express();
 
@@ -83,6 +36,11 @@ app.use(express.json() as RequestHandler);
 app.get("/api", (req, res) => {
   const command: Command = Convert.toCommand(`{"function": "stop"}`);
   res.json(command);
+});
+
+app.get("/api/v1/device", (req, res) => {
+  const devices = Array.from(units.entries()).map((x, i, ar) => x[1].devices).flat(1);
+  res.json(devices);
 });
 
 app.use((req: Request, res: Response, next: NextFunction) => {

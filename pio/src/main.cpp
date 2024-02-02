@@ -4,7 +4,8 @@
 
 ControlUnit cu;
 
-void setup() {
+void setup()
+{
   Serial.begin(115200);
   for (int i = 0; i < 10; i++)
   {
@@ -16,9 +17,14 @@ void setup() {
 
   cu.set_id("cu1");
 
+  std::vector<railschema::Function> functions;
+  functions.push_back(railschema::Function::MOVE_BACKWARD);
+  functions.push_back(railschema::Function::MOVE_FORWARD);
+  functions.push_back(railschema::Function::STOP);
   std::vector<railschema::Device> devices;
   Train t;
   t.set_id("train1");
+  t.set_functions(functions);
   devices.push_back(t);
 
   cu.set_devices(devices);
@@ -26,6 +32,7 @@ void setup() {
   cu.Setup();
 }
 
-void loop() {
-    cu.Loop();
+void loop()
+{
+  cu.Loop();
 }
