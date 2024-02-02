@@ -33,14 +33,17 @@ const app = express();
 app.use(cors());
 app.use(express.json() as RequestHandler);
 
-app.get("/api", (req, res) => {
-  const command: Command = Convert.toCommand(`{"function": "stop"}`);
-  res.json(command);
-});
-
 app.get("/api/v1/device", (req, res) => {
   const devices = Array.from(units.entries()).map((x, i, ar) => x[1].devices).flat(1);
   res.json(devices);
+});
+
+app.put("/api/v1/device/:id", (req, res) => {
+  const command: Command = req.body as Command;
+
+  client.publish(req.params.id, JSON.stringify(command));
+
+  res.json({});
 });
 
 app.use((req: Request, res: Response, next: NextFunction) => {

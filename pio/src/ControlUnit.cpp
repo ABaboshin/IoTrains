@@ -84,6 +84,7 @@ void ControlUnit::callback(char *topic, byte *payload, unsigned int length)
   {
     if (i->get_id() == topic)
     {
+      Serial.println("process");
       (*i).ProcessCommand(cmd);
       break;
     }
