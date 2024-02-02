@@ -1,46 +1,9 @@
 import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Device, DeviceType } from 'common';
 import { useEffect, useState } from 'react';
 import { TrainControl } from './TrainControl';
-
-interface HeadCell {
-  id: keyof Device;
-  label: string;
-}
-
-const headCells: readonly HeadCell[] = [
-  {
-    id: 'id',
-    label: 'Name',
-  },
-];
-
-function EnhancedTableHead() {
-  return (
-    <TableHead>
-      <TableRow>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            scope="row"
-          >
-            {headCell.label}
-          </TableCell>
-        ))}
-        <TableCell>
-          Action
-        </TableCell>
-      </TableRow>
-    </TableHead>
-  );
-}
+import { Divider } from '@mui/material';
 
 export default function DevicesList() {
   async function fetchApi() {
@@ -71,40 +34,17 @@ export default function DevicesList() {
   return (
     <Box sx={{ width: '90%' }}>
       <Paper sx={{ width: '90%', mb: 2 }}>
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-          >
-            <EnhancedTableHead
-            />
-            <TableBody>
-              {rows && rows.map((row, index) => {
-                const labelId = `enhanced-table-checkbox-${index}`;
-
-                return (
-                  <TableRow
-                    key={row.id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                    >
-                      {row.id}
-                    </TableCell>
-                    <TableCell
-                      component="th"
-                      scope="row">{
-                        row.type === DeviceType.Train && <TrainControl train={row}/>
-                      }</TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        {rows && rows.map((row, index) => {
+          return (
+            <Box>
+              {row.id}
+              <Divider />
+              {
+                row.type === DeviceType.Train && <TrainControl train={row} />
+              }
+            </Box>
+          );
+        })}
       </Paper>
     </Box>
   );

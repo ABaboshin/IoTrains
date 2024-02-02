@@ -1,19 +1,19 @@
-//
-// Created by andrey.baboshin on 1/31/2024.
-//
-
 #pragma once
 
 #include <vector>
-#include "schema.hpp"
+#include <memory>
+#include "BaseDevice.h"
 
-class ControlUnit : public railschema::ControlUnit {
-    void reconnect();
+class ControlUnit
+{
+  void reconnect();
 public:
   ControlUnit();
   void Setup();
   void Loop();
 
   static void callback(char *topic, byte *payload, unsigned int length);
-};
 
+  std::vector<std::shared_ptr<BaseDevice>> devices;
+  std::string id;
+};

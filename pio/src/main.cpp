@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <memory>
 #include "ControlUnit.h"
 #include "Train.h"
 
@@ -15,19 +16,19 @@ void setup()
 
   Serial.println("start");
 
-  cu.set_id("cu1");
+  cu.id = "cu1";
 
   std::vector<railschema::Function> functions;
   functions.push_back(railschema::Function::MOVE_BACKWARD);
   functions.push_back(railschema::Function::MOVE_FORWARD);
   functions.push_back(railschema::Function::STOP);
-  std::vector<railschema::Device> devices;
-  Train t;
-  t.set_id("train1");
-  t.set_functions(functions);
-  devices.push_back(t);
 
-  cu.set_devices(devices);
+  std::shared_ptr<BaseDevice> train = std::make_shared<Train>();
+
+  train->id = "train1";
+  train->functions = functions;
+
+  cu.devices.push_back(train);
 
   cu.Setup();
 }

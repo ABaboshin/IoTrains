@@ -8,8 +8,9 @@ type TrainControlProps = {
 }
 
 export const TrainControl: FunctionComponent<TrainControlProps> = ({ train }) =>
-  <Box>
-    <Slider defaultValue={0} aria-label="Default" valueLabelDisplay="on" min={-100} max={100} onChange={(e, v, a) => {
+  {
+    async function SendCommand(v: any)
+    {
       if (typeof v === "number") {
         const speed = v as number;
 
@@ -24,6 +25,10 @@ export const TrainControl: FunctionComponent<TrainControlProps> = ({ train }) =>
           body: JSON.stringify(command)
         })
       }
-    }} />
-    <Button variant="contained">Stop</Button>
-  </Box>
+    }
+
+  return (<Box>
+    <Slider defaultValue={0} aria-label="Default" valueLabelDisplay="on" min={-100} max={100} onChange={(e, v, a) => SendCommand(v)} />
+    <Button variant="contained" onClick={() => SendCommand(0)}>Stop</Button>
+  </Box>);
+  };

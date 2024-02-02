@@ -1,11 +1,12 @@
 // To parse this data:
 //
-//   import { Convert, Function, DeviceType, Command, ControlUnit } from "./file";
+//   import { Convert, Function, DeviceType, Command, ControlUnit, TrainState } from "./file";
 //
 //   const function = Convert.toFunction(json);
 //   const deviceType = Convert.toDeviceType(json);
 //   const command = Convert.toCommand(json);
 //   const controlUnit = Convert.toControlUnit(json);
+//   const trainState = Convert.toTrainState(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
@@ -33,13 +34,31 @@ export interface ControlUnit {
 export interface Device {
     functions?: Function[];
     id:         string;
+    state:      State;
     type:       DeviceType;
+    [property: string]: any;
+}
+
+export interface State {
+    dummy?: number;
     [property: string]: any;
 }
 
 export enum DeviceType {
     Train = "train",
     Turnout = "turnout",
+}
+
+export interface TrainState {
+    direction?: Direction;
+    speed?:     number;
+    [property: string]: any;
+}
+
+export enum Direction {
+    Backward = "backward",
+    Forward = "forward",
+    Stop = "stop",
 }
 
 // Converts JSON strings to/from your types
@@ -75,6 +94,14 @@ export class Convert {
 
     public static controlUnitToJson(value: ControlUnit): string {
         return JSON.stringify(uncast(value, r("ControlUnit")), null, 2);
+    }
+
+    public static toTrainState(json: string): TrainState {
+        return cast(JSON.parse(json), r("TrainState"));
+    }
+
+    public static trainStateToJson(value: TrainState): string {
+        return JSON.stringify(uncast(value, r("TrainState")), null, 2);
     }
 }
 
@@ -242,7 +269,15 @@ const typeMap: any = {
     "Device": o([
         { json: "functions", js: "functions", typ: u(undefined, a(r("Function"))) },
         { json: "id", js: "id", typ: "" },
+        { json: "state", js: "state", typ: r("State") },
         { json: "type", js: "type", typ: r("DeviceType") },
+    ], "any"),
+    "State": o([
+        { json: "dummy", js: "dummy", typ: u(undefined, 3.14) },
+    ], "any"),
+    "TrainState": o([
+        { json: "direction", js: "direction", typ: u(undefined, r("Direction")) },
+        { json: "speed", js: "speed", typ: u(undefined, 3.14) },
     ], "any"),
     "Function": [
         "move_backward",
@@ -254,5 +289,10 @@ const typeMap: any = {
     "DeviceType": [
         "train",
         "turnout",
+    ],
+    "Direction": [
+        "backward",
+        "forward",
+        "stop",
     ],
 };

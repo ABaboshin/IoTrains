@@ -13,7 +13,14 @@ client.on("connect", (x) => {
     if (err) {
       console.log(err);
     } else {
-      console.log("subscribed");
+      console.log("subscribed report");
+    }
+  });
+  client.subscribe("state", (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("subscribed state");
     }
   });
 });
@@ -21,11 +28,11 @@ client.on("connect", (x) => {
 let units = new Map<string, ControlUnit>();
 
 client.on("message", (topic, message) => {
-  const cu = Convert.toControlUnit(message.toString());
+  // const cu = Convert.toControlUnit(message.toString());
 
-  units.set(cu.id, cu);
+  // units.set(cu.id, cu);
 
-  console.log(JSON.stringify(cu));
+  console.log(message.toString());
 });
 
 const app = express();

@@ -1,17 +1,14 @@
-//
-// Created by andrey.baboshin on 1/31/2024.
-//
-
 #pragma once
 
 #include "schema.hpp"
 #include "MotorDriver.h"
+#include "BaseDevice.h"
 
-class Train : public railschema::Device {
+class Train : public BaseDevice
+{
 private:
     MotorDriver drv;
 public:
     Train();
-    void ProcessCommand(const railschema::Command& command)const;
+    std::shared_ptr<railschema::State> ProcessCommand(const railschema::Command &command) override;
 };
-

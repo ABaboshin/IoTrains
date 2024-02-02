@@ -20,9 +20,9 @@ auto timer = timer_create_default();
 
 bool send_report(void *argument)
 {
-  nlohmann::json j;
-  to_json(j, *instance);
-  client.publish("report", j.dump().c_str());
+  // nlohmann::json j;
+  // to_json(j, *instance);
+  // client.publish("report", j.dump().c_str());
   return true;
 }
 
@@ -51,7 +51,7 @@ void ControlUnit::Setup()
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
 
-  if (MDNS.begin("esp8266"))
+  if (MDNS.begin("esp"))
   {
     Serial.println("MDNS responder started");
   }
@@ -80,12 +80,14 @@ void ControlUnit::callback(char *topic, byte *payload, unsigned int length)
   railschema::Command cmd;
   from_json(j, cmd);
 
-  for (auto i = instance->get_devices().begin(); i != instance->get_devices().end(); i++)
-  {
-    if (i->get_id() == topic)
+  for (auto i = 0; i < instance->devices.size(); i++) {
+    if (instance->devices[i]->id == topic)
     {
       Serial.println("process");
-      (*i).ProcessCommand(cmd);
+      auto state = (*instance->devices[i]).ProcessCommand(cmd);
+      nlohmann::json j;
+      state->to_json(j);
+      client.publish("state", j.dump().c_str());
       break;
     }
   }
@@ -111,9 +113,9 @@ void ControlUnit::reconnect()
     if (client.connect(mqtt_clientid, mqtt_login, mqtt_password))
     {
       Serial.println("connected");
-      for (auto i = this->get_devices().begin(); i != this->get_devices().end(); i++)
+      for (auto i = this->devices.begin(); i != this->devices.end(); i++)
       {
-        client.subscribe(i->get_id().c_str());
+        client.subscribe(i->get()->id.c_str());
       }
     }
     else

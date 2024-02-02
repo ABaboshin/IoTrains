@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "type": "object",
+  "definitions": {
+    "State": {
+      "type": "object",
+      "properties": {
+        "dummy": {
+          "type": "number"
+        }
+      }
+    }
+  }
+}
