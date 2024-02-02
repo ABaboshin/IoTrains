@@ -49,7 +49,7 @@ export enum DeviceType {
     Turnout = "turnout",
 }
 
-export interface TrainState {
+export interface TrainState extends State {
     direction?: Direction;
     speed?:     number;
     [property: string]: any;

@@ -1,22 +1,28 @@
 import path from "path";
 import express, { NextFunction, Request, RequestHandler, Response } from "express";
 import cors from "cors";
-import { Command, Convert, ControlUnit, Device } from "common";
+import { Command, Convert, ControlUnit, Device, State } from "common";
 import { connect } from "mqtt";
 
 const PORT = process.env.PORT || 3001;
-const client = connect("mqtt://localhost", { username: "manager", password: "!manager" });
+const MQTT_URL = process.env.MQTT_URL || "mqtt://localhost";
+const MQTT_USERNAME = process.env.MQTT_USERNAME || "manager";
+const MQTT_PASSWORD = process.env.MQTT_PASSWORD || "!manager";
+const client = connect(MQTT_URL, { username: MQTT_USERNAME, password: MQTT_PASSWORD });
+
+const reportQueue = "report";
+const stateQueue = "state";
 
 client.on("connect", (x) => {
   console.log("connected");
-  client.subscribe("report", (err) => {
+  client.subscribe(reportQueue, (err) => {
     if (err) {
       console.log(err);
     } else {
       console.log("subscribed report");
     }
   });
-  client.subscribe("state", (err) => {
+  client.subscribe(stateQueue, (err) => {
     if (err) {
       console.log(err);
     } else {
@@ -26,11 +32,22 @@ client.on("connect", (x) => {
 });
 
 let units = new Map<string, ControlUnit>();
+let states = new Map<string, State>();
 
 client.on("message", (topic, message) => {
-  // const cu = Convert.toControlUnit(message.toString());
+  if (topic === reportQueue)
+  {
+    const cu = Convert.toControlUnit(message.toString());
 
-  // units.set(cu.id, cu);
+    units.set(cu.id, cu);
+  }
+
+  if (topic === stateQueue)
+  {
+    const tmp = JSON.parse(message.toString());
+
+    states.set(tmp.id, tmp);
+  }
 
   console.log(message.toString());
 });
@@ -42,6 +59,9 @@ app.use(express.json() as RequestHandler);
 
 app.get("/api/v1/device", (req, res) => {
   const devices = Array.from(units.entries()).map((x, i, ar) => x[1].devices).flat(1);
+  devices.forEach(d => {
+    d.state = states.get(d.id);
+  });
   res.json(devices);
 });
 

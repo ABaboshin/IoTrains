@@ -36,7 +36,7 @@ export default function DevicesList() {
       <Paper sx={{ width: '90%', mb: 2 }}>
         {rows && rows.map((row, index) => {
           return (
-            <Box>
+            <Box key={row.id}>
               {row.id}
               <Divider />
               {
