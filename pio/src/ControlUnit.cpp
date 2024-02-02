@@ -20,9 +20,21 @@ auto timer = timer_create_default();
 
 bool send_report(void *argument)
 {
-  // nlohmann::json j;
-  // to_json(j, *instance);
-  // client.publish("report", j.dump().c_str());
+  nlohmann::json j;
+
+  railschema::ControlUnit cu;
+  cu.id = instance->id;
+  for (auto it = instance->devices.begin(); it != instance->devices.end(); it++)
+  {
+    railschema::Device d;
+    d.functions = it->get()->functions;
+    d.id = it->get()->id;
+    d.type = it->get()->type;
+    cu.devices.push_back(d);
+  }
+
+  to_json(j, cu);
+  client.publish("report", j.dump().c_str());
   return true;
 }
 

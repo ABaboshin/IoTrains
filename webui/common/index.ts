@@ -34,13 +34,13 @@ export interface ControlUnit {
 export interface Device {
     functions?: Function[];
     id:         string;
-    state:      State;
+    state?:     State;
     type:       DeviceType;
     [property: string]: any;
 }
 
 export interface State {
-    dummy?: number;
+    id?: string;
     [property: string]: any;
 }
 
@@ -269,11 +269,11 @@ const typeMap: any = {
     "Device": o([
         { json: "functions", js: "functions", typ: u(undefined, a(r("Function"))) },
         { json: "id", js: "id", typ: "" },
-        { json: "state", js: "state", typ: r("State") },
+        { json: "state", js: "state", typ: u(undefined, r("State")) },
         { json: "type", js: "type", typ: r("DeviceType") },
     ], "any"),
     "State": o([
-        { json: "dummy", js: "dummy", typ: u(undefined, 3.14) },
+        { json: "id", js: "id", typ: u(undefined, "") },
     ], "any"),
     "TrainState": o([
         { json: "direction", js: "direction", typ: u(undefined, r("Direction")) },

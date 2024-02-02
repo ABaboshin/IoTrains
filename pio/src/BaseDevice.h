@@ -4,7 +4,8 @@
 #include <memory>
 #include "schema.hpp"
 
-class BaseDevice {
+class BaseDevice //: public railschema::Device
+{
 public:
   std::optional<std::vector<railschema::Function>> functions;
   std::string id;
@@ -12,4 +13,3 @@ public:
 
   virtual std::shared_ptr<railschema::State> ProcessCommand(const railschema::Command &command) { return nullptr; };
 };
-

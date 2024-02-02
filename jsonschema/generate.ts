@@ -18,11 +18,8 @@ import {
   ClassType,
   Sourcelike,
   Name,
-  // OptionValues,
-  // ClassProperty,
 } from "quicktype-core";
 import * as fs from "fs";
-// import { toReadonlyArray } from "collection-utils";
 
 class ProcessTypeAttributeKind extends TypeAttributeKind<boolean> {
   constructor() {
@@ -110,16 +107,6 @@ class CustomCPPTargetLanguage extends CPlusPlusTargetLanguage {
 }
 
 class CustomCPPRenderer extends CPlusPlusRenderer {
-  // private readonly _namespaceNames2: ReadonlyArray<string>;
-
-  // constructor(
-  //   targetLanguage: TargetLanguage,
-  //   renderContext: RenderContext,
-  //   options: OptionValues<typeof cPlusPlusOptions>
-  // ) {
-  //   super(targetLanguage, renderContext, options);
-  //   this._namespaceNames2 = options.namespace.split("::");
-  // }
 
   protected emitClass(c: ClassType, className: Name): void {
     this.emitDescription(this.descriptionForType(c));
@@ -151,17 +138,6 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
       this.emitLine("virtual ~", className, "() = default;");
       this.ensureBlankLine();
 
-      const attributes = c.getAttributes();
-      const processing = processTypeAttributeKind.tryGetInAttributes(attributes);
-      if (processing) {
-        this.emitLine([
-          "virtual State* ProcessCommand(const Command& command) { return nullptr; }"
-        ]);
-        // this.emitLine([
-        //   "virtual void to_json(json & j) {}",
-        // ]);
-      }
-
       if (baseclass !== undefined) {
         this.emitLine([
           "void to_json(json & j);"
@@ -172,50 +148,9 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
         ]);
       }
 
-      // this.emitLine([
-      //   "virtual void to_json(json & j) { ${this._namespaceNames2[0]}::to_json(j,x);}"
-      // ]);
-
       this.emitClassMembers(c, constraints);
     });
   }
-
-  // protected emitNamespaces(namespaceNames: Iterable<string>, f: () => void): void {
-  //   const namesArray = toReadonlyArray(namespaceNames);
-  //   const first = namesArray[0];
-  //   if (first === undefined) {
-  //     f();
-  //   } else {
-  //     this.emitBlock(
-  //       ["namespace ", first],
-  //       false,
-  //       () => this.emitNamespaces(namesArray.slice(1), f),
-  //       namesArray.length === 1
-  //     );
-  //     this.emitLine(["// namespace"]);
-  //   }
-
-  // }
-
-  // private readonly _gettersAndSettersForPropertyName2 = new Map<Name, [Name, Name, Name]>();
-
-  // protected makePropertyDependencyNames(
-  //   c: ClassType,
-  //   className: Name,
-  //   p: ClassProperty,
-  //   jsonName: string,
-  //   name: Name
-  // ): Name[] {
-  //   const getterAndSetterNames = this.makeNamesForPropertyGetterAndSetter(c, className, p, jsonName, name);
-  //   this._gettersAndSettersForPropertyName2.set(name, getterAndSetterNames);
-
-  //   return super.makePropertyDependencyNames(c,className, p, jsonName, name);
-  // }
-
-  // protected emitClassMembers(c: ClassType, constraints: Map<string, Sourcelike> | undefined): void {
-  //   super.emitClassMembers(c, constraints);
-
-  // }
 }
 
 async function quicktypeJSONSchema(targetLanguage: string | TargetLanguage) {
@@ -223,7 +158,6 @@ async function quicktypeJSONSchema(targetLanguage: string | TargetLanguage) {
 
   await schemaInput.addSource({ name: "Function", schema: await readFromFileOrURL("./function.json") });
   await schemaInput.addSource({ name: "DeviceType", schema: await readFromFileOrURL("./devicetype.json") });
-  // await schemaInput.addSource({ name: "Device", schema: await readFromFileOrURL("./device.json") });
   await schemaInput.addSource({ name: "Command", schema: await readFromFileOrURL("./command.json") });
   await schemaInput.addSource({ name: "ControlUnit", schema: await readFromFileOrURL("./controlunit.json") });
   await schemaInput.addSource({ name: "TrainState", schema: await readFromFileOrURL("./trainstate.json") });

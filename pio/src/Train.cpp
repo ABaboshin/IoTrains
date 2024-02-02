@@ -12,6 +12,7 @@ std::shared_ptr<railschema::State> Train::ProcessCommand(const railschema::Comma
 {
   Serial.println("enter process");
   auto ts = std::make_shared<railschema::TrainState>();
+  ts->id = this->id;
 
   if (command.function == railschema::Function::MOVE_FORWARD)
   {
@@ -45,6 +46,8 @@ std::shared_ptr<railschema::State> Train::ProcessCommand(const railschema::Comma
 
 void railschema::TrainState::to_json(json &j)
 {
-  Serial.println("railschema::TrainState::to_json");
-  railschema::to_json(j, *this);
+  j = json::object();
+  j["direction"] = direction;
+  j["speed"] = speed;
+  j["id"] = id;
 }

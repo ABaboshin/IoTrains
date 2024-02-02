@@ -5,8 +5,8 @@
     "State": {
       "type": "object",
       "properties": {
-        "dummy": {
-          "type": "number"
+        "id": {
+          "type": "string"
         }
       }
     }

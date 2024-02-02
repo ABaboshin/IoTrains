@@ -27,6 +27,7 @@ void setup()
 
   train->id = "train1";
   train->functions = functions;
+  train->type = railschema::DeviceType::TRAIN;
 
   cu.devices.push_back(train);
 

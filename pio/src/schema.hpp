@@ -106,7 +106,7 @@ namespace railschema {
         virtual ~State() = default;
 
         virtual void to_json(json & j) {}
-        std::optional<double> dummy;
+        std::optional<std::string> id;
     };
 
     enum class DeviceType : int { TRAIN, TURNOUT };
@@ -116,11 +116,10 @@ namespace railschema {
         Device() = default;
         virtual ~Device() = default;
 
-        virtual State* ProcessCommand(const Command& command) { return nullptr; }
         virtual void to_json(json & j) {}
         std::optional<std::vector<Function>> functions;
         std::string id;
-        State state;
+        std::optional<State> state;
         DeviceType type;
     };
 
@@ -184,18 +183,18 @@ namespace railschema {
     }
 
     inline void from_json(const json & j, State& x) {
-        x.dummy = get_stack_optional<double>(j, "dummy");
+        x.id = get_stack_optional<std::string>(j, "id");
     }
 
     inline void to_json(json & j, const State & x) {
         j = json::object();
-        j["dummy"] = x.dummy;
+        j["id"] = x.id;
     }
 
     inline void from_json(const json & j, Device& x) {
         x.functions = get_stack_optional<std::vector<Function>>(j, "functions");
         x.id = j.at("id").get<std::string>();
-        x.state = j.at("state").get<State>();
+        x.state = get_stack_optional<State>(j, "state");
         x.type = j.at("type").get<DeviceType>();
     }
 

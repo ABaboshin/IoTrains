@@ -15,6 +15,9 @@
           "$ref": "function.json"
         }
       ]
+    },
+    "state": {
+      "$ref": "state.json#definitions/State"
     }
   },
   "required": [
