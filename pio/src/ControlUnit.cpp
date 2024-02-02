@@ -5,8 +5,10 @@
 #include <Arduino.h>
 #ifdef ESP8266
 #include <ESP8266WiFi.h>
+#include <ESP8266mDNS.h>
 #else
 #include <WiFi.h>
+#include <ESPmDNS.h>
 #endif
 #include <PubSubClient.h>
 
@@ -24,13 +26,6 @@ ControlUnit::ControlUnit () {
 
 void ControlUnit::Setup()
 {
-  for (int i = 0; i < 20; i++)
-  {
-    Serial.println("sleep");
-    delay(500);
-  }
-
-  // We start by connecting to a WiFi network
   Serial.println();
   Serial.print("Connecting to ");
   Serial.println(ssid);
@@ -49,7 +44,16 @@ void ControlUnit::Setup()
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
 
-  client.setServer(mqtt_server, 1883);
+  if (MDNS.begin("esp8266"))
+  {
+    Serial.println("MDNS responder started");
+  } else {
+    Serial.println("MDNS responder not started");
+  }
+
+  IPAddress ip;
+  ip.fromString(mqtt_server);
+  client.setServer(ip, 1883);
   client.setCallback(callback);
 }
 
@@ -75,25 +79,27 @@ void ControlUnit::callback(char* topic, byte* payload, unsigned int length) {
 }
 
 void ControlUnit::Loop() {
-    if (!client.connected()) {
-        reconnect();
-    }
+  if (!client.connected()) {
+      reconnect();
+  }
 
-    client.loop();
+  client.loop();
 }
 
 void ControlUnit::reconnect() {
     while (!client.connected()) {
-        Serial.print("Attempting MQTT connection...");
-        if (client.connect(mqtt_clientid, mqtt_login, mqtt_password)) {
-            Serial.println("connected");
-            for (auto i = this->get_devices().begin(); i != this->get_devices().end(); i++) {
-                client.subscribe(i->get_id().c_str());
-            }
+      Serial.printf("Attempting MQTT connection... %s %s %s", mqtt_clientid, mqtt_login, mqtt_password);
+      if (client.connect(mqtt_clientid, mqtt_login, mqtt_password))
+      {
+        Serial.println("connected");
+        for (auto i = this->get_devices().begin(); i != this->get_devices().end(); i++)
+        {
+          client.subscribe(i->get_id().c_str());
+        }
 
-            nlohmann::json j;
-            to_json(j, *this);
-            client.publish("ack", j.dump().c_str());
+        nlohmann::json j;
+        to_json(j, *this);
+        client.publish("report", j.dump().c_str());
         } else {
             Serial.print("failed, rc=");
             Serial.print(client.state());

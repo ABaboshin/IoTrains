@@ -6,10 +6,15 @@ ControlUnit cu;
 
 void setup() {
   Serial.begin(115200);
-  delay(5000);
+  for (int i = 0; i < 10; i++)
+  {
+    Serial.println("sleep");
+    delay(500);
+  }
+
+  Serial.println("start");
 
   cu.set_id("cu1");
-
 
   std::vector<railschema::Device> devices;
   Train t;
