@@ -34,7 +34,6 @@ export interface ControlUnit {
 export interface Device {
     functions?: Function[];
     id:         string;
-    state?:     State;
     type:       DeviceType;
     [property: string]: any;
 }
@@ -269,7 +268,6 @@ const typeMap: any = {
     "Device": o([
         { json: "functions", js: "functions", typ: u(undefined, a(r("Function"))) },
         { json: "id", js: "id", typ: "" },
-        { json: "state", js: "state", typ: u(undefined, r("State")) },
         { json: "type", js: "type", typ: r("DeviceType") },
     ], "any"),
     "State": o([

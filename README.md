@@ -1,7 +1,8 @@
 # dcc-decoder
 
 TODO
- - expose state from device
+ - fix schema generation
  - responsive ui
  - nanomq/emqx
  - sqlite3
+ - schematic

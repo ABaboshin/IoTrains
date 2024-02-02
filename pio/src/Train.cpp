@@ -10,7 +10,6 @@ Train::Train() : drv(10, 11) {
 
 std::shared_ptr<railschema::State> Train::ProcessCommand(const railschema::Command &command)
 {
-  Serial.println("enter process");
   auto ts = std::make_shared<railschema::TrainState>();
   ts->id = this->id;
 
@@ -37,8 +36,6 @@ std::shared_ptr<railschema::State> Train::ProcessCommand(const railschema::Comma
     ts->direction = railschema::Direction::STOP;
     ts->speed = 0;
   }
-
-  Serial.println("exit process");
 
   return ts;
 }

@@ -1,17 +1,18 @@
 "use strict";
 // To parse this data:
 //
-//   import { Convert, Function, DeviceType, Command, ControlUnit } from "./file";
+//   import { Convert, Function, DeviceType, Command, ControlUnit, TrainState } from "./file";
 //
 //   const function = Convert.toFunction(json);
 //   const deviceType = Convert.toDeviceType(json);
 //   const command = Convert.toCommand(json);
 //   const controlUnit = Convert.toControlUnit(json);
+//   const trainState = Convert.toTrainState(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Convert = exports.DeviceType = exports.Function = void 0;
+exports.Convert = exports.Direction = exports.DeviceType = exports.Function = void 0;
 var Function;
 (function (Function) {
     Function["MoveBackward"] = "move_backward";
@@ -25,6 +26,12 @@ var DeviceType;
     DeviceType["Train"] = "train";
     DeviceType["Turnout"] = "turnout";
 })(DeviceType || (exports.DeviceType = DeviceType = {}));
+var Direction;
+(function (Direction) {
+    Direction["Backward"] = "backward";
+    Direction["Forward"] = "forward";
+    Direction["Stop"] = "stop";
+})(Direction || (exports.Direction = Direction = {}));
 // Converts JSON strings to/from your types
 // and asserts the results of JSON.parse at runtime
 var Convert = /** @class */ (function () {
@@ -53,6 +60,12 @@ var Convert = /** @class */ (function () {
     };
     Convert.controlUnitToJson = function (value) {
         return JSON.stringify(uncast(value, r("ControlUnit")), null, 2);
+    };
+    Convert.toTrainState = function (json) {
+        return cast(JSON.parse(json), r("TrainState"));
+    };
+    Convert.trainStateToJson = function (value) {
+        return JSON.stringify(uncast(value, r("TrainState")), null, 2);
     };
     return Convert;
 }());
@@ -223,6 +236,13 @@ var typeMap = {
         { json: "id", js: "id", typ: "" },
         { json: "type", js: "type", typ: r("DeviceType") },
     ], "any"),
+    "State": o([
+        { json: "id", js: "id", typ: u(undefined, "") },
+    ], "any"),
+    "TrainState": o([
+        { json: "direction", js: "direction", typ: u(undefined, r("Direction")) },
+        { json: "speed", js: "speed", typ: u(undefined, 3.14) },
+    ], "any"),
     "Function": [
         "move_backward",
         "move_forward",
@@ -233,5 +253,10 @@ var typeMap = {
     "DeviceType": [
         "train",
         "turnout",
+    ],
+    "Direction": [
+        "backward",
+        "forward",
+        "stop",
     ],
 };

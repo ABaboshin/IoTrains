@@ -14,6 +14,8 @@ export const TrainControl: FunctionComponent<TrainControlProps> = ({ train }) =>
       if (typeof v === "number") {
         const speed = v as number;
 
+        train.state.speed = v;
+
         const command: Command = {
           function: speed === 0 ? Function.Stop : speed > 0 ? Function.MoveForward : Function.MoveBackward,
           value: speed.toString()
@@ -28,7 +30,7 @@ export const TrainControl: FunctionComponent<TrainControlProps> = ({ train }) =>
     }
 
   return (<Box>
-    <Slider defaultValue={train.state?.speed} aria-label="Default" valueLabelDisplay="on" min={-100} max={100} onChange={(e, v, a) => SendCommand(v)} />
+    <Slider defaultValue={train?.state?.speed ?? 0} aria-label="Default" valueLabelDisplay="on" min={-100} max={100} onChange={(e, v, a) => SendCommand(v)} />
     <Button variant="contained" onClick={() => SendCommand(0)}>Stop</Button>
   </Box>);
   };

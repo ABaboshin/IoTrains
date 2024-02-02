@@ -1,7 +1,7 @@
 import path from "path";
 import express, { NextFunction, Request, RequestHandler, Response } from "express";
 import cors from "cors";
-import { Command, Convert, ControlUnit, Device, State } from "common";
+import { Command, Convert, ControlUnit, State } from "common";
 import { connect } from "mqtt";
 
 const PORT = process.env.PORT || 3001;
@@ -35,21 +35,18 @@ let units = new Map<string, ControlUnit>();
 let states = new Map<string, State>();
 
 client.on("message", (topic, message) => {
-  if (topic === reportQueue)
-  {
+  console.log(message.toString());
+  if (topic === reportQueue) {
     const cu = Convert.toControlUnit(message.toString());
 
     units.set(cu.id, cu);
   }
 
-  if (topic === stateQueue)
-  {
+  if (topic === stateQueue) {
     const tmp = JSON.parse(message.toString());
 
     states.set(tmp.id, tmp);
   }
-
-  console.log(message.toString());
 });
 
 const app = express();
@@ -57,6 +54,8 @@ const app = express();
 app.use(cors());
 app.use(express.json() as RequestHandler);
 
+// TODO
+// pair (device, state)
 app.get("/api/v1/device", (req, res) => {
   const devices = Array.from(units.entries()).map((x, i, ar) => x[1].devices).flat(1);
   devices.forEach(d => {
