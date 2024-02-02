@@ -1,7 +1,7 @@
 import path from "path";
 import express, { NextFunction, Request, RequestHandler, Response } from "express";
 import cors from "cors";
-import { Command, Convert, ControlUnit, State } from "common";
+import { Command, Convert, ControlUnit, State, DeviceInfo } from "common";
 import { connect } from "mqtt";
 
 const PORT = process.env.PORT || 3001;
@@ -57,9 +57,9 @@ app.use(express.json() as RequestHandler);
 // TODO
 // pair (device, state)
 app.get("/api/v1/device", (req, res) => {
-  const devices = Array.from(units.entries()).map((x, i, ar) => x[1].devices).flat(1);
-  devices.forEach(d => {
-    d.state = states.get(d.id);
+  const devices = Array.from(units.entries()).map((x, i, ar) => x[1].devices).flat(1).map(d => {
+    let r : DeviceInfo = {device: d, state: states.get(d.id)};
+    return r;
   });
   res.json(devices);
 });

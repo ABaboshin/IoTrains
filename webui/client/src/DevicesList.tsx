@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import { Device, DeviceType } from 'common';
+import { Device, DeviceInfo, DeviceType } from 'common';
 import { useEffect, useState } from 'react';
 import { TrainControl } from './TrainControl';
 import { Divider } from '@mui/material';
@@ -24,7 +24,7 @@ export default function DevicesList() {
     return [];
   }
 
-  const def: Device[] = [];
+  const def: DeviceInfo[] = [];
   const [rows, setRows] = useState(def);
 
   useEffect(() => {
@@ -36,11 +36,11 @@ export default function DevicesList() {
       <Paper sx={{ width: '90%', mb: 2 }}>
         {rows && rows.map((row, index) => {
           return (
-            <Box key={row.id}>
-              {row.id}
+            <Box key={row.device.id}>
+              {row.device.id}
               <Divider />
               {
-                row.type === DeviceType.Train && <TrainControl train={row} />
+                row.device.type === DeviceType.Train && <TrainControl device={row.device} state={row.state} />
               }
             </Box>
           );

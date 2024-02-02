@@ -1,27 +1,25 @@
 import { Box, Button } from '@mui/material';
 import Slider from '@mui/material/Slider';
-import { Command, Device, Function } from 'common';
+import { Command, Device, Function, DeviceInfo } from 'common';
 import { FunctionComponent } from 'react';
 
-type TrainControlProps = {
-  train: Device
-}
-
-export const TrainControl: FunctionComponent<TrainControlProps> = ({ train }) =>
+export const TrainControl: FunctionComponent<DeviceInfo> = (train: DeviceInfo) =>
   {
     async function SendCommand(v: any)
     {
       if (typeof v === "number") {
         const speed = v as number;
 
-        train.state.speed = v;
+        if (train.state !== undefined) {
+          train.state.speed = v;
+        }
 
         const command: Command = {
           function: speed === 0 ? Function.Stop : speed > 0 ? Function.MoveForward : Function.MoveBackward,
           value: speed.toString()
         };
 
-        fetch(`/api/v1/device/${train.id}`, {
+        fetch(`/api/v1/device/${train.device.id}`, {
           headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
           method: "PUT",
           body: JSON.stringify(command)

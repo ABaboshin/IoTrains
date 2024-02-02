@@ -11,6 +11,11 @@
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
 
+export interface DeviceInfo {
+  device: Device;
+  state?: State
+}
+
 export interface Command {
     function: Function;
     value?:   string;
