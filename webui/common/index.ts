@@ -1,20 +1,16 @@
 // To parse this data:
 //
-//   import { Convert, Function, DeviceType, Command, ControlUnit, TrainState } from "./file";
+//   import { Convert, Function, DeviceType, Command, ControlUnit, DeviceInfo, TrainState } from "./file";
 //
 //   const function = Convert.toFunction(json);
 //   const deviceType = Convert.toDeviceType(json);
 //   const command = Convert.toCommand(json);
 //   const controlUnit = Convert.toControlUnit(json);
+//   const deviceInfo = Convert.toDeviceInfo(json);
 //   const trainState = Convert.toTrainState(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
-
-export interface DeviceInfo {
-  device: Device;
-  state?: State
-}
 
 export interface Command {
     function: Function;
@@ -25,6 +21,7 @@ export interface Command {
 export enum Function {
     MoveBackward = "move_backward",
     MoveForward = "move_forward",
+    Play = "play",
     Stop = "stop",
     TurnoutPos1 = "turnout_pos1",
     TurnoutPos2 = "turnout_pos2",
@@ -43,17 +40,24 @@ export interface Device {
     [property: string]: any;
 }
 
+export enum DeviceType {
+    Player = "player",
+    Train = "train",
+    Turnout = "turnout",
+}
+
+export interface DeviceInfo {
+    device: Device;
+    state?: State;
+    [property: string]: any;
+}
+
 export interface State {
     id?: string;
     [property: string]: any;
 }
 
-export enum DeviceType {
-    Train = "train",
-    Turnout = "turnout",
-}
-
-export interface TrainState extends State {
+export interface TrainState {
     direction?: Direction;
     speed?:     number;
     [property: string]: any;
@@ -98,6 +102,14 @@ export class Convert {
 
     public static controlUnitToJson(value: ControlUnit): string {
         return JSON.stringify(uncast(value, r("ControlUnit")), null, 2);
+    }
+
+    public static toDeviceInfo(json: string): DeviceInfo {
+        return cast(JSON.parse(json), r("DeviceInfo"));
+    }
+
+    public static deviceInfoToJson(value: DeviceInfo): string {
+        return JSON.stringify(uncast(value, r("DeviceInfo")), null, 2);
     }
 
     public static toTrainState(json: string): TrainState {
@@ -275,6 +287,10 @@ const typeMap: any = {
         { json: "id", js: "id", typ: "" },
         { json: "type", js: "type", typ: r("DeviceType") },
     ], "any"),
+    "DeviceInfo": o([
+        { json: "device", js: "device", typ: r("Device") },
+        { json: "state", js: "state", typ: u(undefined, r("State")) },
+    ], "any"),
     "State": o([
         { json: "id", js: "id", typ: u(undefined, "") },
     ], "any"),
@@ -285,11 +301,13 @@ const typeMap: any = {
     "Function": [
         "move_backward",
         "move_forward",
+        "play",
         "stop",
         "turnout_pos1",
         "turnout_pos2",
     ],
     "DeviceType": [
+        "player",
         "train",
         "turnout",
     ],

@@ -50,16 +50,57 @@ function processAttributeProducer(
 
   if (!types.has("object")) return undefined;
 
-  let processing: boolean;
-  if (schema.processing === undefined) {
-    processing = false;
-  } else if (typeof schema.processing === "boolean") {
-    processing = schema.processing;
+  let response: boolean;
+  if (schema.response === undefined) {
+    response = false;
+  } else if (typeof schema.response === "boolean") {
+    response = schema.response;
   } else {
-    throw new Error(`processing is not a boolean in ${canonicalRef}`);
+    throw new Error(`response is not a boolean in ${canonicalRef}`);
   }
 
-  return { forType: processTypeAttributeKind.makeAttributes(processing) };
+  return { forType: processTypeAttributeKind.makeAttributes(response) };
+}
+
+class ResponseTypeAttributeKind extends TypeAttributeKind<boolean> {
+  constructor() {
+    super("response");
+  }
+
+  combine(attrs: boolean[]): boolean {
+    return attrs.some(x => x);
+  }
+
+  makeInferred(_: boolean): undefined {
+    return undefined;
+  }
+
+  stringify(isResponse: boolean): string {
+    return isResponse.toString();
+  }
+}
+
+const responseTypeAttributeKind = new ResponseTypeAttributeKind();
+
+function responseAttributeProducer(
+  schema: JSONSchema,
+  canonicalRef: Ref,
+  types: Set<JSONSchemaType>
+): JSONSchemaAttributes | undefined {
+  if (typeof schema !== "object") return undefined;
+
+  if (!types.has("object")) return undefined;
+
+  let response: boolean;
+  if (schema.response === undefined) {
+    response = false;
+  } else if (typeof schema.response === "boolean") {
+    response = schema.response;
+  } else {
+    throw new Error(`response is not a boolean in ${canonicalRef}`);
+  }
+
+  return { forType: responseTypeAttributeKind.makeAttributes(response) };
 }
 
 class ExtendsTypeAttributeKind extends TypeAttributeKind<string> {
@@ -113,6 +154,7 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
 
     const attributes = c.getAttributes();
     const baseclass = extendsTypeAttributeKind.tryGetInAttributes(attributes);
+    const responseclass = responseTypeAttributeKind.tryGetInAttributes(attributes);
 
     this.emitBlock(["class ", className, baseclass === undefined ? "" : " : public " + baseclass], true, () => {
       const constraints = this.generateClassConstraints(c);
@@ -138,13 +180,13 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
       this.emitLine("virtual ~", className, "() = default;");
       this.ensureBlankLine();
 
-      if (baseclass !== undefined) {
+      if (baseclass !== undefined && responseclass) {
         this.emitLine([
-          "void to_json(json & j);"
+          "void to_json(json & j) override;"
         ]);
-      } else {
+      } else if (responseclass) {
         this.emitLine([
-          "virtual void to_json(json & j) {}"
+          "virtual void to_json(json & j);"
         ]);
       }
 
@@ -154,12 +196,14 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
 }
 
 async function quicktypeJSONSchema(targetLanguage: string | TargetLanguage) {
-  const schemaInput = new JSONSchemaInput(new FetchingJSONSchemaStore(), [processAttributeProducer, extendsAttributeProducer]);
+  const schemaInput = new JSONSchemaInput(new FetchingJSONSchemaStore(), [processAttributeProducer, extendsAttributeProducer, responseAttributeProducer]);
 
   await schemaInput.addSource({ name: "Function", schema: await readFromFileOrURL("./function.json") });
   await schemaInput.addSource({ name: "DeviceType", schema: await readFromFileOrURL("./devicetype.json") });
   await schemaInput.addSource({ name: "Command", schema: await readFromFileOrURL("./command.json") });
   await schemaInput.addSource({ name: "ControlUnit", schema: await readFromFileOrURL("./controlunit.json") });
+  // await schemaInput.addSource({ name: "State", schema: await readFromFileOrURL("./state.json") });
+  await schemaInput.addSource({ name: "DeviceInfo", schema: await readFromFileOrURL("./deviceinfo.json") });
   await schemaInput.addSource({ name: "TrainState", schema: await readFromFileOrURL("./trainstate.json") });
 
   const inputData = new InputData();

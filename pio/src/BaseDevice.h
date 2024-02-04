@@ -4,7 +4,7 @@
 #include <memory>
 #include "schema.hpp"
 
-class BaseDevice //: public railschema::Device
+class BaseDevice
 {
 public:
   std::optional<std::vector<railschema::Function>> functions;

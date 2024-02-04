@@ -114,7 +114,7 @@ void ControlUnit::Loop()
 
   client.loop();
   timer.tick();
-  delay(100);
+  delay(10);
 }
 
 void ControlUnit::reconnect()

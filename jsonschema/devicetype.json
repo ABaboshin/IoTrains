@@ -3,6 +3,7 @@
   "type": "string",
   "enum": [
     "train",
-    "turnout"
+    "turnout",
+    "player"
   ]
 }

@@ -5,7 +5,7 @@
 #include "Train.h"
 
 
-Train::Train() : drv(10, 11) {
+Train::Train() : drv(5, 6) {
 }
 
 std::shared_ptr<railschema::State> Train::ProcessCommand(const railschema::Command &command)
@@ -38,13 +38,4 @@ std::shared_ptr<railschema::State> Train::ProcessCommand(const railschema::Comma
   }
 
   return ts;
-}
-
-
-void railschema::TrainState::to_json(json &j)
-{
-  j = json::object();
-  j["direction"] = direction;
-  j["speed"] = speed;
-  j["id"] = id;
 }

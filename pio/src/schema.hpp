@@ -8,6 +8,7 @@
 //     DeviceType data = nlohmann::json::parse(jsonString);
 //     Command data = nlohmann::json::parse(jsonString);
 //     ControlUnit data = nlohmann::json::parse(jsonString);
+//     DeviceInfo data = nlohmann::json::parse(jsonString);
 //     TrainState data = nlohmann::json::parse(jsonString);
 
 #pragma once
@@ -88,38 +89,26 @@ namespace railschema {
     }
     #endif
 
-    enum class Function : int { MOVE_BACKWARD, MOVE_FORWARD, STOP, TURNOUT_POS1, TURNOUT_POS2 };
+    enum class Function : int { MOVE_BACKWARD, MOVE_FORWARD, PLAY, STOP, TURNOUT_POS1, TURNOUT_POS2 };
 
     class Command {
         public:
         Command() = default;
         virtual ~Command() = default;
 
-        virtual void to_json(json & j) {}
         Function function;
         std::optional<std::string> value;
     };
 
-    class State {
-        public:
-        State() = default;
-        virtual ~State() = default;
-
-        virtual void to_json(json & j) {}
-        std::optional<std::string> id;
-    };
-
-    enum class DeviceType : int { TRAIN, TURNOUT };
+    enum class DeviceType : int { PLAYER, TRAIN, TURNOUT };
 
     class Device {
         public:
         Device() = default;
         virtual ~Device() = default;
 
-        virtual void to_json(json & j) {}
         std::optional<std::vector<Function>> functions;
         std::string id;
-        std::optional<State> state;
         DeviceType type;
     };
 
@@ -128,9 +117,26 @@ namespace railschema {
         ControlUnit() = default;
         virtual ~ControlUnit() = default;
 
-        virtual void to_json(json & j) {}
         std::vector<Device> devices;
         std::string id;
+    };
+
+    class State {
+        public:
+        State() = default;
+        virtual ~State() = default;
+
+        virtual void to_json(json & j);
+        std::optional<std::string> id;
+    };
+
+    class DeviceInfo {
+        public:
+        DeviceInfo() = default;
+        virtual ~DeviceInfo() = default;
+
+        Device device;
+        std::optional<State> state;
     };
 
     enum class Direction : int { BACKWARD, FORWARD, STOP };
@@ -140,7 +146,7 @@ namespace railschema {
         TrainState() = default;
         virtual ~TrainState() = default;
 
-        void to_json(json & j);
+        void to_json(json & j) override;
         std::optional<Direction> direction;
         std::optional<double> speed;
     };
@@ -150,14 +156,17 @@ namespace railschema {
     void from_json(const json & j, Command & x);
     void to_json(json & j, const Command & x);
 
-    void from_json(const json & j, State & x);
-    void to_json(json & j, const State & x);
-
     void from_json(const json & j, Device & x);
     void to_json(json & j, const Device & x);
 
     void from_json(const json & j, ControlUnit & x);
     void to_json(json & j, const ControlUnit & x);
+
+    void from_json(const json & j, State & x);
+    void to_json(json & j, const State & x);
+
+    void from_json(const json & j, DeviceInfo & x);
+    void to_json(json & j, const DeviceInfo & x);
 
     void from_json(const json & j, TrainState & x);
     void to_json(json & j, const TrainState & x);
@@ -182,19 +191,9 @@ namespace railschema {
         j["value"] = x.value;
     }
 
-    inline void from_json(const json & j, State& x) {
-        x.id = get_stack_optional<std::string>(j, "id");
-    }
-
-    inline void to_json(json & j, const State & x) {
-        j = json::object();
-        j["id"] = x.id;
-    }
-
     inline void from_json(const json & j, Device& x) {
         x.functions = get_stack_optional<std::vector<Function>>(j, "functions");
         x.id = j.at("id").get<std::string>();
-        x.state = get_stack_optional<State>(j, "state");
         x.type = j.at("type").get<DeviceType>();
     }
 
@@ -202,7 +201,6 @@ namespace railschema {
         j = json::object();
         j["functions"] = x.functions;
         j["id"] = x.id;
-        j["state"] = x.state;
         j["type"] = x.type;
     }
 
@@ -215,6 +213,26 @@ namespace railschema {
         j = json::object();
         j["devices"] = x.devices;
         j["id"] = x.id;
+    }
+
+    inline void from_json(const json & j, State& x) {
+        x.id = get_stack_optional<std::string>(j, "id");
+    }
+
+    inline void to_json(json & j, const State & x) {
+        j = json::object();
+        j["id"] = x.id;
+    }
+
+    inline void from_json(const json & j, DeviceInfo& x) {
+        x.device = j.at("device").get<Device>();
+        x.state = get_stack_optional<State>(j, "state");
+    }
+
+    inline void to_json(json & j, const DeviceInfo & x) {
+        j = json::object();
+        j["device"] = x.device;
+        j["state"] = x.state;
     }
 
     inline void from_json(const json & j, TrainState& x) {
@@ -231,6 +249,7 @@ namespace railschema {
     inline void from_json(const json & j, Function & x) {
         if (j == "move_backward") x = Function::MOVE_BACKWARD;
         else if (j == "move_forward") x = Function::MOVE_FORWARD;
+        else if (j == "play") x = Function::PLAY;
         else if (j == "stop") x = Function::STOP;
         else if (j == "turnout_pos1") x = Function::TURNOUT_POS1;
         else if (j == "turnout_pos2") x = Function::TURNOUT_POS2;
@@ -241,6 +260,7 @@ namespace railschema {
         switch (x) {
             case Function::MOVE_BACKWARD: j = "move_backward"; break;
             case Function::MOVE_FORWARD: j = "move_forward"; break;
+            case Function::PLAY: j = "play"; break;
             case Function::STOP: j = "stop"; break;
             case Function::TURNOUT_POS1: j = "turnout_pos1"; break;
             case Function::TURNOUT_POS2: j = "turnout_pos2"; break;
@@ -249,13 +269,15 @@ namespace railschema {
     }
 
     inline void from_json(const json & j, DeviceType & x) {
-        if (j == "train") x = DeviceType::TRAIN;
+        if (j == "player") x = DeviceType::PLAYER;
+        else if (j == "train") x = DeviceType::TRAIN;
         else if (j == "turnout") x = DeviceType::TURNOUT;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
     inline void to_json(json & j, const DeviceType & x) {
         switch (x) {
+            case DeviceType::PLAYER: j = "player"; break;
             case DeviceType::TRAIN: j = "train"; break;
             case DeviceType::TURNOUT: j = "turnout"; break;
             default: throw std::runtime_error("This should not happen");

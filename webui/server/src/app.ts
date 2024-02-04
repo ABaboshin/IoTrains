@@ -3,6 +3,7 @@ import express, { NextFunction, Request, RequestHandler, Response } from "expres
 import cors from "cors";
 import { Command, Convert, ControlUnit, State, DeviceInfo } from "common";
 import { connect } from "mqtt";
+import moment from "moment";
 
 const PORT = process.env.PORT || 3001;
 const MQTT_URL = process.env.MQTT_URL || "mqtt://localhost";
@@ -35,7 +36,7 @@ let units = new Map<string, ControlUnit>();
 let states = new Map<string, State>();
 
 client.on("message", (topic, message) => {
-  console.log(message.toString());
+  console.log(`${moment().format('yyyy-mm-dd:hh:mm:ss') } ${message.toString() }`);
   if (topic === reportQueue) {
     const cu = Convert.toControlUnit(message.toString());
 

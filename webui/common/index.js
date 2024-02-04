@@ -11,7 +11,7 @@
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.Convert = exports.Direction = exports.DeviceType = exports.Function = void 0;
 var Function;
 (function (Function) {
@@ -20,18 +20,18 @@ var Function;
     Function["Stop"] = "stop";
     Function["TurnoutPos1"] = "turnout_pos1";
     Function["TurnoutPos2"] = "turnout_pos2";
-})(Function || (exports.Function = Function = {}));
+})(Function = exports.Function || (exports.Function = {}));
 var DeviceType;
 (function (DeviceType) {
     DeviceType["Train"] = "train";
     DeviceType["Turnout"] = "turnout";
-})(DeviceType || (exports.DeviceType = DeviceType = {}));
+})(DeviceType = exports.DeviceType || (exports.DeviceType = {}));
 var Direction;
 (function (Direction) {
     Direction["Backward"] = "backward";
     Direction["Forward"] = "forward";
     Direction["Stop"] = "stop";
-})(Direction || (exports.Direction = Direction = {}));
+})(Direction = exports.Direction || (exports.Direction = {}));
 // Converts JSON strings to/from your types
 // and asserts the results of JSON.parse at runtime
 var Convert = /** @class */ (function () {
@@ -258,5 +258,5 @@ var typeMap = {
         "backward",
         "forward",
         "stop",
-    ],
+    ]
 };

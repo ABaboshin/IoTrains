@@ -6,6 +6,7 @@
     "move_backward",
     "stop",
     "turnout_pos1",
-    "turnout_pos2"
+    "turnout_pos2",
+    "play"
   ]
 }

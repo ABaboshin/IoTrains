@@ -1,3 +1,7 @@
+export interface DeviceInfo {
+    device: Device;
+    state?: State;
+}
 export interface Command {
     function: Function;
     value?: string;
