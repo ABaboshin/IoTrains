@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "type": {
+      "$ref": "devicetype.json"
+    },
+    "functions": {
+      "type": "array",
+      "items": [
+        {
+          "$ref": "function.json"
+        }
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "type"
+  ],
+  "processing": true
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "type": "object",
+  "properties": {
+    "device": {
+      "$ref": "device.json"
+    },
+    "state": {
+      "$ref": "state.json"
+    }
+  },
+  "required": [
+    "device"
+  ]
+}

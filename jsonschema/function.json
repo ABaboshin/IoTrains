@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "type": "string",
+  "enum": [
+    "move_forward",
+    "move_backward",
+    "stop",
+    "turnout_pos1",
+    "turnout_pos2",
+    "play"
+  ]
+}

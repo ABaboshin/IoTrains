@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "type": "object",
+  "properties": {
+    "function": {
+      "$ref": "function.json"
+    },
+    "value": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "function"
+  ]
+}
