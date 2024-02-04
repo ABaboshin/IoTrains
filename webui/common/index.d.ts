@@ -1,7 +1,3 @@
-export interface DeviceInfo {
-    device: Device;
-    state?: State;
-}
 export interface Command {
     function: Function;
     value?: string;
@@ -10,6 +6,7 @@ export interface Command {
 export declare enum Function {
     MoveBackward = "move_backward",
     MoveForward = "move_forward",
+    Play = "play",
     Stop = "stop",
     TurnoutPos1 = "turnout_pos1",
     TurnoutPos2 = "turnout_pos2"
@@ -25,13 +22,19 @@ export interface Device {
     type: DeviceType;
     [property: string]: any;
 }
+export declare enum DeviceType {
+    Player = "player",
+    Train = "train",
+    Turnout = "turnout"
+}
+export interface DeviceInfo {
+    device: Device;
+    state?: State;
+    [property: string]: any;
+}
 export interface State {
     id?: string;
     [property: string]: any;
-}
-export declare enum DeviceType {
-    Train = "train",
-    Turnout = "turnout"
 }
 export interface TrainState extends State {
     direction?: Direction;
@@ -52,6 +55,8 @@ export declare class Convert {
     static commandToJson(value: Command): string;
     static toControlUnit(json: string): ControlUnit;
     static controlUnitToJson(value: ControlUnit): string;
+    static toDeviceInfo(json: string): DeviceInfo;
+    static deviceInfoToJson(value: DeviceInfo): string;
     static toTrainState(json: string): TrainState;
     static trainStateToJson(value: TrainState): string;
 }

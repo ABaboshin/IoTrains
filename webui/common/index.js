@@ -1,12 +1,13 @@
 "use strict";
 // To parse this data:
 //
-//   import { Convert, Function, DeviceType, Command, ControlUnit, TrainState } from "./file";
+//   import { Convert, Function, DeviceType, Command, ControlUnit, DeviceInfo, TrainState } from "./file";
 //
 //   const function = Convert.toFunction(json);
 //   const deviceType = Convert.toDeviceType(json);
 //   const command = Convert.toCommand(json);
 //   const controlUnit = Convert.toControlUnit(json);
+//   const deviceInfo = Convert.toDeviceInfo(json);
 //   const trainState = Convert.toTrainState(json);
 //
 // These functions will throw an error if the JSON doesn't
@@ -17,12 +18,14 @@ var Function;
 (function (Function) {
     Function["MoveBackward"] = "move_backward";
     Function["MoveForward"] = "move_forward";
+    Function["Play"] = "play";
     Function["Stop"] = "stop";
     Function["TurnoutPos1"] = "turnout_pos1";
     Function["TurnoutPos2"] = "turnout_pos2";
 })(Function = exports.Function || (exports.Function = {}));
 var DeviceType;
 (function (DeviceType) {
+    DeviceType["Player"] = "player";
     DeviceType["Train"] = "train";
     DeviceType["Turnout"] = "turnout";
 })(DeviceType = exports.DeviceType || (exports.DeviceType = {}));
@@ -60,6 +63,12 @@ var Convert = /** @class */ (function () {
     };
     Convert.controlUnitToJson = function (value) {
         return JSON.stringify(uncast(value, r("ControlUnit")), null, 2);
+    };
+    Convert.toDeviceInfo = function (json) {
+        return cast(JSON.parse(json), r("DeviceInfo"));
+    };
+    Convert.deviceInfoToJson = function (value) {
+        return JSON.stringify(uncast(value, r("DeviceInfo")), null, 2);
     };
     Convert.toTrainState = function (json) {
         return cast(JSON.parse(json), r("TrainState"));
@@ -236,6 +245,10 @@ var typeMap = {
         { json: "id", js: "id", typ: "" },
         { json: "type", js: "type", typ: r("DeviceType") },
     ], "any"),
+    "DeviceInfo": o([
+        { json: "device", js: "device", typ: r("Device") },
+        { json: "state", js: "state", typ: u(undefined, r("State")) },
+    ], "any"),
     "State": o([
         { json: "id", js: "id", typ: u(undefined, "") },
     ], "any"),
@@ -246,11 +259,13 @@ var typeMap = {
     "Function": [
         "move_backward",
         "move_forward",
+        "play",
         "stop",
         "turnout_pos1",
         "turnout_pos2",
     ],
     "DeviceType": [
+        "player",
         "train",
         "turnout",
     ],

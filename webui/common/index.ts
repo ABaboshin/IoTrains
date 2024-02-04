@@ -12,7 +12,7 @@
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
 
-export interface Command {
+export interface Command{
     function: Function;
     value?:   string;
     [property: string]: any;
@@ -27,13 +27,13 @@ export enum Function {
     TurnoutPos2 = "turnout_pos2",
 }
 
-export interface ControlUnit {
+export interface ControlUnit{
     devices: Device[];
     id:      string;
     [property: string]: any;
 }
 
-export interface Device {
+export interface Device{
     functions?: Function[];
     id:         string;
     type:       DeviceType;
@@ -46,18 +46,18 @@ export enum DeviceType {
     Turnout = "turnout",
 }
 
-export interface DeviceInfo {
+export interface DeviceInfo{
     device: Device;
     state?: State;
     [property: string]: any;
 }
 
-export interface State {
+export interface State{
     id?: string;
     [property: string]: any;
 }
 
-export interface TrainState {
+export interface TrainState extends State {
     direction?: Direction;
     speed?:     number;
     [property: string]: any;

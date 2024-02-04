@@ -5,198 +5,15 @@ import {
   FetchingJSONSchemaStore,
   readFromFileOrURL,
   TargetLanguage,
-  CPlusPlusRenderer,
-  CPlusPlusTargetLanguage,
-  RenderContext,
-  cPlusPlusOptions,
-  getOptionValues,
-  TypeAttributeKind,
-  JSONSchema,
-  Ref,
-  JSONSchemaType,
-  JSONSchemaAttributes,
-  ClassType,
-  Sourcelike,
-  Name,
 } from "quicktype-core";
 import * as fs from "fs";
-
-class ProcessTypeAttributeKind extends TypeAttributeKind<boolean> {
-  constructor() {
-    super("process");
-  }
-
-  combine(attrs: boolean[]): boolean {
-    return attrs.some(x => x);
-  }
-
-  makeInferred(_: boolean): undefined {
-    return undefined;
-  }
-
-  stringify(isProcess: boolean): string {
-    return isProcess.toString();
-  }
-}
-
-const processTypeAttributeKind = new ProcessTypeAttributeKind();
-
-function processAttributeProducer(
-  schema: JSONSchema,
-  canonicalRef: Ref,
-  types: Set<JSONSchemaType>
-): JSONSchemaAttributes | undefined {
-  if (typeof schema !== "object") return undefined;
-
-  if (!types.has("object")) return undefined;
-
-  let response: boolean;
-  if (schema.response === undefined) {
-    response = false;
-  } else if (typeof schema.response === "boolean") {
-    response = schema.response;
-  } else {
-    throw new Error(`response is not a boolean in ${canonicalRef}`);
-  }
-
-  return { forType: processTypeAttributeKind.makeAttributes(response) };
-}
-
-class ResponseTypeAttributeKind extends TypeAttributeKind<boolean> {
-  constructor() {
-    super("response");
-  }
-
-  combine(attrs: boolean[]): boolean {
-    return attrs.some(x => x);
-  }
-
-  makeInferred(_: boolean): undefined {
-    return undefined;
-  }
-
-  stringify(isResponse: boolean): string {
-    return isResponse.toString();
-  }
-}
-
-const responseTypeAttributeKind = new ResponseTypeAttributeKind();
-
-function responseAttributeProducer(
-  schema: JSONSchema,
-  canonicalRef: Ref,
-  types: Set<JSONSchemaType>
-): JSONSchemaAttributes | undefined {
-  if (typeof schema !== "object") return undefined;
-
-  if (!types.has("object")) return undefined;
-
-  let response: boolean;
-  if (schema.response === undefined) {
-    response = false;
-  } else if (typeof schema.response === "boolean") {
-    response = schema.response;
-  } else {
-    throw new Error(`response is not a boolean in ${canonicalRef}`);
-  }
-
-  return { forType: responseTypeAttributeKind.makeAttributes(response) };
-}
-
-class ExtendsTypeAttributeKind extends TypeAttributeKind<string> {
-  constructor() {
-    super("extends");
-  }
-
-  combine(attrs: string[]): string {
-    return attrs[0];
-  }
-
-  makeInferred(_: string): undefined {
-    return undefined;
-  }
-
-  stringify(isProcess: string): string {
-    return isProcess.toString();
-  }
-}
-
-const extendsTypeAttributeKind = new ExtendsTypeAttributeKind();
-
-function extendsAttributeProducer(
-  schema: JSONSchema,
-  _canonicalRef: Ref,
-  types: Set<JSONSchemaType>
-): JSONSchemaAttributes | undefined {
-  if (typeof schema !== "object") return undefined;
-
-  if (!types.has("object")) return undefined;
-
-  return { forType: extendsTypeAttributeKind.makeAttributes(schema.extends) };
-}
-
-class CustomCPPTargetLanguage extends CPlusPlusTargetLanguage {
-  constructor() {
-    super("C++", ["cpp"], "cpp");
-  }
-
-  protected makeRenderer(renderContext: RenderContext, untypedOptionValues: { [name: string]: any }): CPlusPlusRenderer {
-    let options = getOptionValues(cPlusPlusOptions, untypedOptionValues);
-    options.codeFormat = false;
-    return new CustomCPPRenderer(this, renderContext, options);
-  }
-}
-
-class CustomCPPRenderer extends CPlusPlusRenderer {
-
-  protected emitClass(c: ClassType, className: Name): void {
-    this.emitDescription(this.descriptionForType(c));
-
-    const attributes = c.getAttributes();
-    const baseclass = extendsTypeAttributeKind.tryGetInAttributes(attributes);
-    const responseclass = responseTypeAttributeKind.tryGetInAttributes(attributes);
-
-    this.emitBlock(["class ", className, baseclass === undefined ? "" : " : public " + baseclass], true, () => {
-      const constraints = this.generateClassConstraints(c);
-      this.emitLine("public:");
-      if (constraints === undefined) {
-        this.emitLine(className, "() = default;");
-      } else {
-        this.emitLine(className, "() :");
-        let numEmits = 0;
-        constraints.forEach((initializer: Sourcelike, _propName: string) => {
-          numEmits++;
-          this.indent(() => {
-            if (numEmits === constraints.size) {
-              this.emitLine(initializer);
-            } else {
-              this.emitLine(initializer, ",");
-            }
-          });
-        });
-        this.emitLine("{}");
-      }
-
-      this.emitLine("virtual ~", className, "() = default;");
-      this.ensureBlankLine();
-
-      if (baseclass !== undefined && responseclass) {
-        this.emitLine([
-          "void to_json(json & j) override;"
-        ]);
-      } else if (responseclass) {
-        this.emitLine([
-          "virtual void to_json(json & j);"
-        ]);
-      }
-
-      this.emitClassMembers(c, constraints);
-    });
-  }
-}
+import { CustomCPPTargetLanguage } from "./cpp";
+import { CustomTypeScriptTargetLanguage } from "./typescript";
+import { extendsAttributeProducer } from "./extendattribute";
+import { responseAttributeProducer } from "./responseattribute";
 
 async function quicktypeJSONSchema(targetLanguage: string | TargetLanguage) {
-  const schemaInput = new JSONSchemaInput(new FetchingJSONSchemaStore(), [processAttributeProducer, extendsAttributeProducer, responseAttributeProducer]);
+  const schemaInput = new JSONSchemaInput(new FetchingJSONSchemaStore(), [extendsAttributeProducer, responseAttributeProducer]);
 
   await schemaInput.addSource({ name: "Function", schema: await readFromFileOrURL("./function.json") });
   await schemaInput.addSource({ name: "DeviceType", schema: await readFromFileOrURL("./devicetype.json") });
@@ -221,9 +38,9 @@ async function quicktypeJSONSchema(targetLanguage: string | TargetLanguage) {
 
 async function main() {
   const { lines: linescpp } = await quicktypeJSONSchema(new CustomCPPTargetLanguage());
-  fs.writeFileSync("../pio/src/schema.hpp", linescpp.join("\n"));
+  fs.writeFileSync("../firmware/src/schema.hpp", linescpp.join("\n"));
 
-  const { lines: linests } = await quicktypeJSONSchema("typescript");
+  const { lines: linests } = await quicktypeJSONSchema(new CustomTypeScriptTargetLanguage());
   fs.writeFileSync("../webui/common/index.ts", linests.join("\n"));
 }
 
