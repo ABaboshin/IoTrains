@@ -4,7 +4,14 @@
   "properties": {
     "id": {
       "type": "string"
+    },
+    "command": {
+      "$ref": "command.json"
+    },
+    "ok": {
+      "type": "boolean"
     }
   },
-  "response": true
+  "response": true,
+  "required": ["id", "ok"]
 }

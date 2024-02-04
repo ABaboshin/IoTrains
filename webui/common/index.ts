@@ -1,31 +1,15 @@
 // To parse this data:
 //
-//   import { Convert, Function, DeviceType, Command, ControlUnit, DeviceInfo, TrainState } from "./file";
+//   import { Convert, Function, DeviceType, ControlUnit, DeviceInfo, TrainState } from "./file";
 //
 //   const function = Convert.toFunction(json);
 //   const deviceType = Convert.toDeviceType(json);
-//   const command = Convert.toCommand(json);
 //   const controlUnit = Convert.toControlUnit(json);
 //   const deviceInfo = Convert.toDeviceInfo(json);
 //   const trainState = Convert.toTrainState(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
-
-export interface Command{
-    function: Function;
-    value?:   string;
-    [property: string]: any;
-}
-
-export enum Function {
-    MoveBackward = "move_backward",
-    MoveForward = "move_forward",
-    Play = "play",
-    Stop = "stop",
-    TurnoutPos1 = "turnout_pos1",
-    TurnoutPos2 = "turnout_pos2",
-}
 
 export interface ControlUnit{
     devices: Device[];
@@ -38,6 +22,15 @@ export interface Device{
     id:         string;
     type:       DeviceType;
     [property: string]: any;
+}
+
+export enum Function {
+    MoveBackward = "move_backward",
+    MoveForward = "move_forward",
+    Play = "play",
+    Stop = "stop",
+    TurnoutPos1 = "turnout_pos1",
+    TurnoutPos2 = "turnout_pos2",
 }
 
 export enum DeviceType {
@@ -53,7 +46,15 @@ export interface DeviceInfo{
 }
 
 export interface State{
-    id?: string;
+    command?: Command;
+    id:       string;
+    ok:       boolean;
+    [property: string]: any;
+}
+
+export interface Command{
+    function: Function;
+    value?:   string;
     [property: string]: any;
 }
 
@@ -86,14 +87,6 @@ export class Convert {
 
     public static deviceTypeToJson(value: DeviceType): string {
         return JSON.stringify(uncast(value, r("DeviceType")), null, 2);
-    }
-
-    public static toCommand(json: string): Command {
-        return cast(JSON.parse(json), r("Command"));
-    }
-
-    public static commandToJson(value: Command): string {
-        return JSON.stringify(uncast(value, r("Command")), null, 2);
     }
 
     public static toControlUnit(json: string): ControlUnit {
@@ -274,10 +267,6 @@ function r(name: string) {
 }
 
 const typeMap: any = {
-    "Command": o([
-        { json: "function", js: "function", typ: r("Function") },
-        { json: "value", js: "value", typ: u(undefined, "") },
-    ], "any"),
     "ControlUnit": o([
         { json: "devices", js: "devices", typ: a(r("Device")) },
         { json: "id", js: "id", typ: "" },
@@ -292,7 +281,13 @@ const typeMap: any = {
         { json: "state", js: "state", typ: u(undefined, r("State")) },
     ], "any"),
     "State": o([
-        { json: "id", js: "id", typ: u(undefined, "") },
+        { json: "command", js: "command", typ: u(undefined, r("Command")) },
+        { json: "id", js: "id", typ: "" },
+        { json: "ok", js: "ok", typ: true },
+    ], "any"),
+    "Command": o([
+        { json: "function", js: "function", typ: r("Function") },
+        { json: "value", js: "value", typ: u(undefined, "") },
     ], "any"),
     "TrainState": o([
         { json: "direction", js: "direction", typ: u(undefined, r("Direction")) },

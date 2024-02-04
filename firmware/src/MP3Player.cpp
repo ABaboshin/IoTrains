@@ -2,7 +2,13 @@
 #include <Arduino.h>
 #include <memory>
 
-#include "mp3.h"
+#ifdef ESP8266
+#include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
+#else
+#include <WiFi.h>
+#include <HTTPClient.h>
+#endif
 
 #include "AudioFileSourcePROGMEM.h"
 #include "AudioGeneratorMP3.h"
@@ -53,15 +59,34 @@ std::shared_ptr<railschema::State> MP3Player::ProcessCommand(const railschema::C
 
   if (command.function == railschema::Function::PLAY)
   {
-    in = std::make_shared<AudioFileSourcePROGMEM>(outputmp3, sizeof(outputmp3));
-    in->RegisterMetadataCB(MDCallback, (void *)"ICY");
-    mp3.begin(in.get(), &out);
+    HTTPClient http;
+    WiFiClient client;
+    if (http.begin(client, command.value.value().c_str()))
+    {
+      auto httpCode = http.GET();
+      if (httpCode > 0)
+      {
+        if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY)
+        {
+          auto size = http.getSize();
+          std::vector<std::uint8_t> buf(size);
+          WiFiClient *stream = &client;
+          int c = stream->readBytes(&buf[0], size);
+          if (c > 0)
+          {
+            in = std::make_shared<AudioFileSourcePROGMEM>(&buf[0], buf.size());
+            in->RegisterMetadataCB(MDCallback, (void *)"ICY");
+            mp3.begin(in.get(), &out);
+
+            ts->ok = true;
+          }
+        }
+      }
+    }
   }
 
   return ts;
 }
-
-static int lastms = 0;
 
 void MP3Player::Loop()
 {

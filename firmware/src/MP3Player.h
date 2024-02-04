@@ -3,6 +3,7 @@
 #include <cstdint>
 #include "BaseDevice.h"
 
+// 128kbps
 class MP3Player : public BaseDevice
 {
 public:

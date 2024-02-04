@@ -20,6 +20,7 @@ std::shared_ptr<railschema::State> Train::ProcessCommand(const railschema::Comma
 
     ts->direction = railschema::Direction::FORWARD;
     ts->speed = speed;
+    ts->ok = true;
   }
 
   if (command.function == railschema::Function::MOVE_BACKWARD)
@@ -28,6 +29,7 @@ std::shared_ptr<railschema::State> Train::ProcessCommand(const railschema::Comma
     drv.Backward(speed);
     ts->direction = railschema::Direction::BACKWARD;
     ts->speed = speed;
+    ts->ok = true;
   }
 
   if (command.function == railschema::Function::STOP)
@@ -35,6 +37,7 @@ std::shared_ptr<railschema::State> Train::ProcessCommand(const railschema::Comma
     drv.Stop();
     ts->direction = railschema::Direction::STOP;
     ts->speed = 0;
+    ts->ok = true;
   }
 
   return ts;

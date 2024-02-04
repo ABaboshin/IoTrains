@@ -1,11 +1,10 @@
 "use strict";
 // To parse this data:
 //
-//   import { Convert, Function, DeviceType, Command, ControlUnit, DeviceInfo, TrainState } from "./file";
+//   import { Convert, Function, DeviceType, ControlUnit, DeviceInfo, TrainState } from "./file";
 //
 //   const function = Convert.toFunction(json);
 //   const deviceType = Convert.toDeviceType(json);
-//   const command = Convert.toCommand(json);
 //   const controlUnit = Convert.toControlUnit(json);
 //   const deviceInfo = Convert.toDeviceInfo(json);
 //   const trainState = Convert.toTrainState(json);
@@ -51,12 +50,6 @@ var Convert = /** @class */ (function () {
     };
     Convert.deviceTypeToJson = function (value) {
         return JSON.stringify(uncast(value, r("DeviceType")), null, 2);
-    };
-    Convert.toCommand = function (json) {
-        return cast(JSON.parse(json), r("Command"));
-    };
-    Convert.commandToJson = function (value) {
-        return JSON.stringify(uncast(value, r("Command")), null, 2);
     };
     Convert.toControlUnit = function (json) {
         return cast(JSON.parse(json), r("ControlUnit"));
@@ -232,10 +225,6 @@ function r(name) {
     return { ref: name };
 }
 var typeMap = {
-    "Command": o([
-        { json: "function", js: "function", typ: r("Function") },
-        { json: "value", js: "value", typ: u(undefined, "") },
-    ], "any"),
     "ControlUnit": o([
         { json: "devices", js: "devices", typ: a(r("Device")) },
         { json: "id", js: "id", typ: "" },
@@ -250,7 +239,13 @@ var typeMap = {
         { json: "state", js: "state", typ: u(undefined, r("State")) },
     ], "any"),
     "State": o([
-        { json: "id", js: "id", typ: u(undefined, "") },
+        { json: "command", js: "command", typ: u(undefined, r("Command")) },
+        { json: "id", js: "id", typ: "" },
+        { json: "ok", js: "ok", typ: true },
+    ], "any"),
+    "Command": o([
+        { json: "function", js: "function", typ: r("Function") },
+        { json: "value", js: "value", typ: u(undefined, "") },
     ], "any"),
     "TrainState": o([
         { json: "direction", js: "direction", typ: u(undefined, r("Direction")) },

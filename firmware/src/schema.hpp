@@ -6,7 +6,6 @@
 //
 //     Function data = nlohmann::json::parse(jsonString);
 //     DeviceType data = nlohmann::json::parse(jsonString);
-//     Command data = nlohmann::json::parse(jsonString);
 //     ControlUnit data = nlohmann::json::parse(jsonString);
 //     DeviceInfo data = nlohmann::json::parse(jsonString);
 //     TrainState data = nlohmann::json::parse(jsonString);
@@ -91,15 +90,6 @@ namespace railschema {
 
     enum class Function : int { MOVE_BACKWARD, MOVE_FORWARD, PLAY, STOP, TURNOUT_POS1, TURNOUT_POS2 };
 
-    class Command {
-        public:
-        Command() = default;
-        virtual ~Command() = default;
-
-        Function function;
-        std::optional<std::string> value;
-    };
-
     enum class DeviceType : int { PLAYER, TRAIN, TURNOUT };
 
     class Device {
@@ -121,13 +111,24 @@ namespace railschema {
         std::string id;
     };
 
+    class Command {
+        public:
+        Command() = default;
+        virtual ~Command() = default;
+
+        Function function;
+        std::optional<std::string> value;
+    };
+
     class State {
         public:
         State() = default;
         virtual ~State() = default;
 
         virtual void to_json(json & j);
-        std::optional<std::string> id;
+        std::optional<Command> command;
+        std::string id;
+        bool ok;
     };
 
     class DeviceInfo {
@@ -153,14 +154,14 @@ namespace railschema {
 }
 
 namespace railschema {
-    void from_json(const json & j, Command & x);
-    void to_json(json & j, const Command & x);
-
     void from_json(const json & j, Device & x);
     void to_json(json & j, const Device & x);
 
     void from_json(const json & j, ControlUnit & x);
     void to_json(json & j, const ControlUnit & x);
+
+    void from_json(const json & j, Command & x);
+    void to_json(json & j, const Command & x);
 
     void from_json(const json & j, State & x);
     void to_json(json & j, const State & x);
@@ -179,17 +180,6 @@ namespace railschema {
 
     void from_json(const json & j, Direction & x);
     void to_json(json & j, const Direction & x);
-
-    inline void from_json(const json & j, Command& x) {
-        x.function = j.at("function").get<Function>();
-        x.value = get_stack_optional<std::string>(j, "value");
-    }
-
-    inline void to_json(json & j, const Command & x) {
-        j = json::object();
-        j["function"] = x.function;
-        j["value"] = x.value;
-    }
 
     inline void from_json(const json & j, Device& x) {
         x.functions = get_stack_optional<std::vector<Function>>(j, "functions");
@@ -215,13 +205,28 @@ namespace railschema {
         j["id"] = x.id;
     }
 
+    inline void from_json(const json & j, Command& x) {
+        x.function = j.at("function").get<Function>();
+        x.value = get_stack_optional<std::string>(j, "value");
+    }
+
+    inline void to_json(json & j, const Command & x) {
+        j = json::object();
+        j["function"] = x.function;
+        j["value"] = x.value;
+    }
+
     inline void from_json(const json & j, State& x) {
-        x.id = get_stack_optional<std::string>(j, "id");
+        x.command = get_stack_optional<Command>(j, "command");
+        x.id = j.at("id").get<std::string>();
+        x.ok = j.at("ok").get<bool>();
     }
 
     inline void to_json(json & j, const State & x) {
         j = json::object();
+        j["command"] = x.command;
         j["id"] = x.id;
+        j["ok"] = x.ok;
     }
 
     inline void from_json(const json & j, DeviceInfo& x) {
