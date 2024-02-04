@@ -6,7 +6,6 @@
 
 ControlUnit cu;
 
-std::shared_ptr<MP3Player> player = std::make_shared<MP3Player>(0);
 void setup()
 {
   Serial.begin(115200);
@@ -33,16 +32,15 @@ void setup()
 
   // cu.devices.push_back(train);
 
-  // std::shared_ptr<MP3Player> player = std::make_shared<MP3Player>(0);
+  std::shared_ptr<MP3Player> player = std::make_shared<MP3Player>();
   player->id = "player";
   player->type = railschema::DeviceType::PLAYER;
   cu.devices.push_back(player);
 
-  // cu.Setup();
+  cu.Setup();
 }
 
 void loop()
 {
-  // cu.Loop();
-  player->loop();
+  cu.Loop();
 }

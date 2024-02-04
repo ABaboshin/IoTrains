@@ -114,6 +114,12 @@ void ControlUnit::Loop()
 
   client.loop();
   timer.tick();
+
+  for (auto i = 0; i < devices.size(); i++)
+  {
+    devices[i]->Loop();
+  }
+
   delay(10);
 }
 
