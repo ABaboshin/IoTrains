@@ -32,7 +32,7 @@ std::shared_ptr<railschema::State> Train::ProcessCommand(const railschema::Comma
     ts->ok = true;
   }
 
-  if (command.function == railschema::Function::STOP)
+  if (command.function == railschema::Function::BREAK)
   {
     drv.Stop();
     ts->direction = railschema::Direction::STOP;

@@ -27,10 +27,11 @@ export interface Device{
 }
 
 export enum Function {
+    Break = "break",
     MoveBackward = "move_backward",
     MoveForward = "move_forward",
     Play = "play",
-    Stop = "stop",
+    StopPlay = "stop_play",
     TurnoutPos1 = "turnout_pos1",
     TurnoutPos2 = "turnout_pos2",
 }
@@ -326,10 +327,11 @@ const typeMap: any = {
         { json: "vakue", js: "vakue", typ: u(undefined, "") },
     ], "any"),
     "Function": [
+        "break",
         "move_backward",
         "move_forward",
         "play",
-        "stop",
+        "stop_play",
         "turnout_pos1",
         "turnout_pos2",
     ],

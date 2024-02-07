@@ -10,10 +10,11 @@ export interface Device {
     [property: string]: any;
 }
 export declare enum Function {
+    Break = "break",
     MoveBackward = "move_backward",
     MoveForward = "move_forward",
     Play = "play",
-    Stop = "stop",
+    StopPlay = "stop_play",
     TurnoutPos1 = "turnout_pos1",
     TurnoutPos2 = "turnout_pos2"
 }

@@ -20,9 +20,6 @@ void setup()
   cu.id = "cu2";
 
   std::vector<railschema::Function> functions;
-  functions.push_back(railschema::Function::MOVE_BACKWARD);
-  functions.push_back(railschema::Function::MOVE_FORWARD);
-  functions.push_back(railschema::Function::STOP);
 
   std::shared_ptr<BaseDevice> train = std::make_shared<Train>();
 

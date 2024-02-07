@@ -15,7 +15,7 @@ export const TrainControl: FunctionComponent<DeviceInfo> = (train: DeviceInfo) =
         }
 
         const command: Command = {
-          function: speed === 0 ? Function.Stop : speed > 0 ? Function.MoveForward : Function.MoveBackward,
+          function: speed === 0 ? Function.Break : speed > 0 ? Function.MoveForward : Function.MoveBackward,
           value: speed.toString()
         };
 
