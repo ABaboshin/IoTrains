@@ -13,6 +13,7 @@ const client = connect(MQTT_URL, { username: MQTT_USERNAME, password: MQTT_PASSW
 
 const reportQueue = "report";
 const stateQueue = "state";
+const eventQueue = "event";
 
 client.on("connect", (x) => {
   console.log("connected");
@@ -29,11 +30,18 @@ client.on("connect", (x) => {
     } else {
       console.log("subscribed state");
     }
+  }); client.subscribe(eventQueue, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("subscribed event");
+    }
   });
 });
 
 let units = new Map<string, ControlUnit>();
 let states = new Map<string, State>();
+let events = new Array<Event>();
 
 client.on("message", (topic, message) => {
   console.log(`${moment().format('yyyy-mm-dd:hh:mm:ss') } ${message.toString() }`);
@@ -48,6 +56,12 @@ client.on("message", (topic, message) => {
 
     states.set(tmp.id, tmp);
   }
+
+  if (topic === eventQueue) {
+    const tmp = JSON.parse(message.toString());
+
+    events.push(tmp);
+  }
 });
 
 const app = express();
@@ -55,8 +69,10 @@ const app = express();
 app.use(cors());
 app.use(express.json() as RequestHandler);
 
-// TODO
-// pair (device, state)
+app.get("/api/v1/event", (req, res) => {
+  res.json(events);
+});
+
 app.get("/api/v1/device", (req, res) => {
   const devices = Array.from(units.entries()).map((x, i, ar) => x[1].devices).flat(1).map(d => {
     let r : DeviceInfo = {device: d, state: states.get(d.id)};

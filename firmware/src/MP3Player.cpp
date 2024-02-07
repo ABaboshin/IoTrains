@@ -88,7 +88,7 @@ std::shared_ptr<railschema::State> MP3Player::ProcessCommand(const railschema::C
   return ts;
 }
 
-void MP3Player::Loop()
+std::shared_ptr<railschema::Event> MP3Player::Loop()
 {
   if (mp3.isRunning())
   {
@@ -97,4 +97,6 @@ void MP3Player::Loop()
       mp3.stop();
     }
   }
+
+  return nullptr;
 }

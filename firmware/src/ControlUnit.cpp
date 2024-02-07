@@ -117,7 +117,13 @@ void ControlUnit::Loop()
 
   for (auto i = 0; i < devices.size(); i++)
   {
-    devices[i]->Loop();
+    auto event = devices[i]->Loop();
+    if (event != nullptr)
+    {
+      nlohmann::json j;
+      railschema::to_json(j, *event);
+      client.publish("event", j.dump().c_str());
+    }
   }
 
   delay(10);

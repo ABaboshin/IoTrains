@@ -1,18 +1,20 @@
 "use strict";
 // To parse this data:
 //
-//   import { Convert, Function, DeviceType, ControlUnit, DeviceInfo, TrainState } from "./file";
+//   import { Convert, Function, DeviceType, ControlUnit, DeviceInfo, TrainState, EventType, Event } from "./file";
 //
 //   const function = Convert.toFunction(json);
 //   const deviceType = Convert.toDeviceType(json);
 //   const controlUnit = Convert.toControlUnit(json);
 //   const deviceInfo = Convert.toDeviceInfo(json);
 //   const trainState = Convert.toTrainState(json);
+//   const eventType = Convert.toEventType(json);
+//   const event = Convert.toEvent(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
 exports.__esModule = true;
-exports.Convert = exports.Direction = exports.DeviceType = exports.Function = void 0;
+exports.Convert = exports.EventType = exports.Direction = exports.DeviceType = exports.Function = void 0;
 var Function;
 (function (Function) {
     Function["MoveBackward"] = "move_backward";
@@ -34,6 +36,10 @@ var Direction;
     Direction["Forward"] = "forward";
     Direction["Stop"] = "stop";
 })(Direction = exports.Direction || (exports.Direction = {}));
+var EventType;
+(function (EventType) {
+    EventType["Train"] = "train";
+})(EventType = exports.EventType || (exports.EventType = {}));
 // Converts JSON strings to/from your types
 // and asserts the results of JSON.parse at runtime
 var Convert = /** @class */ (function () {
@@ -68,6 +74,18 @@ var Convert = /** @class */ (function () {
     };
     Convert.trainStateToJson = function (value) {
         return JSON.stringify(uncast(value, r("TrainState")), null, 2);
+    };
+    Convert.toEventType = function (json) {
+        return cast(JSON.parse(json), r("EventType"));
+    };
+    Convert.eventTypeToJson = function (value) {
+        return JSON.stringify(uncast(value, r("EventType")), null, 2);
+    };
+    Convert.toEvent = function (json) {
+        return cast(JSON.parse(json), r("Event"));
+    };
+    Convert.eventToJson = function (value) {
+        return JSON.stringify(uncast(value, r("Event")), null, 2);
     };
     return Convert;
 }());
@@ -251,6 +269,10 @@ var typeMap = {
         { json: "direction", js: "direction", typ: u(undefined, r("Direction")) },
         { json: "speed", js: "speed", typ: u(undefined, 3.14) },
     ], "any"),
+    "Event": o([
+        { json: "type", js: "type", typ: r("EventType") },
+        { json: "vakue", js: "vakue", typ: u(undefined, "") },
+    ], "any"),
     "Function": [
         "move_backward",
         "move_forward",
@@ -268,5 +290,8 @@ var typeMap = {
         "backward",
         "forward",
         "stop",
+    ],
+    "EventType": [
+        "train",
     ]
 };

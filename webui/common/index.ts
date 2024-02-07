@@ -1,12 +1,14 @@
 // To parse this data:
 //
-//   import { Convert, Function, DeviceType, ControlUnit, DeviceInfo, TrainState } from "./file";
+//   import { Convert, Function, DeviceType, ControlUnit, DeviceInfo, TrainState, EventType, Event } from "./file";
 //
 //   const function = Convert.toFunction(json);
 //   const deviceType = Convert.toDeviceType(json);
 //   const controlUnit = Convert.toControlUnit(json);
 //   const deviceInfo = Convert.toDeviceInfo(json);
 //   const trainState = Convert.toTrainState(json);
+//   const eventType = Convert.toEventType(json);
+//   const event = Convert.toEvent(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
@@ -70,6 +72,16 @@ export enum Direction {
     Stop = "stop",
 }
 
+export interface Event{
+    type:   EventType;
+    vakue?: string;
+    [property: string]: any;
+}
+
+export enum EventType {
+    Train = "train",
+}
+
 // Converts JSON strings to/from your types
 // and asserts the results of JSON.parse at runtime
 export class Convert {
@@ -111,6 +123,22 @@ export class Convert {
 
     public static trainStateToJson(value: TrainState): string {
         return JSON.stringify(uncast(value, r("TrainState")), null, 2);
+    }
+
+    public static toEventType(json: string): EventType {
+        return cast(JSON.parse(json), r("EventType"));
+    }
+
+    public static eventTypeToJson(value: EventType): string {
+        return JSON.stringify(uncast(value, r("EventType")), null, 2);
+    }
+
+    public static toEvent(json: string): Event {
+        return cast(JSON.parse(json), r("Event"));
+    }
+
+    public static eventToJson(value: Event): string {
+        return JSON.stringify(uncast(value, r("Event")), null, 2);
     }
 }
 
@@ -293,6 +321,10 @@ const typeMap: any = {
         { json: "direction", js: "direction", typ: u(undefined, r("Direction")) },
         { json: "speed", js: "speed", typ: u(undefined, 3.14) },
     ], "any"),
+    "Event": o([
+        { json: "type", js: "type", typ: r("EventType") },
+        { json: "vakue", js: "vakue", typ: u(undefined, "") },
+    ], "any"),
     "Function": [
         "move_backward",
         "move_forward",
@@ -310,5 +342,8 @@ const typeMap: any = {
         "backward",
         "forward",
         "stop",
+    ],
+    "EventType": [
+        "train",
     ],
 };

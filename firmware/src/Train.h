@@ -11,4 +11,5 @@ private:
 public:
     Train();
     std::shared_ptr<railschema::State> ProcessCommand(const railschema::Command &command) override;
+    std::shared_ptr<railschema::Event> Loop();
 };
