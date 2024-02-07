@@ -1,8 +1,7 @@
 // To parse this data:
 //
-//   import { Convert, Discriminator, Function, DeviceType, ControlUnit, DeviceInfo, TrainState, EventType, Event } from "./file";
+//   import { Convert, Function, DeviceType, ControlUnit, DeviceInfo, TrainState, EventType, Event, RFIDEvent } from "./file";
 //
-//   const discriminator = Convert.toDiscriminator(json);
 //   const function = Convert.toFunction(json);
 //   const deviceType = Convert.toDeviceType(json);
 //   const controlUnit = Convert.toControlUnit(json);
@@ -10,14 +9,10 @@
 //   const trainState = Convert.toTrainState(json);
 //   const eventType = Convert.toEventType(json);
 //   const event = Convert.toEvent(json);
+//   const rFIDEvent = Convert.toRFIDEvent(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
-
-export interface Discriminator{
-    discriminator: string;
-    [property: string]: any;
-}
 
 export interface ControlUnit{
     devices: Device[];
@@ -80,8 +75,7 @@ export enum Direction {
 }
 
 export interface Event{
-    type:   EventType;
-    value?: string;
+    type: EventType;
     [property: string]: any;
 }
 
@@ -89,17 +83,14 @@ export enum EventType {
     Train = "train",
 }
 
+export interface RFIDEvent extends Event {
+    value: string;
+    [property: string]: any;
+}
+
 // Converts JSON strings to/from your types
 // and asserts the results of JSON.parse at runtime
 export class Convert {
-    public static toDiscriminator(json: string): Discriminator {
-        return cast(JSON.parse(json), r("Discriminator"));
-    }
-
-    public static discriminatorToJson(value: Discriminator): string {
-        return JSON.stringify(uncast(value, r("Discriminator")), null, 2);
-    }
-
     public static toFunction(json: string): Function {
         return cast(JSON.parse(json), r("Function"));
     }
@@ -154,6 +145,14 @@ export class Convert {
 
     public static eventToJson(value: Event): string {
         return JSON.stringify(uncast(value, r("Event")), null, 2);
+    }
+
+    public static toRFIDEvent(json: string): RFIDEvent {
+        return cast(JSON.parse(json), r("RFIDEvent"));
+    }
+
+    public static rFIDEventToJson(value: RFIDEvent): string {
+        return JSON.stringify(uncast(value, r("RFIDEvent")), null, 2);
     }
 }
 
@@ -310,9 +309,6 @@ function r(name: string) {
 }
 
 const typeMap: any = {
-    "Discriminator": o([
-        { json: "discriminator", js: "discriminator", typ: "" },
-    ], "any"),
     "ControlUnit": o([
         { json: "devices", js: "devices", typ: a(r("Device")) },
         { json: "id", js: "id", typ: "" },
@@ -341,7 +337,9 @@ const typeMap: any = {
     ], "any"),
     "Event": o([
         { json: "type", js: "type", typ: r("EventType") },
-        { json: "value", js: "value", typ: u(undefined, "") },
+    ], "any"),
+    "RFIDEvent": o([
+        { json: "value", js: "value", typ: "" },
     ], "any"),
     "Function": [
         "break",

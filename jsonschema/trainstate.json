@@ -3,6 +3,7 @@
   "type": "object",
   "extends": "State",
   "response": true,
+  "name": "TrainState",
   "properties": {
     "direction": {
       "$ref": "direction.json"

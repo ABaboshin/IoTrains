@@ -4,7 +4,6 @@
 //
 //  Then include this file, and then do
 //
-//     Discriminator data = nlohmann::json::parse(jsonString);
 //     Function data = nlohmann::json::parse(jsonString);
 //     DeviceType data = nlohmann::json::parse(jsonString);
 //     ControlUnit data = nlohmann::json::parse(jsonString);
@@ -12,6 +11,7 @@
 //     TrainState data = nlohmann::json::parse(jsonString);
 //     EventType data = nlohmann::json::parse(jsonString);
 //     Event data = nlohmann::json::parse(jsonString);
+//     RfidEvent data = nlohmann::json::parse(jsonString);
 
 #pragma once
 
@@ -91,15 +91,6 @@ namespace railschema {
     }
     #endif
 
-    class Discriminator {
-        public:
-        Discriminator() = default;
-        virtual ~Discriminator() = default;
-
-        virtual void to_json(json & j);
-        std::string discriminator;
-    };
-
     enum class Function : int { BREAK, MOVE_BACKWARD, MOVE_FORWARD, PLAY, STOP_PLAY, TURNOUT_POS1, TURNOUT_POS2 };
 
     enum class DeviceType : int { PLAYER, TRAIN, TURNOUT };
@@ -173,14 +164,19 @@ namespace railschema {
 
         virtual void to_json(json & j);
         EventType type;
-        std::optional<std::string> value;
+    };
+
+    class RfidEvent : public Event {
+        public:
+        RfidEvent() = default;
+        virtual ~RfidEvent() = default;
+
+        void to_json(json & j) override;
+        std::string value;
     };
 }
 
 namespace railschema {
-    void from_json(const json & j, Discriminator & x);
-    void to_json(json & j, const Discriminator & x);
-
     void from_json(const json & j, Device & x);
     void to_json(json & j, const Device & x);
 
@@ -202,6 +198,9 @@ namespace railschema {
     void from_json(const json & j, Event & x);
     void to_json(json & j, const Event & x);
 
+    void from_json(const json & j, RfidEvent & x);
+    void to_json(json & j, const RfidEvent & x);
+
     void from_json(const json & j, Function & x);
     void to_json(json & j, const Function & x);
 
@@ -213,15 +212,6 @@ namespace railschema {
 
     void from_json(const json & j, EventType & x);
     void to_json(json & j, const EventType & x);
-
-    inline void from_json(const json & j, Discriminator& x) {
-        x.discriminator = j.at("discriminator").get<std::string>();
-    }
-
-    inline void to_json(json & j, const Discriminator & x) {
-        j = json::object();
-        j["discriminator"] = x.discriminator;
-    }
 
     inline void from_json(const json & j, Device& x) {
         x.functions = get_stack_optional<std::vector<Function>>(j, "functions");
@@ -295,12 +285,19 @@ namespace railschema {
 
     inline void from_json(const json & j, Event& x) {
         x.type = j.at("type").get<EventType>();
-        x.value = get_stack_optional<std::string>(j, "value");
     }
 
     inline void to_json(json & j, const Event & x) {
         j = json::object();
         j["type"] = x.type;
+    }
+
+    inline void from_json(const json & j, RfidEvent& x) {
+        x.value = j.at("value").get<std::string>();
+    }
+
+    inline void to_json(json & j, const RfidEvent & x) {
+        j = json::object();
         j["value"] = x.value;
     }
 
@@ -371,4 +368,42 @@ namespace railschema {
             default: throw std::runtime_error("This should not happen");
         }
     }
+    
+        template<typename T>
+        inline std::shared_ptr<T> from_json(const json & j) {
+            return nullptr;
+        }
+          
+    template<> inline std::shared_ptr<State> from_json<State>(const json& j) {
+              const auto discriminator = j.at("discriminator").get<std::string>();
+              if (discriminator == "State") {
+                std::shared_ptr<State> ptr;
+                from_json(j, *ptr);
+                return ptr;
+              }
+              
+    
+              if (discriminator == "TrainState") {
+                std::shared_ptr<State> ptr = std::make_shared<TrainState>();
+                from_json(j, *(TrainState*)ptr.get());
+                return ptr;
+              }
+              
+    return nullptr; }
+    template<> inline std::shared_ptr<Event> from_json<Event>(const json& j) {
+              const auto discriminator = j.at("discriminator").get<std::string>();
+              if (discriminator == "Event") {
+                std::shared_ptr<Event> ptr;
+                from_json(j, *ptr);
+                return ptr;
+              }
+              
+    
+              if (discriminator == "RfidEvent") {
+                std::shared_ptr<Event> ptr = std::make_shared<RfidEvent>();
+                from_json(j, *(RfidEvent*)ptr.get());
+                return ptr;
+              }
+              
+    return nullptr; }
 }

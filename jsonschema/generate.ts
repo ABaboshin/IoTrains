@@ -11,11 +11,11 @@ import { CustomCPPTargetLanguage } from "./cpp";
 import { CustomTypeScriptTargetLanguage } from "./typescript";
 import { extendsAttributeProducer } from "./extendattribute";
 import { responseAttributeProducer } from "./responseattribute";
+import { nameAttributeProducer } from "./nameattribute";
 
 async function quicktypeJSONSchema(targetLanguage: string | TargetLanguage) {
-  const schemaInput = new JSONSchemaInput(new FetchingJSONSchemaStore(), [extendsAttributeProducer, responseAttributeProducer]);
+  const schemaInput = new JSONSchemaInput(new FetchingJSONSchemaStore(), [extendsAttributeProducer, responseAttributeProducer, nameAttributeProducer]);
 
-  await schemaInput.addSource({ name: "Discriminator", schema: await readFromFileOrURL("./discriminator.json") });
   await schemaInput.addSource({ name: "Function", schema: await readFromFileOrURL("./function.json") });
   await schemaInput.addSource({ name: "DeviceType", schema: await readFromFileOrURL("./devicetype.json") });
   // await schemaInput.addSource({ name: "Command", schema: await readFromFileOrURL("./command.json") });
@@ -25,7 +25,7 @@ async function quicktypeJSONSchema(targetLanguage: string | TargetLanguage) {
   await schemaInput.addSource({ name: "TrainState", schema: await readFromFileOrURL("./trainstate.json") });
   await schemaInput.addSource({ name: "EventType", schema: await readFromFileOrURL("./eventtype.json") });
   await schemaInput.addSource({ name: "Event", schema: await readFromFileOrURL("./event.json") });
-  // await schemaInput.addSource({ name: "Discriminator", schema: await readFromFileOrURL("./discriminator.json") });
+  await schemaInput.addSource({ name: "RFIDEvent", schema: await readFromFileOrURL("./rfidevent.json") });
 
   const inputData = new InputData();
   inputData.addInput(schemaInput);
