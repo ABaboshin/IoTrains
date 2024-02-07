@@ -4,9 +4,10 @@
   "enum": [
     "move_forward",
     "move_backward",
-    "stop",
+    "break",
     "turnout_pos1",
     "turnout_pos2",
-    "play"
+    "play",
+    "stop_play"
   ]
 }

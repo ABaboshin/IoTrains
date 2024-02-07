@@ -5,7 +5,7 @@
     "common"
   ],
   "scripts": {
-    "build": "npm install && cd common && npm install && npm run build && cd .. && npm install && cd client && npm run build && cd .. && cd server && npm run build",
+    "build": "npm install && cd common && npm install && npm run build && cd .. && cd client && npm install && npm run build && cd .. && cd server && npm run build",
     "start": "cd server && npm run start"
   },
   "devDependencies": {

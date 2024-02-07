@@ -90,7 +90,7 @@ namespace railschema {
     }
     #endif
 
-    enum class Function : int { MOVE_BACKWARD, MOVE_FORWARD, PLAY, STOP, TURNOUT_POS1, TURNOUT_POS2 };
+    enum class Function : int { BREAK, MOVE_BACKWARD, MOVE_FORWARD, PLAY, STOP_PLAY, TURNOUT_POS1, TURNOUT_POS2 };
 
     enum class DeviceType : int { PLAYER, TRAIN, TURNOUT };
 
@@ -283,10 +283,11 @@ namespace railschema {
     }
 
     inline void from_json(const json & j, Function & x) {
-        if (j == "move_backward") x = Function::MOVE_BACKWARD;
+        if (j == "break") x = Function::BREAK;
+        else if (j == "move_backward") x = Function::MOVE_BACKWARD;
         else if (j == "move_forward") x = Function::MOVE_FORWARD;
         else if (j == "play") x = Function::PLAY;
-        else if (j == "stop") x = Function::STOP;
+        else if (j == "stop_play") x = Function::STOP_PLAY;
         else if (j == "turnout_pos1") x = Function::TURNOUT_POS1;
         else if (j == "turnout_pos2") x = Function::TURNOUT_POS2;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
@@ -294,10 +295,11 @@ namespace railschema {
 
     inline void to_json(json & j, const Function & x) {
         switch (x) {
+            case Function::BREAK: j = "break"; break;
             case Function::MOVE_BACKWARD: j = "move_backward"; break;
             case Function::MOVE_FORWARD: j = "move_forward"; break;
             case Function::PLAY: j = "play"; break;
-            case Function::STOP: j = "stop"; break;
+            case Function::STOP_PLAY: j = "stop_play"; break;
             case Function::TURNOUT_POS1: j = "turnout_pos1"; break;
             case Function::TURNOUT_POS2: j = "turnout_pos2"; break;
             default: throw std::runtime_error("This should not happen");

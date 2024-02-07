@@ -17,10 +17,11 @@ exports.__esModule = true;
 exports.Convert = exports.EventType = exports.Direction = exports.DeviceType = exports.Function = void 0;
 var Function;
 (function (Function) {
+    Function["Break"] = "break";
     Function["MoveBackward"] = "move_backward";
     Function["MoveForward"] = "move_forward";
     Function["Play"] = "play";
-    Function["Stop"] = "stop";
+    Function["StopPlay"] = "stop_play";
     Function["TurnoutPos1"] = "turnout_pos1";
     Function["TurnoutPos2"] = "turnout_pos2";
 })(Function = exports.Function || (exports.Function = {}));
@@ -274,10 +275,11 @@ var typeMap = {
         { json: "vakue", js: "vakue", typ: u(undefined, "") },
     ], "any"),
     "Function": [
+        "break",
         "move_backward",
         "move_forward",
         "play",
-        "stop",
+        "stop_play",
         "turnout_pos1",
         "turnout_pos2",
     ],

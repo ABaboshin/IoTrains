@@ -85,6 +85,11 @@ std::shared_ptr<railschema::State> MP3Player::ProcessCommand(const railschema::C
     }
   }
 
+  if (command.function == railschema::Function::STOP_PLAY)
+  {
+    ts->ok = mp3.stop();
+  }
+
   return ts;
 }
 
