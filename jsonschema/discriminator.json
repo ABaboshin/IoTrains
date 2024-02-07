@@ -1,16 +1,13 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
   "type": "object",
-  // "extends": "Discriminator",
+  "response": true,
   "properties": {
-    "function": {
-      "$ref": "function.json"
-    },
-    "value": {
+    "discriminator": {
       "type": "string"
     }
   },
   "required": [
-    "function"
+    "discriminator"
   ]
 }

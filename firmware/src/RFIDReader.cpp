@@ -53,7 +53,7 @@ std::shared_ptr<railschema::Event> RFIDReader::Loop()
     value += std::to_string(mfrc522.uid.uidByte[i]);
   }
 
-  event->vakue = value;
+  event->value = value;
 
   return event;
 }

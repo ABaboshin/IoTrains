@@ -4,6 +4,7 @@
 //
 //  Then include this file, and then do
 //
+//     Discriminator data = nlohmann::json::parse(jsonString);
 //     Function data = nlohmann::json::parse(jsonString);
 //     DeviceType data = nlohmann::json::parse(jsonString);
 //     ControlUnit data = nlohmann::json::parse(jsonString);
@@ -90,6 +91,15 @@ namespace railschema {
     }
     #endif
 
+    class Discriminator {
+        public:
+        Discriminator() = default;
+        virtual ~Discriminator() = default;
+
+        virtual void to_json(json & j);
+        std::string discriminator;
+    };
+
     enum class Function : int { BREAK, MOVE_BACKWARD, MOVE_FORWARD, PLAY, STOP_PLAY, TURNOUT_POS1, TURNOUT_POS2 };
 
     enum class DeviceType : int { PLAYER, TRAIN, TURNOUT };
@@ -163,11 +173,14 @@ namespace railschema {
 
         virtual void to_json(json & j);
         EventType type;
-        std::optional<std::string> vakue;
+        std::optional<std::string> value;
     };
 }
 
 namespace railschema {
+    void from_json(const json & j, Discriminator & x);
+    void to_json(json & j, const Discriminator & x);
+
     void from_json(const json & j, Device & x);
     void to_json(json & j, const Device & x);
 
@@ -200,6 +213,15 @@ namespace railschema {
 
     void from_json(const json & j, EventType & x);
     void to_json(json & j, const EventType & x);
+
+    inline void from_json(const json & j, Discriminator& x) {
+        x.discriminator = j.at("discriminator").get<std::string>();
+    }
+
+    inline void to_json(json & j, const Discriminator & x) {
+        j = json::object();
+        j["discriminator"] = x.discriminator;
+    }
 
     inline void from_json(const json & j, Device& x) {
         x.functions = get_stack_optional<std::vector<Function>>(j, "functions");
@@ -273,13 +295,13 @@ namespace railschema {
 
     inline void from_json(const json & j, Event& x) {
         x.type = j.at("type").get<EventType>();
-        x.vakue = get_stack_optional<std::string>(j, "vakue");
+        x.value = get_stack_optional<std::string>(j, "value");
     }
 
     inline void to_json(json & j, const Event & x) {
         j = json::object();
         j["type"] = x.type;
-        j["vakue"] = x.vakue;
+        j["value"] = x.value;
     }
 
     inline void from_json(const json & j, Function & x) {

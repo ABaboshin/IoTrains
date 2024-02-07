@@ -15,6 +15,7 @@ import { responseAttributeProducer } from "./responseattribute";
 async function quicktypeJSONSchema(targetLanguage: string | TargetLanguage) {
   const schemaInput = new JSONSchemaInput(new FetchingJSONSchemaStore(), [extendsAttributeProducer, responseAttributeProducer]);
 
+  await schemaInput.addSource({ name: "Discriminator", schema: await readFromFileOrURL("./discriminator.json") });
   await schemaInput.addSource({ name: "Function", schema: await readFromFileOrURL("./function.json") });
   await schemaInput.addSource({ name: "DeviceType", schema: await readFromFileOrURL("./devicetype.json") });
   // await schemaInput.addSource({ name: "Command", schema: await readFromFileOrURL("./command.json") });
@@ -24,6 +25,7 @@ async function quicktypeJSONSchema(targetLanguage: string | TargetLanguage) {
   await schemaInput.addSource({ name: "TrainState", schema: await readFromFileOrURL("./trainstate.json") });
   await schemaInput.addSource({ name: "EventType", schema: await readFromFileOrURL("./eventtype.json") });
   await schemaInput.addSource({ name: "Event", schema: await readFromFileOrURL("./event.json") });
+  // await schemaInput.addSource({ name: "Discriminator", schema: await readFromFileOrURL("./discriminator.json") });
 
   const inputData = new InputData();
   inputData.addInput(schemaInput);

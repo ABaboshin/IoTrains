@@ -92,11 +92,13 @@ void ControlUnit::callback(char *topic, byte *payload, unsigned int length)
   railschema::Command cmd;
   from_json(j, cmd);
 
+  std::shared_ptr<railschema::Command> ptr(&cmd);
+
   for (auto i = 0; i < instance->devices.size(); i++) {
     if (instance->devices[i]->id == topic)
     {
       Serial.println("process");
-      auto state = (*instance->devices[i]).ProcessCommand(cmd);
+      auto state = (*instance->devices[i]).ProcessCommand(ptr);
       nlohmann::json j;
       state->to_json(j);
       client.publish("state", j.dump().c_str());
@@ -115,7 +117,7 @@ void ControlUnit::Loop()
   client.loop();
   timer.tick();
 
-  for (auto i = 0; i < devices.size(); i++)
+  for (std::size_t i = 0; i < devices.size(); i++)
   {
     auto event = devices[i]->Loop();
     if (event != nullptr)

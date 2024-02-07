@@ -14,7 +14,11 @@ export class CustomCPPTargetLanguage extends CPlusPlusTargetLanguage {
   }
 }
 
+// import * as util from 'util';
+
 class CustomCPPRenderer extends CPlusPlusRenderer {
+
+  // protected baseClasses: Map<string, string>;
 
   protected emitClass(c: ClassType, className: Name): void {
     this.emitDescription(this.descriptionForType(c));
@@ -22,6 +26,14 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
     const attributes = c.getAttributes();
     const baseclass = extendsTypeAttributeKind.tryGetInAttributes(attributes);
     const responseclass = responseTypeAttributeKind.tryGetInAttributes(attributes);
+
+    // if (baseclass !== undefined)
+    // {
+    //   // this.baseClasses.set(className, baseclass);
+    //   console.log(util.inspect(c));
+    //   console.log(util.inspect(className));
+    //   console.log(typeof className)
+    // }
 
     this.emitBlock(["class ", className, baseclass === undefined ? "" : " : public " + baseclass], true, () => {
       const constraints = this.generateClassConstraints(c);
@@ -60,4 +72,39 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
       this.emitClassMembers(c, constraints);
     });
   }
+
+  // protected emitClassFunctions(c: ClassType, className: Name): void {
+  //   super.emitClassFunctions(c, className);
+  // }
+
+  // protected emitUserNamespaceImpls() {
+  //   super.emitUserNamespaceImpls();
+
+  //   this.emitLine([
+  //     `
+  //   template<typename T>
+  //   inline std::shared_ptr<T> from_json(const json & j) {
+  //       return nullptr;
+  //   }
+  //     `
+  //   ]);
+
+  //   this.forEachObject("leading-and-interposing", (_c: ClassType, className: Name) =>
+  //     {
+  //     this.forEachClassProperty(c2, "none", (name, json, p) => {
+
+  //     });
+
+  //     this.emitLine([
+  //       "template<> inline std::shared_ptr<", className,
+  //       "> from_json(const json& j) {",
+  //       className,
+  //       " obj; from_json(j, obj);",
+  //       "if (obj.discripminator == \"", className, "\");",
+  //       "return nullptr",
+  //       "}"
+  //     ]);
+  //     }
+  //   );
+  // }
 }
