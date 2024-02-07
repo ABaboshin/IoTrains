@@ -42,3 +42,8 @@ std::shared_ptr<railschema::State> Train::ProcessCommand(const railschema::Comma
 
   return ts;
 }
+
+std::shared_ptr<railschema::Event> Train::Loop()
+{
+  return nullptr;
+}

@@ -9,6 +9,8 @@
 //     ControlUnit data = nlohmann::json::parse(jsonString);
 //     DeviceInfo data = nlohmann::json::parse(jsonString);
 //     TrainState data = nlohmann::json::parse(jsonString);
+//     EventType data = nlohmann::json::parse(jsonString);
+//     Event data = nlohmann::json::parse(jsonString);
 
 #pragma once
 
@@ -151,6 +153,18 @@ namespace railschema {
         std::optional<Direction> direction;
         std::optional<double> speed;
     };
+
+    enum class EventType : int { TRAIN };
+
+    class Event {
+        public:
+        Event() = default;
+        virtual ~Event() = default;
+
+        virtual void to_json(json & j);
+        EventType type;
+        std::optional<std::string> vakue;
+    };
 }
 
 namespace railschema {
@@ -172,6 +186,9 @@ namespace railschema {
     void from_json(const json & j, TrainState & x);
     void to_json(json & j, const TrainState & x);
 
+    void from_json(const json & j, Event & x);
+    void to_json(json & j, const Event & x);
+
     void from_json(const json & j, Function & x);
     void to_json(json & j, const Function & x);
 
@@ -180,6 +197,9 @@ namespace railschema {
 
     void from_json(const json & j, Direction & x);
     void to_json(json & j, const Direction & x);
+
+    void from_json(const json & j, EventType & x);
+    void to_json(json & j, const EventType & x);
 
     inline void from_json(const json & j, Device& x) {
         x.functions = get_stack_optional<std::vector<Function>>(j, "functions");
@@ -251,6 +271,17 @@ namespace railschema {
         j["speed"] = x.speed;
     }
 
+    inline void from_json(const json & j, Event& x) {
+        x.type = j.at("type").get<EventType>();
+        x.vakue = get_stack_optional<std::string>(j, "vakue");
+    }
+
+    inline void to_json(json & j, const Event & x) {
+        j = json::object();
+        j["type"] = x.type;
+        j["vakue"] = x.vakue;
+    }
+
     inline void from_json(const json & j, Function & x) {
         if (j == "move_backward") x = Function::MOVE_BACKWARD;
         else if (j == "move_forward") x = Function::MOVE_FORWARD;
@@ -301,6 +332,18 @@ namespace railschema {
             case Direction::BACKWARD: j = "backward"; break;
             case Direction::FORWARD: j = "forward"; break;
             case Direction::STOP: j = "stop"; break;
+            default: throw std::runtime_error("This should not happen");
+        }
+    }
+
+    inline void from_json(const json & j, EventType & x) {
+        if (j == "train") x = EventType::TRAIN;
+        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+    }
+
+    inline void to_json(json & j, const EventType & x) {
+        switch (x) {
+            case EventType::TRAIN: j = "train"; break;
             default: throw std::runtime_error("This should not happen");
         }
     }

@@ -10,5 +10,5 @@ public:
   MP3Player();
 
   std::shared_ptr<railschema::State> ProcessCommand(const railschema::Command &command) override;
-  void Loop();
+  std::shared_ptr<railschema::Event> Loop();
 };

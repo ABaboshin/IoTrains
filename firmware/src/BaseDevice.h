@@ -12,5 +12,5 @@ public:
   railschema::DeviceType type;
 
   virtual std::shared_ptr<railschema::State> ProcessCommand(const railschema::Command &command)=0;
-  virtual void Loop()=0;
+  virtual std::shared_ptr<railschema::Event> Loop() = 0;
 };

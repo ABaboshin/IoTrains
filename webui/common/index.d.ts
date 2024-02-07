@@ -48,6 +48,14 @@ export declare enum Direction {
     Forward = "forward",
     Stop = "stop"
 }
+export interface Event {
+    type: EventType;
+    vakue?: string;
+    [property: string]: any;
+}
+export declare enum EventType {
+    Train = "train"
+}
 export declare class Convert {
     static toFunction(json: string): Function;
     static functionToJson(value: Function): string;
@@ -59,4 +67,8 @@ export declare class Convert {
     static deviceInfoToJson(value: DeviceInfo): string;
     static toTrainState(json: string): TrainState;
     static trainStateToJson(value: TrainState): string;
+    static toEventType(json: string): EventType;
+    static eventTypeToJson(value: EventType): string;
+    static toEvent(json: string): Event;
+    static eventToJson(value: Event): string;
 }

@@ -22,6 +22,8 @@ async function quicktypeJSONSchema(targetLanguage: string | TargetLanguage) {
   // await schemaInput.addSource({ name: "State", schema: await readFromFileOrURL("./state.json") });
   await schemaInput.addSource({ name: "DeviceInfo", schema: await readFromFileOrURL("./deviceinfo.json") });
   await schemaInput.addSource({ name: "TrainState", schema: await readFromFileOrURL("./trainstate.json") });
+  await schemaInput.addSource({ name: "EventType", schema: await readFromFileOrURL("./eventtype.json") });
+  await schemaInput.addSource({ name: "Event", schema: await readFromFileOrURL("./event.json") });
 
   const inputData = new InputData();
   inputData.addInput(schemaInput);
