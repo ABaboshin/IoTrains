@@ -1,12 +1,13 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
   "type": "object",
-  "name": "Event",
+  "name": "RfidEvent",
+  "extends": "Event",
   "properties": {
-    "type": {
-      "$ref": "eventtype.json"
+    "value": {
+      "type": "string"
     }
   },
   "response": true,
-  "required": ["type"]
+  "required": ["value"]
 }

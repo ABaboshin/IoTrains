@@ -3,12 +3,14 @@
   "type": "object",
   "extends": "State",
   "response": true,
+  "name": "TrainState",
   "properties": {
     "direction": {
       "$ref": "direction.json"
     },
     "speed": {
-      "type": "number"
+      "type": "integer"
     }
-  }
+  },
+  "required": ["speed"]
 }

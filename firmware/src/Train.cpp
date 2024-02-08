@@ -8,31 +8,31 @@
 Train::Train() : drv(5, 6) {
 }
 
-std::shared_ptr<railschema::State> Train::ProcessCommand(const railschema::Command &command)
+std::shared_ptr<railschema::State> Train::ProcessCommand(std::shared_ptr<railschema::Command> command)
 {
   auto ts = std::make_shared<railschema::TrainState>();
   ts->id = this->id;
 
-  if (command.function == railschema::Function::MOVE_FORWARD)
+  auto trainCommand = (railschema::TrainCommand*)command.get();
+
+  if (command->function == railschema::Function::MOVE_FORWARD)
   {
-    const auto speed = stoi(command.value.value());
-    drv.Forward(speed);
+    drv.Forward(trainCommand->speed);
 
     ts->direction = railschema::Direction::FORWARD;
-    ts->speed = speed;
+    ts->speed = trainCommand->speed;
     ts->ok = true;
   }
 
-  if (command.function == railschema::Function::MOVE_BACKWARD)
+  if (command->function == railschema::Function::MOVE_BACKWARD)
   {
-    const auto speed = stoi(command.value.value());
-    drv.Backward(speed);
+    drv.Backward(trainCommand->speed);
     ts->direction = railschema::Direction::BACKWARD;
-    ts->speed = speed;
+    ts->speed = trainCommand->speed;
     ts->ok = true;
   }
 
-  if (command.function == railschema::Function::BREAK)
+  if (command->function == railschema::Function::BREAK)
   {
     drv.Stop();
     ts->direction = railschema::Direction::STOP;

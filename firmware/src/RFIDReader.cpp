@@ -39,7 +39,7 @@ std::shared_ptr<railschema::Event> RFIDReader::Loop()
 
   // mfrc522.PICC_DumpToSerial(&(mfrc522.uid));
 
-  auto event = std::make_shared<railschema::Event>();
+  std::shared_ptr<railschema::Event> event = std::make_shared<railschema::RfidEvent>();
 
   event->type = railschema::EventType::TRAIN;
   std::string value = "";
@@ -53,7 +53,7 @@ std::shared_ptr<railschema::Event> RFIDReader::Loop()
     value += std::to_string(mfrc522.uid.uidByte[i]);
   }
 
-  event->vakue = value;
+  ((railschema::RfidEvent*) event.get())->value = value;
 
   return event;
 }

@@ -1,6 +1,6 @@
 // To parse this data:
 //
-//   import { Convert, Function, DeviceType, ControlUnit, DeviceInfo, TrainState, EventType, Event } from "./file";
+//   import { Convert, Function, DeviceType, ControlUnit, DeviceInfo, TrainState, EventType, Event, RFIDEvent, TrainCommand, Mp3Command } from "./file";
 //
 //   const function = Convert.toFunction(json);
 //   const deviceType = Convert.toDeviceType(json);
@@ -9,6 +9,9 @@
 //   const trainState = Convert.toTrainState(json);
 //   const eventType = Convert.toEventType(json);
 //   const event = Convert.toEvent(json);
+//   const rFIDEvent = Convert.toRFIDEvent(json);
+//   const trainCommand = Convert.toTrainCommand(json);
+//   const mp3Command = Convert.toMp3Command(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
@@ -57,13 +60,12 @@ export interface State{
 
 export interface Command{
     function: Function;
-    value?:   string;
     [property: string]: any;
 }
 
 export interface TrainState extends State {
     direction?: Direction;
-    speed?:     number;
+    speed:      number;
     [property: string]: any;
 }
 
@@ -74,13 +76,27 @@ export enum Direction {
 }
 
 export interface Event{
-    type:   EventType;
-    vakue?: string;
+    type: EventType;
     [property: string]: any;
 }
 
 export enum EventType {
     Train = "train",
+}
+
+export interface RFIDEvent extends Event {
+    value: string;
+    [property: string]: any;
+}
+
+export interface TrainCommand extends Command {
+    speed: number;
+    [property: string]: any;
+}
+
+export interface Mp3Command extends Command {
+    url: string;
+    [property: string]: any;
 }
 
 // Converts JSON strings to/from your types
@@ -140,6 +156,30 @@ export class Convert {
 
     public static eventToJson(value: Event): string {
         return JSON.stringify(uncast(value, r("Event")), null, 2);
+    }
+
+    public static toRFIDEvent(json: string): RFIDEvent {
+        return cast(JSON.parse(json), r("RFIDEvent"));
+    }
+
+    public static rFIDEventToJson(value: RFIDEvent): string {
+        return JSON.stringify(uncast(value, r("RFIDEvent")), null, 2);
+    }
+
+    public static toTrainCommand(json: string): TrainCommand {
+        return cast(JSON.parse(json), r("TrainCommand"));
+    }
+
+    public static trainCommandToJson(value: TrainCommand): string {
+        return JSON.stringify(uncast(value, r("TrainCommand")), null, 2);
+    }
+
+    public static toMp3Command(json: string): Mp3Command {
+        return cast(JSON.parse(json), r("Mp3Command"));
+    }
+
+    public static mp3CommandToJson(value: Mp3Command): string {
+        return JSON.stringify(uncast(value, r("Mp3Command")), null, 2);
     }
 }
 
@@ -316,15 +356,22 @@ const typeMap: any = {
     ], "any"),
     "Command": o([
         { json: "function", js: "function", typ: r("Function") },
-        { json: "value", js: "value", typ: u(undefined, "") },
     ], "any"),
     "TrainState": o([
         { json: "direction", js: "direction", typ: u(undefined, r("Direction")) },
-        { json: "speed", js: "speed", typ: u(undefined, 3.14) },
+        { json: "speed", js: "speed", typ: 0 },
     ], "any"),
     "Event": o([
         { json: "type", js: "type", typ: r("EventType") },
-        { json: "vakue", js: "vakue", typ: u(undefined, "") },
+    ], "any"),
+    "RFIDEvent": o([
+        { json: "value", js: "value", typ: "" },
+    ], "any"),
+    "TrainCommand": o([
+        { json: "speed", js: "speed", typ: 0 },
+    ], "any"),
+    "Mp3Command": o([
+        { json: "url", js: "url", typ: "" },
     ], "any"),
     "Function": [
         "break",

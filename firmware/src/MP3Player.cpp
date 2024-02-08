@@ -52,16 +52,17 @@ MP3Player::MP3Player()
   mp3.RegisterStatusCB(StatusCallback, (void *)"mp3");
 }
 
-std::shared_ptr<railschema::State> MP3Player::ProcessCommand(const railschema::Command &command)
+std::shared_ptr<railschema::State> MP3Player::ProcessCommand(std::shared_ptr<railschema::Command> command)
 {
   auto ts = std::make_shared<railschema::State>();
   ts->id = this->id;
+  auto mp3Command = (railschema::Mp3Command*)command.get();
 
-  if (command.function == railschema::Function::PLAY)
+  if (mp3Command->function == railschema::Function::PLAY)
   {
     HTTPClient http;
     WiFiClient client;
-    if (http.begin(client, command.value.value().c_str()))
+    if (http.begin(client, mp3Command->url.c_str()))
     {
       auto httpCode = http.GET();
       if (httpCode > 0)
@@ -85,7 +86,7 @@ std::shared_ptr<railschema::State> MP3Player::ProcessCommand(const railschema::C
     }
   }
 
-  if (command.function == railschema::Function::STOP_PLAY)
+  if (mp3Command->function == railschema::Function::STOP_PLAY)
   {
     ts->ok = mp3.stop();
   }
