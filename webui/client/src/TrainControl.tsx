@@ -1,6 +1,6 @@
 import { Box, Button } from '@mui/material';
 import Slider from '@mui/material/Slider';
-import { Command, Device, Function, DeviceInfo } from 'common';
+import { Function, DeviceInfo, TrainCommand } from 'common';
 import { FunctionComponent } from 'react';
 
 export const TrainControl: FunctionComponent<DeviceInfo> = (train: DeviceInfo) =>
@@ -14,9 +14,10 @@ export const TrainControl: FunctionComponent<DeviceInfo> = (train: DeviceInfo) =
           train.state.speed = v;
         }
 
-        const command: Command = {
+        const command: TrainCommand = {
           function: speed === 0 ? Function.Break : speed > 0 ? Function.MoveForward : Function.MoveBackward,
-          value: speed.toString()
+          speed: speed,
+          discriminator: "TrainCommand"
         };
 
         fetch(`/api/v1/device/${train.device.id}`, {

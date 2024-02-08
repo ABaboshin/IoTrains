@@ -37,7 +37,8 @@ async function quicktypeJSONSchema(targetLanguage: string | TargetLanguage) {
     lang: targetLanguage,
     rendererOptions: {
       boost: false,
-      namespace: "railschema"
+      namespace: "railschema",
+      preferTypes: true
     }
   });
 }

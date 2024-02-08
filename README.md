@@ -14,6 +14,7 @@ The projects consists of:
 
 ## TODO
  - responsive ui
+ - generate typescript discriminator
  - nanomq/emqx
  - sqlite3
  - schematic

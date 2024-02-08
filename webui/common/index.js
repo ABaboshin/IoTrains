@@ -1,7 +1,7 @@
 "use strict";
 // To parse this data:
 //
-//   import { Convert, Function, DeviceType, ControlUnit, DeviceInfo, TrainState, EventType, Event } from "./file";
+//   import { Convert, Function, DeviceType, ControlUnit, DeviceInfo, TrainState, EventType, Event, RFIDEvent, TrainCommand, Mp3Command } from "./file";
 //
 //   const function = Convert.toFunction(json);
 //   const deviceType = Convert.toDeviceType(json);
@@ -10,6 +10,9 @@
 //   const trainState = Convert.toTrainState(json);
 //   const eventType = Convert.toEventType(json);
 //   const event = Convert.toEvent(json);
+//   const rFIDEvent = Convert.toRFIDEvent(json);
+//   const trainCommand = Convert.toTrainCommand(json);
+//   const mp3Command = Convert.toMp3Command(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
@@ -87,6 +90,24 @@ var Convert = /** @class */ (function () {
     };
     Convert.eventToJson = function (value) {
         return JSON.stringify(uncast(value, r("Event")), null, 2);
+    };
+    Convert.toRFIDEvent = function (json) {
+        return cast(JSON.parse(json), r("RFIDEvent"));
+    };
+    Convert.rFIDEventToJson = function (value) {
+        return JSON.stringify(uncast(value, r("RFIDEvent")), null, 2);
+    };
+    Convert.toTrainCommand = function (json) {
+        return cast(JSON.parse(json), r("TrainCommand"));
+    };
+    Convert.trainCommandToJson = function (value) {
+        return JSON.stringify(uncast(value, r("TrainCommand")), null, 2);
+    };
+    Convert.toMp3Command = function (json) {
+        return cast(JSON.parse(json), r("Mp3Command"));
+    };
+    Convert.mp3CommandToJson = function (value) {
+        return JSON.stringify(uncast(value, r("Mp3Command")), null, 2);
     };
     return Convert;
 }());
@@ -264,15 +285,22 @@ var typeMap = {
     ], "any"),
     "Command": o([
         { json: "function", js: "function", typ: r("Function") },
-        { json: "value", js: "value", typ: u(undefined, "") },
     ], "any"),
     "TrainState": o([
         { json: "direction", js: "direction", typ: u(undefined, r("Direction")) },
-        { json: "speed", js: "speed", typ: u(undefined, 3.14) },
+        { json: "speed", js: "speed", typ: 0 },
     ], "any"),
     "Event": o([
         { json: "type", js: "type", typ: r("EventType") },
-        { json: "vakue", js: "vakue", typ: u(undefined, "") },
+    ], "any"),
+    "RFIDEvent": o([
+        { json: "value", js: "value", typ: "" },
+    ], "any"),
+    "TrainCommand": o([
+        { json: "speed", js: "speed", typ: 0 },
+    ], "any"),
+    "Mp3Command": o([
+        { json: "url", js: "url", typ: "" },
     ], "any"),
     "Function": [
         "break",
