@@ -89,18 +89,16 @@ void ControlUnit::callback(char *topic, byte *payload, unsigned int length)
   std::string s((const char *)payload, length);
   Serial.println(s.c_str());
   const auto j = nlohmann::json::parse(s);
-  railschema::Command cmd;
-  from_json(j, cmd);
 
-  std::shared_ptr<railschema::Command> ptr(&cmd);
+  auto cmd = railschema::from_json<railschema::Command>(j);
 
   for (auto i = 0; i < instance->devices.size(); i++) {
     if (instance->devices[i]->id == topic)
     {
       Serial.println("process");
-      auto state = (*instance->devices[i]).ProcessCommand(ptr);
+      auto state = (*instance->devices[i]).ProcessCommand(cmd);
       nlohmann::json j;
-      state->to_json(j);
+      railschema::to_json<railschema::State>(j, state);
       client.publish("state", j.dump().c_str());
       break;
     }
@@ -123,7 +121,7 @@ void ControlUnit::Loop()
     if (event != nullptr)
     {
       nlohmann::json j;
-      railschema::to_json(j, *event);
+      railschema::to_json<railschema::Event>(j, event);
       client.publish("event", j.dump().c_str());
     }
   }

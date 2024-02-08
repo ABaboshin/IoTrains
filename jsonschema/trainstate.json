@@ -9,7 +9,8 @@
       "$ref": "direction.json"
     },
     "speed": {
-      "type": "number"
+      "type": "integer"
     }
-  }
+  },
+  "required": ["speed"]
 }
