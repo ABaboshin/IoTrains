@@ -97,9 +97,14 @@ void ControlUnit::callback(char *topic, byte *payload, unsigned int length)
     {
       Serial.println("process");
       auto state = (*instance->devices[i]).ProcessCommand(cmd);
-      nlohmann::json j;
-      railschema::to_json<railschema::State>(j, state);
-      client.publish("state", j.dump().c_str());
+      if (state != nullptr) {
+        delay(500);
+        nlohmann::json j;
+        railschema::to_json<railschema::State>(j, state);
+        Serial.println(j.dump().c_str());
+        client.publish("state", j.dump().c_str());
+      }
+
       break;
     }
   }

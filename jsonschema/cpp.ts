@@ -1,6 +1,8 @@
-import { CPlusPlusRenderer, CPlusPlusTargetLanguage, ClassType, Name, OptionValues, RenderContext, Sourcelike, TargetLanguage, cPlusPlusOptions, getOptionValues } from "quicktype-core";
+import { ClassType, EnumType, Name, OptionValues, RenderContext, Sourcelike, TargetLanguage, Type, UnionType, cPlusPlusOptions, defined, getOptionValues, removeNullFromUnion } from "quicktype-core";
 import { extendsTypeAttributeKind } from "./extendattribute";
 import { nameTypeAttributeKind } from "./nameattribute";
+import { CPlusPlusRenderer, CPlusPlusTargetLanguage, WrappingCode } from "./CPlusPlus";
+import { stringEscape } from "quicktype-core/dist/support/Strings";
 
 export class CustomCPPTargetLanguage extends CPlusPlusTargetLanguage {
   constructor() {
@@ -70,8 +72,245 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
     });
   }
 
+  protected emitClassFunctions(c: ClassType, className: Name): void {
+    const ourQualifier = this.ourQualifier(false);
+    let cppType: Sourcelike;
+    let toType: Sourcelike;
+
+    const attributes = c.getAttributes();
+    const baseclass = extendsTypeAttributeKind.tryGetInAttributes(attributes);
+
+    this.emitBlock(
+      ["inline void from_json(", this.withConst("json"), " & j, ", ourQualifier, className, "& x)"],
+      false,
+      () => {
+        if (baseclass !== undefined) {
+          this.emitLine(`
+          from_json(j, (${baseclass}&)x);
+          `);
+        }
+        this.forEachClassProperty(c, "none", (name, json, p) => {
+          const [, , setterName] = defined(this._gettersAndSettersForPropertyName.get(name));
+          const propType = p.type;
+
+
+
+          let assignment: WrappingCode;
+          if (this._options.codeFormat) {
+            assignment = new WrappingCode(["x.", setterName, "("], [")"]);
+          } else {
+            assignment = new WrappingCode(["x.", name, " = "], []);
+          }
+
+          if (propType.kind === "null" || propType.kind === "any") {
+            this.emitLine(
+              assignment.wrap(
+                [],
+                [
+                  ourQualifier,
+                  "get_untyped(j, ",
+                  this._stringType.wrapEncodingChange(
+                    [ourQualifier],
+                    this._stringType.getType(),
+                    this.NarrowString.getType(),
+                    [this._stringType.createStringLiteral([stringEscape(json)])]
+                  ),
+                  ")"
+                ]
+              ),
+              ";"
+            );
+            return;
+          }
+          if (p.isOptional || propType instanceof UnionType) {
+            const [nullOrOptional, typeSet] = (function (): [boolean, ReadonlySet<Type>] {
+              if (propType instanceof UnionType) {
+                const [maybeNull, nonNulls] = removeNullFromUnion(propType, true);
+                return [maybeNull !== null || p.isOptional, nonNulls];
+              } else {
+                const set = new Set<Type>();
+                set.add(propType);
+                return [true, set];
+              }
+            })();
+            if (nullOrOptional) {
+              cppType = this.cppTypeInOptional(
+                typeSet,
+                {
+                  needsForwardIndirection: false,
+                  needsOptionalIndirection: false,
+                  inJsonNamespace: false
+                },
+                false,
+                true
+              );
+              toType = this.cppTypeInOptional(
+                typeSet,
+                {
+                  needsForwardIndirection: false,
+                  needsOptionalIndirection: false,
+                  inJsonNamespace: false
+                },
+                false,
+                false
+              );
+              this.emitLine(
+                assignment.wrap(
+                  [],
+                  [
+                    this._stringType.wrapEncodingChange(
+                      [ourQualifier],
+                      [this.optionalType(propType), "<", cppType, ">"],
+                      [this.optionalType(propType), "<", toType, ">"],
+                      [
+                        ourQualifier,
+                        `get_${this.optionalTypeLabel(propType)}_optional<`,
+                        cppType,
+                        ">(j, ",
+                        this._stringType.wrapEncodingChange(
+                          [ourQualifier],
+                          this._stringType.getType(),
+                          this.NarrowString.getType(),
+                          [this._stringType.createStringLiteral([stringEscape(json)])]
+                        ),
+                        ")"
+                      ]
+                    )
+                  ]
+                ),
+                ";"
+              );
+              return;
+            }
+          }
+          cppType = this.cppType(
+            propType,
+            {
+              needsForwardIndirection: true,
+              needsOptionalIndirection: true,
+              inJsonNamespace: false
+            },
+            false,
+            true,
+            p.isOptional
+          );
+          toType = this.cppType(
+            propType,
+            {
+              needsForwardIndirection: true,
+              needsOptionalIndirection: true,
+              inJsonNamespace: false
+            },
+            false,
+            false,
+            p.isOptional
+          );
+          this.emitLine(
+            assignment.wrap(
+              [],
+              this._stringType.wrapEncodingChange([ourQualifier], cppType, toType, [
+                "j.at(",
+                this._stringType.wrapEncodingChange(
+                  [ourQualifier],
+                  this._stringType.getType(),
+                  this.NarrowString.getType(),
+                  this._stringType.createStringLiteral([stringEscape(json)])
+                ),
+                ").get<",
+                cppType,
+                ">()"
+              ])
+            ),
+            ";"
+          );
+        });
+      }
+    );
+    this.ensureBlankLine();
+
+    this.emitBlock(
+      ["inline void to_json(json & j, ", this.withConst([ourQualifier, className]), " & x)"],
+      false,
+      () => {
+        if (baseclass !== undefined) {
+          this.emitLine(`
+          to_json(j, (const ${baseclass}&)x);
+          `);
+        } else {
+          this.emitLine("j = json::object();");
+        }
+
+        this.forEachClassProperty(c, "none", (name, json, p) => {
+          const propType = p.type;
+          cppType = this.cppType(
+            propType,
+            {
+              needsForwardIndirection: true,
+              needsOptionalIndirection: true,
+              inJsonNamespace: false
+            },
+            false,
+            false,
+            p.isOptional
+          );
+          toType = this.cppType(
+            propType,
+            {
+              needsForwardIndirection: true,
+              needsOptionalIndirection: true,
+              inJsonNamespace: false
+            },
+            false,
+            true,
+            p.isOptional
+          );
+          const [getterName, ,] = defined(this._gettersAndSettersForPropertyName.get(name));
+          let getter: Sourcelike[];
+          if (this._options.codeFormat) {
+            getter = [getterName, "()"];
+          } else {
+            getter = [name];
+          }
+          const assignment: Sourcelike[] = [
+            "j[",
+            this._stringType.wrapEncodingChange(
+              [ourQualifier],
+              this._stringType.getType(),
+              this.NarrowString.getType(),
+              this._stringType.createStringLiteral([stringEscape(json)])
+            ),
+            "] = ",
+            this._stringType.wrapEncodingChange([ourQualifier], cppType, toType, ["x.", getter]),
+            ";"
+          ];
+          if (p.isOptional && this._options.hideNullOptional) {
+            this.emitBlock(
+              [
+                "if (",
+                this._stringType.wrapEncodingChange([ourQualifier], cppType, toType, ["x.", getter]),
+                ")"
+              ],
+              false,
+              () => {
+                this.emitLine(assignment);
+              }
+            );
+          } else {
+            this.emitLine(assignment);
+          }
+        });
+      }
+    );
+  }
+
   protected emitUserNamespaceImpls() {
-    super.emitUserNamespaceImpls();
+    this.forEachObject("leading-and-interposing", (c: ClassType, className: Name) =>
+      this.emitClassFunctions(c, className)
+    );
+
+    this.forEachEnum("leading-and-interposing", (e: EnumType, enumName: Name) =>
+      this.emitEnumFunctions(e, enumName)
+    );
 
     this.emitLine([
       `

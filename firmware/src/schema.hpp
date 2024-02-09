@@ -93,7 +93,7 @@ namespace railschema {
     }
     #endif
 
-    enum class Function : int { BREAK, MOVE_BACKWARD, MOVE_FORWARD, PLAY, STOP_PLAY, TURNOUT_POS1, TURNOUT_POS2 };
+    enum class Function : int { BREAK, MOVE_BACKWARD, MOVE_FORWARD, PLAY_ID, PLAY_URL, STOP_PLAY, TURNOUT_POS1, TURNOUT_POS2 };
 
     enum class DeviceType : int { PLAYER, TRAIN, TURNOUT };
 
@@ -130,10 +130,11 @@ namespace railschema {
     class State {
         public:
         std::string discriminator;
-        State()= default;
+        State() { discriminator =  "State"; }
         virtual ~State() = default;
 
         std::optional<Command> command;
+        std::optional<std::string> description;
         std::string id;
         bool ok;
     };
@@ -200,35 +201,35 @@ namespace railschema {
 }
 
 namespace railschema {
-    void from_json(const json & j, Device & x);
-    void to_json(json & j, const Device & x);
+    void from_json(const json & j, Device * x);
+    void to_json(json & j, const Device * x);
 
-    void from_json(const json & j, ControlUnit & x);
-    void to_json(json & j, const ControlUnit & x);
+    void from_json(const json & j, ControlUnit * x);
+    void to_json(json & j, const ControlUnit * x);
 
-    void from_json(const json & j, Command & x);
-    void to_json(json & j, const Command & x);
+    void from_json(const json & j, Command * x);
+    void to_json(json & j, const Command * x);
 
-    void from_json(const json & j, State & x);
-    void to_json(json & j, const State & x);
+    void from_json(const json & j, State * x);
+    void to_json(json & j, const State * x);
 
-    void from_json(const json & j, DeviceInfo & x);
-    void to_json(json & j, const DeviceInfo & x);
+    void from_json(const json & j, DeviceInfo * x);
+    void to_json(json & j, const DeviceInfo * x);
 
-    void from_json(const json & j, TrainState & x);
-    void to_json(json & j, const TrainState & x);
+    void from_json(const json & j, TrainState * x);
+    void to_json(json & j, const TrainState * x);
 
-    void from_json(const json & j, Event & x);
-    void to_json(json & j, const Event & x);
+    void from_json(const json & j, Event * x);
+    void to_json(json & j, const Event * x);
 
-    void from_json(const json & j, RfidEvent & x);
-    void to_json(json & j, const RfidEvent & x);
+    void from_json(const json & j, RfidEvent * x);
+    void to_json(json & j, const RfidEvent * x);
 
-    void from_json(const json & j, TrainCommand & x);
-    void to_json(json & j, const TrainCommand & x);
+    void from_json(const json & j, TrainCommand * x);
+    void to_json(json & j, const TrainCommand * x);
 
-    void from_json(const json & j, Mp3Command & x);
-    void to_json(json & j, const Mp3Command & x);
+    void from_json(const json & j, Mp3Command * x);
+    void to_json(json & j, const Mp3Command * x);
 
     void from_json(const json & j, Function & x);
     void to_json(json & j, const Function & x);
@@ -277,6 +278,7 @@ namespace railschema {
 
     inline void from_json(const json & j, State& x) {
         x.command = get_stack_optional<Command>(j, "command");
+        x.description = get_stack_optional<std::string>(j, "description");
         x.id = j.at("id").get<std::string>();
         x.ok = j.at("ok").get<bool>();
     }
@@ -284,6 +286,7 @@ namespace railschema {
     inline void to_json(json & j, const State & x) {
         j = json::object();
         j["command"] = x.command;
+        j["description"] = x.description;
         j["id"] = x.id;
         j["ok"] = x.ok;
     }
@@ -300,12 +303,17 @@ namespace railschema {
     }
 
     inline void from_json(const json & j, TrainState& x) {
+        
+                  from_json(j, (State&)x);
+                  
         x.direction = get_stack_optional<Direction>(j, "direction");
         x.speed = j.at("speed").get<int64_t>();
     }
 
     inline void to_json(json & j, const TrainState & x) {
-        j = json::object();
+        
+                  to_json(j, (const State&)x);
+                  
         j["direction"] = x.direction;
         j["speed"] = x.speed;
     }
@@ -320,29 +328,44 @@ namespace railschema {
     }
 
     inline void from_json(const json & j, RfidEvent& x) {
+        
+                  from_json(j, (Event&)x);
+                  
         x.value = j.at("value").get<std::string>();
     }
 
     inline void to_json(json & j, const RfidEvent & x) {
-        j = json::object();
+        
+                  to_json(j, (const Event&)x);
+                  
         j["value"] = x.value;
     }
 
     inline void from_json(const json & j, TrainCommand& x) {
+        
+                  from_json(j, (Command&)x);
+                  
         x.speed = j.at("speed").get<int64_t>();
     }
 
     inline void to_json(json & j, const TrainCommand & x) {
-        j = json::object();
+        
+                  to_json(j, (const Command&)x);
+                  
         j["speed"] = x.speed;
     }
 
     inline void from_json(const json & j, Mp3Command& x) {
+        
+                  from_json(j, (Command&)x);
+                  
         x.url = j.at("url").get<std::string>();
     }
 
     inline void to_json(json & j, const Mp3Command & x) {
-        j = json::object();
+        
+                  to_json(j, (const Command&)x);
+                  
         j["url"] = x.url;
     }
 
@@ -350,7 +373,8 @@ namespace railschema {
         if (j == "break") x = Function::BREAK;
         else if (j == "move_backward") x = Function::MOVE_BACKWARD;
         else if (j == "move_forward") x = Function::MOVE_FORWARD;
-        else if (j == "play") x = Function::PLAY;
+        else if (j == "play_id") x = Function::PLAY_ID;
+        else if (j == "play_url") x = Function::PLAY_URL;
         else if (j == "stop_play") x = Function::STOP_PLAY;
         else if (j == "turnout_pos1") x = Function::TURNOUT_POS1;
         else if (j == "turnout_pos2") x = Function::TURNOUT_POS2;
@@ -362,7 +386,8 @@ namespace railschema {
             case Function::BREAK: j = "break"; break;
             case Function::MOVE_BACKWARD: j = "move_backward"; break;
             case Function::MOVE_FORWARD: j = "move_forward"; break;
-            case Function::PLAY: j = "play"; break;
+            case Function::PLAY_ID: j = "play_id"; break;
+            case Function::PLAY_URL: j = "play_url"; break;
             case Function::STOP_PLAY: j = "stop_play"; break;
             case Function::TURNOUT_POS1: j = "turnout_pos1"; break;
             case Function::TURNOUT_POS2: j = "turnout_pos2"; break;

@@ -7,7 +7,8 @@
     "break",
     "turnout_pos1",
     "turnout_pos2",
-    "play",
+    "play_url",
+    "play_id",
     "stop_play"
   ]
 }

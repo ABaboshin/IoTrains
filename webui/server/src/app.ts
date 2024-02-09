@@ -44,7 +44,7 @@ let states = new Map<string, State>();
 let events = new Array<Event>();
 
 client.on("message", (topic, message) => {
-  console.log(`${moment().format('yyyy-mm-dd:hh:mm:ss') } ${message.toString() }`);
+  console.log(`${moment().format('yyyy-mm-dd:hh:mm:ss')} ${topic} ${message.toString() }`);
   if (topic === reportQueue) {
     const cu = Convert.toControlUnit(message.toString());
 
@@ -85,12 +85,14 @@ app.put("/api/v1/device/:id", (req, res) => {
   const command: Command = req.body as Command;
 
   client.publish(req.params.id, JSON.stringify(command));
+  console.log(`publish ${JSON.stringify(command) }`);
 
   res.json({});
 });
 
 app.use((req: Request, res: Response, next: NextFunction) => {
-  if (/(.ico|.js|.css|.jpg|.png|.map|.svg|.json)$/i.test(req.path)) {
+  if (/(.ico|.js|.css|.jpg|.png|.map|.svg|.json|.mp3)$/i.test(req.path)) {
+    console.log(`request ${req.path}`);
     next();
   } else {
     res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');

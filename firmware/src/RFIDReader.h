@@ -15,4 +15,5 @@ public:
   RFIDReader(std::uint8_t ssPin, std::uint8_t rstPin);
 
   std::shared_ptr<railschema::Event> Loop();
+  std::shared_ptr<railschema::State> ProcessCommand(std::shared_ptr<railschema::Command> command) override { return nullptr; }
 };

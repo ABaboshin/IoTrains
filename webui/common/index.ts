@@ -23,7 +23,7 @@ export interface ControlUnit{
 }
 
 export interface Device{
-    functions?: Function[];
+    functions?: Function[] | null;
     id:         string;
     type:       DeviceType;
     [property: string]: any;
@@ -33,7 +33,8 @@ export enum Function {
     Break = "break",
     MoveBackward = "move_backward",
     MoveForward = "move_forward",
-    Play = "play",
+    PlayID = "play_id",
+    PlayURL = "play_url",
     StopPlay = "stop_play",
     TurnoutPos1 = "turnout_pos1",
     TurnoutPos2 = "turnout_pos2",
@@ -52,9 +53,10 @@ export interface DeviceInfo{
 }
 
 export interface State{
-    command?: Command;
-    id:       string;
-    ok:       boolean;
+    command?:     Command;
+    description?: string;
+    id:           string;
+    ok:           boolean;
     [property: string]: any;
 }
 
@@ -341,7 +343,7 @@ const typeMap: any = {
         { json: "id", js: "id", typ: "" },
     ], "any"),
     "Device": o([
-        { json: "functions", js: "functions", typ: u(undefined, a(r("Function"))) },
+        { json: "functions", js: "functions", typ: u(undefined, u(a(r("Function")), null)) },
         { json: "id", js: "id", typ: "" },
         { json: "type", js: "type", typ: r("DeviceType") },
     ], "any"),
@@ -351,6 +353,7 @@ const typeMap: any = {
     ], "any"),
     "State": o([
         { json: "command", js: "command", typ: u(undefined, r("Command")) },
+        { json: "description", js: "description", typ: u(undefined, "") },
         { json: "id", js: "id", typ: "" },
         { json: "ok", js: "ok", typ: true },
     ], "any"),
@@ -377,7 +380,8 @@ const typeMap: any = {
         "break",
         "move_backward",
         "move_forward",
-        "play",
+        "play_id",
+        "play_url",
         "stop_play",
         "turnout_pos1",
         "turnout_pos2",

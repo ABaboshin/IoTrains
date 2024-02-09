@@ -9,10 +9,17 @@
       "$ref": "devicetype.json"
     },
     "functions": {
-      "type": "array",
-      "items": [
+      "oneOf": [
         {
-          "$ref": "function.json"
+          "type": "null"
+        },
+        {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "function.json"
+            }
+          ]
         }
       ]
     }

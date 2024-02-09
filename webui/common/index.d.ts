@@ -4,7 +4,7 @@ export interface ControlUnit {
     [property: string]: any;
 }
 export interface Device {
-    functions?: Function[];
+    functions?: Function[] | null;
     id: string;
     type: DeviceType;
     [property: string]: any;
@@ -13,7 +13,8 @@ export declare enum Function {
     Break = "break",
     MoveBackward = "move_backward",
     MoveForward = "move_forward",
-    Play = "play",
+    PlayID = "play_id",
+    PlayURL = "play_url",
     StopPlay = "stop_play",
     TurnoutPos1 = "turnout_pos1",
     TurnoutPos2 = "turnout_pos2"
@@ -30,6 +31,7 @@ export interface DeviceInfo {
 }
 export interface State {
     command?: Command;
+    description?: string;
     id: string;
     ok: boolean;
     [property: string]: any;

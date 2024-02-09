@@ -13,6 +13,7 @@ The projects consists of:
  - [json schema](./jsonschema/) describes a mqtt based protocol.
 
 ## TODO
+ - use https://github.com/pschatzmann/arduino-audio-tools/tree/main, fix mp3 for esp32
  - responsive ui
  - generate typescript discriminator
  - nanomq/emqx

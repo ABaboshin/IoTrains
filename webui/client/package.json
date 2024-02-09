@@ -33,7 +33,7 @@
       "localhost",
       ".localhost"
     ],
-    "proxy": "https://localhost:3301/"
+    "proxy": "https://localhost:3001/"
   },
   "eslintConfig": {
     "extends": [

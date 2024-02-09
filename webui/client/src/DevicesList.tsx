@@ -1,9 +1,10 @@
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import { Device, DeviceInfo, DeviceType } from 'common';
+import { DeviceInfo, DeviceType } from 'common';
 import { useEffect, useState } from 'react';
 import { TrainControl } from './TrainControl';
 import { Divider } from '@mui/material';
+import { MP3Control } from './MP3Control';
 
 export default function DevicesList() {
   async function fetchApi() {
@@ -41,6 +42,9 @@ export default function DevicesList() {
               <Divider />
               {
                 row.device.type === DeviceType.Train && <TrainControl device={row.device} state={row.state} />
+              }
+              {
+                row.device.type === DeviceType.Player && <MP3Control device={row.device} state={row.state} />
               }
             </Box>
           );
