@@ -14,6 +14,7 @@ std::shared_ptr<railschema::State> Train::ProcessCommand(std::shared_ptr<railsch
   ts->id = this->id;
 
   auto trainCommand = (railschema::TrainCommand*)command.get();
+  ts->command = *trainCommand;
 
   if (command->function == railschema::Function::MOVE_FORWARD)
   {

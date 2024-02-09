@@ -23,7 +23,8 @@ var Function;
     Function["Break"] = "break";
     Function["MoveBackward"] = "move_backward";
     Function["MoveForward"] = "move_forward";
-    Function["Play"] = "play";
+    Function["PlayID"] = "play_id";
+    Function["PlayURL"] = "play_url";
     Function["StopPlay"] = "stop_play";
     Function["TurnoutPos1"] = "turnout_pos1";
     Function["TurnoutPos2"] = "turnout_pos2";
@@ -270,7 +271,7 @@ var typeMap = {
         { json: "id", js: "id", typ: "" },
     ], "any"),
     "Device": o([
-        { json: "functions", js: "functions", typ: u(undefined, a(r("Function"))) },
+        { json: "functions", js: "functions", typ: u(undefined, u(a(r("Function")), null)) },
         { json: "id", js: "id", typ: "" },
         { json: "type", js: "type", typ: r("DeviceType") },
     ], "any"),
@@ -280,6 +281,7 @@ var typeMap = {
     ], "any"),
     "State": o([
         { json: "command", js: "command", typ: u(undefined, r("Command")) },
+        { json: "description", js: "description", typ: u(undefined, "") },
         { json: "id", js: "id", typ: "" },
         { json: "ok", js: "ok", typ: true },
     ], "any"),
@@ -306,7 +308,8 @@ var typeMap = {
         "break",
         "move_backward",
         "move_forward",
-        "play",
+        "play_id",
+        "play_url",
         "stop_play",
         "turnout_pos1",
         "turnout_pos2",
