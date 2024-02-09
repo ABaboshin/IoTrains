@@ -93,7 +93,7 @@ namespace railschema {
     }
     #endif
 
-    enum class Function : int { BREAK, MOVE_BACKWARD, MOVE_FORWARD, PLAY, STOP_PLAY, TURNOUT_POS1, TURNOUT_POS2 };
+    enum class Function : int { BREAK, MOVE_BACKWARD, MOVE_FORWARD, PLAY_ID, PLAY_URL, STOP_PLAY, TURNOUT_POS1, TURNOUT_POS2 };
 
     enum class DeviceType : int { PLAYER, TRAIN, TURNOUT };
 
@@ -130,10 +130,11 @@ namespace railschema {
     class State {
         public:
         std::string discriminator;
-        State()= default;
+        State() { discriminator =  "State"; }
         virtual ~State() = default;
 
         std::optional<Command> command;
+        std::optional<std::string> description;
         std::string id;
         bool ok;
     };
@@ -277,6 +278,7 @@ namespace railschema {
 
     inline void from_json(const json & j, State& x) {
         x.command = get_stack_optional<Command>(j, "command");
+        x.description = get_stack_optional<std::string>(j, "description");
         x.id = j.at("id").get<std::string>();
         x.ok = j.at("ok").get<bool>();
     }
@@ -284,6 +286,7 @@ namespace railschema {
     inline void to_json(json & j, const State & x) {
         j = json::object();
         j["command"] = x.command;
+        j["description"] = x.description;
         j["id"] = x.id;
         j["ok"] = x.ok;
     }
@@ -339,6 +342,7 @@ namespace railschema {
 
     inline void from_json(const json & j, Mp3Command& x) {
         x.url = j.at("url").get<std::string>();
+        x.function = j.at("function").get<Function>();
     }
 
     inline void to_json(json & j, const Mp3Command & x) {
@@ -350,7 +354,8 @@ namespace railschema {
         if (j == "break") x = Function::BREAK;
         else if (j == "move_backward") x = Function::MOVE_BACKWARD;
         else if (j == "move_forward") x = Function::MOVE_FORWARD;
-        else if (j == "play") x = Function::PLAY;
+        else if (j == "play_id") x = Function::PLAY_ID;
+        else if (j == "play_url") x = Function::PLAY_URL;
         else if (j == "stop_play") x = Function::STOP_PLAY;
         else if (j == "turnout_pos1") x = Function::TURNOUT_POS1;
         else if (j == "turnout_pos2") x = Function::TURNOUT_POS2;
@@ -362,7 +367,8 @@ namespace railschema {
             case Function::BREAK: j = "break"; break;
             case Function::MOVE_BACKWARD: j = "move_backward"; break;
             case Function::MOVE_FORWARD: j = "move_forward"; break;
-            case Function::PLAY: j = "play"; break;
+            case Function::PLAY_ID: j = "play_id"; break;
+            case Function::PLAY_URL: j = "play_url"; break;
             case Function::STOP_PLAY: j = "stop_play"; break;
             case Function::TURNOUT_POS1: j = "turnout_pos1"; break;
             case Function::TURNOUT_POS2: j = "turnout_pos2"; break;
@@ -413,17 +419,17 @@ namespace railschema {
             default: throw std::runtime_error("This should not happen");
         }
     }
-    
+
         template<typename T>
         inline std::shared_ptr<T> from_json(const json & j) {
             return nullptr;
         }
-    
+
         template<typename T>
         inline void to_json(json & j, std::shared_ptr<T> data) {
-    
+
         }
-          
+
     template<> inline std::shared_ptr<State> from_json<State>(const json& j) {
               const auto discriminator = j.at("discriminator").get<std::string>();
               if (discriminator == "State") {
@@ -431,25 +437,25 @@ namespace railschema {
                 from_json(j, *ptr);
                 return ptr;
               }
-              
-    
+
+
               if (discriminator == "TrainState") {
                 std::shared_ptr<State> ptr = std::make_shared<TrainState>();
                 from_json(j, *(TrainState*)ptr.get());
                 return ptr;
               }
-              
+
     return nullptr; }
     template<> inline void to_json(json& j, std::shared_ptr<State> data) {
               if (data->discriminator == "State") {
                 to_json(j, *data.get());
               }
-              
-    
+
+
               if (data->discriminator == "TrainState") {
                 to_json(j, *(TrainState*)data.get());
               }
-              
+
     }
     template<> inline std::shared_ptr<Event> from_json<Event>(const json& j) {
               const auto discriminator = j.at("discriminator").get<std::string>();
@@ -458,25 +464,25 @@ namespace railschema {
                 from_json(j, *ptr);
                 return ptr;
               }
-              
-    
+
+
               if (discriminator == "RfidEvent") {
                 std::shared_ptr<Event> ptr = std::make_shared<RfidEvent>();
                 from_json(j, *(RfidEvent*)ptr.get());
                 return ptr;
               }
-              
+
     return nullptr; }
     template<> inline void to_json(json& j, std::shared_ptr<Event> data) {
               if (data->discriminator == "Event") {
                 to_json(j, *data.get());
               }
-              
-    
+
+
               if (data->discriminator == "RfidEvent") {
                 to_json(j, *(RfidEvent*)data.get());
               }
-              
+
     }
     template<> inline std::shared_ptr<Command> from_json<Command>(const json& j) {
               const auto discriminator = j.at("discriminator").get<std::string>();
@@ -485,36 +491,36 @@ namespace railschema {
                 from_json(j, *ptr);
                 return ptr;
               }
-              
-    
+
+
               if (discriminator == "TrainCommand") {
                 std::shared_ptr<Command> ptr = std::make_shared<TrainCommand>();
                 from_json(j, *(TrainCommand*)ptr.get());
                 return ptr;
               }
-              
-    
+
+
               if (discriminator == "Mp3Command") {
                 std::shared_ptr<Command> ptr = std::make_shared<Mp3Command>();
                 from_json(j, *(Mp3Command*)ptr.get());
                 return ptr;
               }
-              
+
     return nullptr; }
     template<> inline void to_json(json& j, std::shared_ptr<Command> data) {
               if (data->discriminator == "Command") {
                 to_json(j, *data.get());
               }
-              
-    
+
+
               if (data->discriminator == "TrainCommand") {
                 to_json(j, *(TrainCommand*)data.get());
               }
-              
-    
+
+
               if (data->discriminator == "Mp3Command") {
                 to_json(j, *(Mp3Command*)data.get());
               }
-              
+
     }
 }
