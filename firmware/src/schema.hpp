@@ -201,35 +201,35 @@ namespace railschema {
 }
 
 namespace railschema {
-    void from_json(const json & j, Device & x);
-    void to_json(json & j, const Device & x);
+    void from_json(const json & j, Device * x);
+    void to_json(json & j, const Device * x);
 
-    void from_json(const json & j, ControlUnit & x);
-    void to_json(json & j, const ControlUnit & x);
+    void from_json(const json & j, ControlUnit * x);
+    void to_json(json & j, const ControlUnit * x);
 
-    void from_json(const json & j, Command & x);
-    void to_json(json & j, const Command & x);
+    void from_json(const json & j, Command * x);
+    void to_json(json & j, const Command * x);
 
-    void from_json(const json & j, State & x);
-    void to_json(json & j, const State & x);
+    void from_json(const json & j, State * x);
+    void to_json(json & j, const State * x);
 
-    void from_json(const json & j, DeviceInfo & x);
-    void to_json(json & j, const DeviceInfo & x);
+    void from_json(const json & j, DeviceInfo * x);
+    void to_json(json & j, const DeviceInfo * x);
 
-    void from_json(const json & j, TrainState & x);
-    void to_json(json & j, const TrainState & x);
+    void from_json(const json & j, TrainState * x);
+    void to_json(json & j, const TrainState * x);
 
-    void from_json(const json & j, Event & x);
-    void to_json(json & j, const Event & x);
+    void from_json(const json & j, Event * x);
+    void to_json(json & j, const Event * x);
 
-    void from_json(const json & j, RfidEvent & x);
-    void to_json(json & j, const RfidEvent & x);
+    void from_json(const json & j, RfidEvent * x);
+    void to_json(json & j, const RfidEvent * x);
 
-    void from_json(const json & j, TrainCommand & x);
-    void to_json(json & j, const TrainCommand & x);
+    void from_json(const json & j, TrainCommand * x);
+    void to_json(json & j, const TrainCommand * x);
 
-    void from_json(const json & j, Mp3Command & x);
-    void to_json(json & j, const Mp3Command & x);
+    void from_json(const json & j, Mp3Command * x);
+    void to_json(json & j, const Mp3Command * x);
 
     void from_json(const json & j, Function & x);
     void to_json(json & j, const Function & x);
@@ -303,12 +303,17 @@ namespace railschema {
     }
 
     inline void from_json(const json & j, TrainState& x) {
+        
+                  from_json(j, (State&)x);
+                  
         x.direction = get_stack_optional<Direction>(j, "direction");
         x.speed = j.at("speed").get<int64_t>();
     }
 
     inline void to_json(json & j, const TrainState & x) {
-        j = json::object();
+        
+                  to_json(j, (const State&)x);
+                  
         j["direction"] = x.direction;
         j["speed"] = x.speed;
     }
@@ -323,30 +328,44 @@ namespace railschema {
     }
 
     inline void from_json(const json & j, RfidEvent& x) {
+        
+                  from_json(j, (Event&)x);
+                  
         x.value = j.at("value").get<std::string>();
     }
 
     inline void to_json(json & j, const RfidEvent & x) {
-        j = json::object();
+        
+                  to_json(j, (const Event&)x);
+                  
         j["value"] = x.value;
     }
 
     inline void from_json(const json & j, TrainCommand& x) {
+        
+                  from_json(j, (Command&)x);
+                  
         x.speed = j.at("speed").get<int64_t>();
     }
 
     inline void to_json(json & j, const TrainCommand & x) {
-        j = json::object();
+        
+                  to_json(j, (const Command&)x);
+                  
         j["speed"] = x.speed;
     }
 
     inline void from_json(const json & j, Mp3Command& x) {
+        
+                  from_json(j, (Command&)x);
+                  
         x.url = j.at("url").get<std::string>();
-        x.function = j.at("function").get<Function>();
     }
 
     inline void to_json(json & j, const Mp3Command & x) {
-        j = json::object();
+        
+                  to_json(j, (const Command&)x);
+                  
         j["url"] = x.url;
     }
 
@@ -419,17 +438,17 @@ namespace railschema {
             default: throw std::runtime_error("This should not happen");
         }
     }
-
+    
         template<typename T>
         inline std::shared_ptr<T> from_json(const json & j) {
             return nullptr;
         }
-
+    
         template<typename T>
         inline void to_json(json & j, std::shared_ptr<T> data) {
-
+    
         }
-
+          
     template<> inline std::shared_ptr<State> from_json<State>(const json& j) {
               const auto discriminator = j.at("discriminator").get<std::string>();
               if (discriminator == "State") {
@@ -437,25 +456,25 @@ namespace railschema {
                 from_json(j, *ptr);
                 return ptr;
               }
-
-
+              
+    
               if (discriminator == "TrainState") {
                 std::shared_ptr<State> ptr = std::make_shared<TrainState>();
                 from_json(j, *(TrainState*)ptr.get());
                 return ptr;
               }
-
+              
     return nullptr; }
     template<> inline void to_json(json& j, std::shared_ptr<State> data) {
               if (data->discriminator == "State") {
                 to_json(j, *data.get());
               }
-
-
+              
+    
               if (data->discriminator == "TrainState") {
                 to_json(j, *(TrainState*)data.get());
               }
-
+              
     }
     template<> inline std::shared_ptr<Event> from_json<Event>(const json& j) {
               const auto discriminator = j.at("discriminator").get<std::string>();
@@ -464,25 +483,25 @@ namespace railschema {
                 from_json(j, *ptr);
                 return ptr;
               }
-
-
+              
+    
               if (discriminator == "RfidEvent") {
                 std::shared_ptr<Event> ptr = std::make_shared<RfidEvent>();
                 from_json(j, *(RfidEvent*)ptr.get());
                 return ptr;
               }
-
+              
     return nullptr; }
     template<> inline void to_json(json& j, std::shared_ptr<Event> data) {
               if (data->discriminator == "Event") {
                 to_json(j, *data.get());
               }
-
-
+              
+    
               if (data->discriminator == "RfidEvent") {
                 to_json(j, *(RfidEvent*)data.get());
               }
-
+              
     }
     template<> inline std::shared_ptr<Command> from_json<Command>(const json& j) {
               const auto discriminator = j.at("discriminator").get<std::string>();
@@ -491,36 +510,36 @@ namespace railschema {
                 from_json(j, *ptr);
                 return ptr;
               }
-
-
+              
+    
               if (discriminator == "TrainCommand") {
                 std::shared_ptr<Command> ptr = std::make_shared<TrainCommand>();
                 from_json(j, *(TrainCommand*)ptr.get());
                 return ptr;
               }
-
-
+              
+    
               if (discriminator == "Mp3Command") {
                 std::shared_ptr<Command> ptr = std::make_shared<Mp3Command>();
                 from_json(j, *(Mp3Command*)ptr.get());
                 return ptr;
               }
-
+              
     return nullptr; }
     template<> inline void to_json(json& j, std::shared_ptr<Command> data) {
               if (data->discriminator == "Command") {
                 to_json(j, *data.get());
               }
-
-
+              
+    
               if (data->discriminator == "TrainCommand") {
                 to_json(j, *(TrainCommand*)data.get());
               }
-
-
+              
+    
               if (data->discriminator == "Mp3Command") {
                 to_json(j, *(Mp3Command*)data.get());
               }
-
+              
     }
 }
