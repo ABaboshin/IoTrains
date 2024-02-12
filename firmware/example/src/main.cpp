@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <memory>
-#include "ControlUnit.h"
+#include <ControlUnit.h>
 #include "Train.h"
 #include "MP3Player.h"
 #include "RFIDReader.h"
@@ -19,7 +19,7 @@ void setup()
 
   Serial.println("start");
 
-  // rf = new RFIDReader(D8, D3);
+  rf = new RFIDReader(D8, D3);
 
   cu.id = "cu2";
 
@@ -34,17 +34,17 @@ void setup()
 
   // cu.devices.push_back(train);
 
-  Serial.println("player");
-  std::shared_ptr<MP3Player> player = std::make_shared<MP3Player>();
-  player->id = "player";
-  player->type = railschema::DeviceType::PLAYER;
-  cu.devices.push_back(player);
+  // Serial.println("player");
+  // std::shared_ptr<MP3Player> player = std::make_shared<MP3Player>();
+  // player->id = "player";
+  // player->type = railschema::DeviceType::PLAYER;
+  // cu.devices.push_back(player);
 
-  cu.Setup();
+  // cu.Setup();
 }
 
 void loop()
 {
-  cu.Loop();
-  // rf->Loop();
+  // cu.Loop();
+  rf->Loop();
 }

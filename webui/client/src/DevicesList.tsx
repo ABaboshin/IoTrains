@@ -46,7 +46,8 @@ export default function DevicesList() {
               }
               {
                 row.device.type === DeviceType.Player && <MP3Control device={row.device} state={row.state} />
-              }{
+              }
+              {
                 row.device.type === DeviceType.Turnout && <TurnoutControl device={row.device} state={row.state} />
               }
             </Box>

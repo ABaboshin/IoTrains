@@ -15,7 +15,6 @@ The projects consists of:
 ## TODO
  - use https://github.com/pschatzmann/arduino-audio-tools/tree/main, fix mp3 for esp32
  - responsive ui
- - generate typescript discriminator
  - nanomq/emqx
  - sqlite3
  - schematic

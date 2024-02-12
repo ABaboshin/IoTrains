@@ -18,6 +18,7 @@ static const unsigned char outputmp3[] PROGMEM ={0};
 
     // data
     std::vector<std::uint8_t> buf;
+
 std::shared_ptr<AudioSourceCallback> source; // source(callbackNextStream);
 I2SStream i2s;
 MP3DecoderHelix decoder;
@@ -42,6 +43,7 @@ MP3Player::MP3Player()
 {
   AudioLogger::instance().begin(Serial, AudioLogger::Info);
   // RX
+
   auto cfg = i2s.defaultConfig(TX_MODE);
   i2s.begin(cfg);
 }
