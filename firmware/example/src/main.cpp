@@ -19,7 +19,7 @@ void setup()
 
   Serial.println("start");
 
-  rf = new RFIDReader(D8, D3);
+  // rf = new RFIDReader(D8, D3);
 
   cu.id = "cu2";
 
