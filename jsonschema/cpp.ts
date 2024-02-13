@@ -12,6 +12,7 @@ export class CustomCPPTargetLanguage extends CPlusPlusTargetLanguage {
   protected makeRenderer(renderContext: RenderContext, untypedOptionValues: { [name: string]: any }): CPlusPlusRenderer {
     let options = getOptionValues(cPlusPlusOptions, untypedOptionValues);
     options.codeFormat = false;
+    options.includeLocation = false;
     return new CustomCPPRenderer(this, renderContext, options);
   }
 }

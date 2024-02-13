@@ -1,0 +1,39 @@
+{
+  "name": "iotrains",
+  "version": "1.0.0",
+  "description": "iotrains",
+  "keywords": "",
+  "$schema": "https://raw.githubusercontent.com/platformio/platformio-core/develop/platformio/assets/schema/library.json",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ABaboshin/IoTrains"
+  },
+  "authors": [
+    {
+      "name": "Andrey Baboshin",
+      "email": "andrey.baboshin@gmail.com",
+      "maintainer": true
+    }
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/ABaboshin/IoTrains",
+  "dependencies": {
+    "johboh/nlohmann-json": "3.11.3",
+    "miguelbalboa/MFRC522": "1.4.11",
+    "contrem/arduino-timer": "3.0.1",
+    "knolleary/PubSubClient": "2.8",
+    "arduino-audio-tools": "https://github.com/pschatzmann/arduino-audio-tools.git#main",
+    "arduino-libhelix": "https://github.com/pschatzmann/arduino-libhelix.git#main"
+  },
+  "frameworks": ["arduino"],
+  "platforms": [
+    "espressif8266",
+    "espressif32"
+  ],
+  "build": {
+    "srcDir": "src",
+    "includeDir": "src",
+    "flags": "-std=c++17 -fexceptions -O3 -s",
+    "unflags": "-std=gnu++11"
+  }
+}

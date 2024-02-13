@@ -45,7 +45,7 @@ async function quicktypeJSONSchema(targetLanguage: string | TargetLanguage) {
 
 async function main() {
   const { lines: linescpp } = await quicktypeJSONSchema(new CustomCPPTargetLanguage());
-  fs.writeFileSync("../firmware/src/schema.hpp", linescpp.join("\n"));
+  fs.writeFileSync("../firmware/lib/iotrains/src/schema.hpp", linescpp.join("\n"));
 
   const { lines: linests } = await quicktypeJSONSchema(new CustomTypeScriptTargetLanguage());
   fs.writeFileSync("../webui/common/index.ts", linests.join("\n"));

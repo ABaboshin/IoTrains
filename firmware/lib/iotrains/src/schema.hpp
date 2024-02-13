@@ -18,7 +18,7 @@
 #pragma once
 
 #include <optional>
-#include "json.hpp"
+#include <nlohmann/json.hpp>
 
 #ifndef NLOHMANN_OPT_HELPER
 #define NLOHMANN_OPT_HELPER
