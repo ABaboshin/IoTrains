@@ -1,8 +1,9 @@
 #pragma once
+#include <string>
 
-const char *ssid = "";
-const char *password = "";
-const char *mqtt_server = "192.168.31.90";
-const char *mqtt_clientid = "manager";
-const char* mqtt_login = "manager";
-const char* mqtt_password = "!manager";
+const std::string wifiNetwork = "";
+const std::string wifiPassword = "";
+const std::string mqttServer = "192.168.31.90";
+const std::string mqttClientId = "manager";
+const std::string mqttLogin = "manager";
+const std::string mqttPassword = "!manager";

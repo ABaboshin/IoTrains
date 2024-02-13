@@ -5,7 +5,9 @@
 #include "MP3Player.h"
 #include "RFIDReader.h"
 
-ControlUnit cu;
+#include "config.h"
+
+ControlUnit cu(wifiNetwork, wifiPassword, mqttServer, mqttClientId, mqttLogin, mqttPassword);
 RFIDReader* rf;
 
 void setup()

@@ -1,24 +1,12 @@
 #include <Arduino.h>
-#ifdef ESP8266
-#include <ESP8266WiFi.h>
-#include <ESP8266mDNS.h>
-#else
-#include <WiFi.h>
-#include <ESPmDNS.h>
-#endif
-#include <PubSubClient.h>
-#include <arduino-timer.h>
 
 #include "ControlUnit.h"
-#include "config.h"
 
 ControlUnit *instance;
 
-WiFiClient espClient;
-PubSubClient client(espClient);
 auto timer = timer_create_default();
 
-bool send_report(void *argument)
+bool ControlUnit::send_report(void *argument)
 {
   nlohmann::json j;
 
@@ -34,11 +22,17 @@ bool send_report(void *argument)
   }
 
   to_json(j, cu);
-  client.publish("report", j.dump().c_str());
+  instance->client.publish("report", j.dump().c_str());
   return true;
 }
 
-ControlUnit::ControlUnit()
+ControlUnit::ControlUnit(std::string wifiNetwork, std::string wifiPassword, std::string mqttServer, std::string mqttClientId, std::string mqttLogin, std::string mqttPassword) : client(espClient),
+                                                                                                                                                                                 wifiNetwork(wifiNetwork),
+                                                                                                                                                                                 wifiPassword(wifiPassword),
+                                                                                                                                                                                 mqttServer(mqttServer),
+                                                                                                                                                                                 mqttClientId(mqttClientId),
+                                                                                                                                                                                 mqttLogin(mqttLogin),
+                                                                                                                                                                                 mqttPassword(mqttPassword)
 {
   instance = this;
 }
@@ -47,10 +41,10 @@ void ControlUnit::Setup()
 {
   Serial.println();
   Serial.print("Connecting to ");
-  Serial.println(ssid);
+  Serial.println(wifiNetwork.c_str());
 
   WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
+  WiFi.begin(wifiNetwork.c_str(), wifiPassword.c_str());
 
   while (WiFi.status() != WL_CONNECTED)
   {
@@ -73,11 +67,11 @@ void ControlUnit::Setup()
   }
 
   IPAddress ip;
-  ip.fromString(mqtt_server);
+  ip.fromString(mqttServer.c_str());
   client.setServer(ip, 1883);
   client.setCallback(callback);
 
-  timer.every(5000, send_report);
+  timer.every(5000, ControlUnit::send_report);
 }
 
 void ControlUnit::callback(char *topic, byte *payload, unsigned int length)
@@ -102,7 +96,7 @@ void ControlUnit::callback(char *topic, byte *payload, unsigned int length)
         nlohmann::json j;
         railschema::to_json<railschema::State>(j, state);
         Serial.println(j.dump().c_str());
-        client.publish("state", j.dump().c_str());
+        instance->client.publish("state", j.dump().c_str());
       }
 
       break;
@@ -138,8 +132,8 @@ void ControlUnit::reconnect()
 {
   while (!client.connected())
   {
-    Serial.printf("Attempting MQTT connection... %s %s %s", mqtt_clientid, mqtt_login, mqtt_password);
-    if (client.connect(mqtt_clientid, mqtt_login, mqtt_password))
+    Serial.printf("Attempting MQTT connection... %s %s %s", mqttClientId, mqttLogin, mqttPassword);
+    if (client.connect(mqttClientId.c_str(), mqttLogin.c_str(), mqttPassword.c_str()))
     {
       Serial.println("connected");
       for (auto i = this->devices.begin(); i != this->devices.end(); i++)
