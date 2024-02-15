@@ -22,7 +22,7 @@ export const MP3Control: FunctionComponent<DeviceInfo> = (mp3: DeviceInfo) =>
     <Button variant="contained" onClick={() => SendCommand(mp3.device.id, {
       function: Function.PlayID,
       discriminator: "Mp3Command",
-      url: "test"
+      url: "1"
     })}>Play built-in</Button>
     <Button variant="contained" onClick={() => SendCommand(mp3.device.id, {
       function: Function.StopPlay,

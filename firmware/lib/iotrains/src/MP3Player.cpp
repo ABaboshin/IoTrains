@@ -10,42 +10,29 @@
 #include <HTTPClient.h>
 #endif
 
-#include <AudioTools.h>
-#include <AudioCodecs/CodecMP3Helix.h>
+// data
+std::vector<std::uint8_t> buf;
 
-// #include "mp3.h"
-static const unsigned char outputmp3[] PROGMEM ={0};
+MP3Player* mp3PlayerInstance;
 
-    // data
-    std::vector<std::uint8_t> buf;
-
-std::shared_ptr<AudioSourceCallback> source; // source(callbackNextStream);
-I2SStream i2s;
-MP3DecoderHelix decoder;
-std::shared_ptr<AudioPlayer> player; //(source, i2s, decoder);
-
-void callbackPrintMetaData(MetaDataType type, const char *str, int len)
+Stream* MP3Player::callbackNextStream(int offset)
 {
-  Serial.print("==> ");
-  Serial.print(toStr(type));
-  Serial.print(": ");
-  Serial.println(str);
+  return mp3PlayerInstance->current.get();
 }
 
-std::shared_ptr<Stream> current;
-
-Stream *callbackNextStream(int offset)
+MP3Player::MP3Player(std::map<std::string, std::vector<unsigned char>> mp3) : mp3(mp3)
 {
-  return current.get();
-}
+  AudioLogger::instance().begin(Serial, AudioLogger::Error);
 
-MP3Player::MP3Player()
-{
-  AudioLogger::instance().begin(Serial, AudioLogger::Info);
-  // RX
+#ifdef ESPWROOM
+  auto cfg = out.defaultConfig();
+  out.begin(cfg);
+#else
+  auto cfg = out.defaultConfig(TX_MODE);
+  out.begin(cfg);
+#endif
 
-  auto cfg = i2s.defaultConfig(TX_MODE);
-  i2s.begin(cfg);
+  mp3PlayerInstance = this;
 }
 
 std::shared_ptr<railschema::State> MP3Player::ProcessCommand(std::shared_ptr<railschema::Command> command)
@@ -76,8 +63,7 @@ std::shared_ptr<railschema::State> MP3Player::ProcessCommand(std::shared_ptr<rai
           {
             current = std::make_shared<MemoryStream>(&buf[0], size);
             source = std::make_shared<AudioSourceCallback>(callbackNextStream);
-            player = std::make_shared<AudioPlayer>(*source, i2s, decoder);
-            player->setMetadataCallback(callbackPrintMetaData);
+            player = std::make_shared<AudioPlayer>(*source, out, decoder);
             player->begin();
 
             ts->ok = true;
@@ -89,11 +75,14 @@ std::shared_ptr<railschema::State> MP3Player::ProcessCommand(std::shared_ptr<rai
 
   if (mp3Command->function == railschema::Function::PLAY_ID)
   {
-    current = std::make_shared<MemoryStream>(outputmp3, sizeof(outputmp3));
-    source = std::make_shared<AudioSourceCallback>(callbackNextStream);
-    player = std::make_shared<AudioPlayer>(*source, i2s, decoder);
-    player->setMetadataCallback(callbackPrintMetaData);
-    player->begin();
+    if (mp3.find(mp3Command->url) != mp3.end()) {
+      current = std::make_shared<MemoryStream>(&mp3[mp3Command->url][0], mp3[mp3Command->url].size());
+      source = std::make_shared<AudioSourceCallback>(callbackNextStream);
+      player = std::make_shared<AudioPlayer>(*source, out, decoder);
+      player->begin();
+    } else {
+      ts->ok = false;
+    }
   }
 
   if (mp3Command->function == railschema::Function::STOP_PLAY)
