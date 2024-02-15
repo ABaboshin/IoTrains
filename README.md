@@ -12,8 +12,11 @@ The projects consists of:
  - as well [frontend](./webui/client/) in react,
  - [json schema](./jsonschema/) describes a mqtt based protocol.
 
+# Notes
+ - Connect an audio amplifier to an i2s capable pin i.e. DAC_1.
+
 ## TODO
- - use https://github.com/pschatzmann/arduino-audio-tools/tree/main, fix mp3 for esp32
+ - advertise built-in mp3 in player
  - responsive ui
  - nanomq/emqx
  - sqlite3

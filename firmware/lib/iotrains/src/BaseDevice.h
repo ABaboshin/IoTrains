@@ -7,7 +7,7 @@
 class BaseDevice
 {
 public:
-  std::optional<std::vector<railschema::Function>> functions;
+  std::vector<railschema::Function> functions;
   std::string id;
   railschema::DeviceType type;
 

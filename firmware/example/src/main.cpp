@@ -1,23 +1,26 @@
 #include <Arduino.h>
 #include <memory>
 #include <ControlUnit.h>
-#include "Train.h"
+// #include "Train.h"
 #include "MP3Player.h"
-#include "RFIDReader.h"
+// #include "RFIDReader.h"
 
 #include "config.h"
 
 ControlUnit cu(wifiNetwork, wifiPassword, mqttServer, mqttClientId, mqttLogin, mqttPassword);
-RFIDReader* rf;
+// RFIDReader* rf;
+MP3Player* mp3;
+
+#include "mp3.h"
 
 void setup()
 {
   Serial.begin(115200);
-  // for (int i = 0; i < 10; i++)
-  // {
-  //   Serial.println("sleep");
-  //   delay(500);
-  // }
+  for (int i = 0; i < 5; i++)
+  {
+    Serial.println("sleep");
+    delay(500);
+  }
 
   Serial.println("start");
 
@@ -37,16 +40,39 @@ void setup()
   // cu.devices.push_back(train);
 
   // Serial.println("player");
-  // std::shared_ptr<MP3Player> player = std::make_shared<MP3Player>();
-  // player->id = "player";
-  // player->type = railschema::DeviceType::PLAYER;
-  // cu.devices.push_back(player);
+  std::map<std::string, std::vector<unsigned char>> data;
+  std::string id = "1";
+  data[id] = test;
 
-  // cu.Setup();
+  std::shared_ptr<MP3Player> player = std::make_shared<MP3Player>(data);
+  player->id = "player";
+  player->type = railschema::DeviceType::PLAYER;
+  cu.devices.push_back(player);
+
+  cu.Setup();
+
+  Serial.println("done start");
 }
 
+bool first = true;
 void loop()
 {
-  // cu.Loop();
-  rf->Loop();
+  // if (first) {
+  //   first = false;
+  //   railschema::Mp3Command mp3Command;
+  //   mp3Command.function = railschema::Function::PLAY_ID;
+  //   mp3Command.url = "1";
+  //   std::shared_ptr<railschema::Command> cmd = std::make_shared<railschema::Mp3Command>(mp3Command);
+  //   mp3->ProcessCommand(cmd);
+  //   // current = std::make_shared<MemoryStream>(outputmp3, sizeof(outputmp3));
+  //   // source = std::make_shared<AudioSourceCallback>(callbackNextStream);
+  //   // player = std::make_shared<AudioPlayer>(*source, out, decoder);
+  //   // player->setMetadataCallback(callbackPrintMetaData);
+  //   // player->begin();
+  // } else {
+  //   // player->copy();
+  //   mp3->Loop();
+  //   }
+  cu.Loop();
+  // rf->Loop();
 }
