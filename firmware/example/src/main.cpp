@@ -44,12 +44,17 @@ void setup()
   std::string id = "1";
   data[id] = test;
 
-  std::shared_ptr<MP3Player> player = std::make_shared<MP3Player>(data);
+  std::shared_ptr<MP3Player> player = std::make_shared<MP3Player>(
+#ifdef AUDIO_PWM
+      33,
+      #endif
+      data);
   player->id = "player";
   player->type = railschema::DeviceType::PLAYER;
   cu.devices.push_back(player);
+  mp3 = player.get();
 
-  cu.Setup();
+  // cu.Setup();
 
   Serial.println("done start");
 }
@@ -57,22 +62,22 @@ void setup()
 bool first = true;
 void loop()
 {
-  // if (first) {
-  //   first = false;
-  //   railschema::Mp3Command mp3Command;
-  //   mp3Command.function = railschema::Function::PLAY_ID;
-  //   mp3Command.url = "1";
-  //   std::shared_ptr<railschema::Command> cmd = std::make_shared<railschema::Mp3Command>(mp3Command);
-  //   mp3->ProcessCommand(cmd);
-  //   // current = std::make_shared<MemoryStream>(outputmp3, sizeof(outputmp3));
-  //   // source = std::make_shared<AudioSourceCallback>(callbackNextStream);
-  //   // player = std::make_shared<AudioPlayer>(*source, out, decoder);
-  //   // player->setMetadataCallback(callbackPrintMetaData);
-  //   // player->begin();
-  // } else {
-  //   // player->copy();
-  //   mp3->Loop();
-  //   }
-  cu.Loop();
+  if (first) {
+    first = false;
+    railschema::Mp3Command mp3Command;
+    mp3Command.function = railschema::Function::PLAY_ID;
+    mp3Command.url = "1";
+    std::shared_ptr<railschema::Command> cmd = std::make_shared<railschema::Mp3Command>(mp3Command);
+    mp3->ProcessCommand(cmd);
+    // current = std::make_shared<MemoryStream>(outputmp3, sizeof(outputmp3));
+    // source = std::make_shared<AudioSourceCallback>(callbackNextStream);
+    // player = std::make_shared<AudioPlayer>(*source, out, decoder);
+    // player->setMetadataCallback(callbackPrintMetaData);
+    // player->begin();
+  } else {
+    // player->copy();
+    mp3->Loop();
+    }
+  // cu.Loop();
   // rf->Loop();
 }

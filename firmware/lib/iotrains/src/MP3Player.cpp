@@ -20,15 +20,26 @@ Stream* MP3Player::callbackNextStream(int offset)
   return mp3PlayerInstance->current.get();
 }
 
-MP3Player::MP3Player(std::map<std::string, std::vector<unsigned char>> mp3) : mp3(mp3)
+MP3Player::MP3Player(
+#ifdef AUDIO_PWM
+    int pwmPin,
+#endif
+std::map < std::string, std::vector < unsigned char>> mp3) : mp3(mp3)
 {
   AudioLogger::instance().begin(Serial, AudioLogger::Error);
 
-#ifdef ESPWROOM
+#ifdef AUDIO_ANALOG
   auto cfg = out.defaultConfig();
   out.begin(cfg);
-#else
+#endif
+#ifdef AUDIO_I2S
   auto cfg = out.defaultConfig(TX_MODE);
+  out.begin(cfg);
+#endif
+#ifdef AUDIO_PWM
+  auto cfg = out.defaultConfig();
+  Pins pwm_pins;
+  pwm_pins.push_back(pwmPin);
   out.begin(cfg);
 #endif
 
