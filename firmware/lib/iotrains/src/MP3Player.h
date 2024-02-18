@@ -15,16 +15,24 @@ class MP3Player : public BaseDevice
   std::shared_ptr<AudioSourceCallback> source;
   MP3DecoderHelix decoder;
   std::shared_ptr<AudioPlayer> player;
-#ifdef ESPWROOM
+#ifdef AUDIO_ANALOG
   AnalogAudioStream out;
-#else
+#endif
+#ifdef AUDIO_I2S
   I2SStream out;
+#endif
+#ifdef AUDIO_PWM
+  PWMAudioOutput out;
 #endif
 
   std::map<std::string, std::vector<unsigned char>> mp3;
 
 public:
-  MP3Player(std::map<std::string, std::vector<unsigned char>> mp3);
+  MP3Player(
+#ifdef AUDIO_PWM
+      int pwmPin,
+#endif
+      std::map<std::string, std::vector<unsigned char>> mp3);
 
   std::shared_ptr<railschema::State> ProcessCommand(std::shared_ptr<railschema::Command>  command) override;
   std::shared_ptr<railschema::Event> Loop();
