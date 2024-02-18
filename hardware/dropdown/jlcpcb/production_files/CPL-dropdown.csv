@@ -1,0 +1,15 @@
+Designator,Val,Package,Mid X,Mid Y,Rotation,Layer
+C1,10uF,C_0603_1608Metric,86.9,-61.5,180.0,top
+C2,10uF,C_0603_1608Metric,87.65,-63.975,90.0,top
+D3,ABS2,Diode_Bridge_Diotec_ABS,79.05,-63.7,180.0,top
+J1,12,TestPoint_THTPad_1.0x1.0mm_Drill0.5mm,83.8,-65.45,0.0,top
+J2,G,TestPoint_THTPad_1.0x1.0mm_Drill0.5mm,79.8,-59.8,0.0,top
+J3,3,TestPoint_THTPad_1.0x1.0mm_Drill0.5mm,89.95,-59.4,0.0,top
+J4,G,TestPoint_THTPad_1.0x1.0mm_Drill0.5mm,84.05,-59.8,0.0,top
+J5,12,TestPoint_THTPad_1.0x1.0mm_Drill0.5mm,85.85,-65.45,0.0,top
+J6,G,TestPoint_THTPad_1.0x1.0mm_Drill0.5mm,84.05,-61.85,0.0,top
+J7,3,TestPoint_THTPad_1.0x1.0mm_Drill0.5mm,87.9,-59.4,0.0,top
+J8,G,TestPoint_THTPad_1.0x1.0mm_Drill0.5mm,81.85,-59.8,0.0,top
+T1,T1,TestPoint_THTPad_1.0x1.0mm_Drill0.5mm,74.15,-65.45,0.0,top
+T2,T2,TestPoint_THTPad_1.0x1.0mm_Drill0.5mm,74.1,-62.0,0.0,top
+U2,AP7381-33Y-13,SOT-89-3,91.3,-63.0,0.0,top
