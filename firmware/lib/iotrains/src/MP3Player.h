@@ -29,9 +29,7 @@ class MP3Player : public BaseDevice
 
 public:
   MP3Player(
-#ifdef AUDIO_PWM
-      int pwmPin,
-#endif
+      int pin,
       std::map<std::string, std::vector<unsigned char>> mp3);
 
   std::shared_ptr<railschema::State> ProcessCommand(std::shared_ptr<railschema::Command>  command) override;

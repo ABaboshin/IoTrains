@@ -21,9 +21,7 @@ Stream* MP3Player::callbackNextStream(int offset)
 }
 
 MP3Player::MP3Player(
-#ifdef AUDIO_PWM
-    int pwmPin,
-#endif
+    int pin,
 std::map < std::string, std::vector < unsigned char>> mp3) : mp3(mp3)
 {
   AudioLogger::instance().begin(Serial, AudioLogger::Error);
@@ -34,12 +32,16 @@ std::map < std::string, std::vector < unsigned char>> mp3) : mp3(mp3)
 #endif
 #ifdef AUDIO_I2S
   auto cfg = out.defaultConfig(TX_MODE);
+  if (pin != -1)
+  {
+    cfg.pin_data = pin;
+  }
   out.begin(cfg);
 #endif
 #ifdef AUDIO_PWM
   auto cfg = out.defaultConfig();
   Pins pwm_pins;
-  pwm_pins.push_back(pwmPin);
+  pwm_pins.push_back(pin);
   out.begin(cfg);
 #endif
 
