@@ -1,10 +1,10 @@
 "use strict";
 // To parse this data:
 //
-//   import { Convert, Function, DeviceType, ControlUnit, DeviceInfo, TrainState, EventType, Event, RFIDEvent, TrainCommand, Mp3Command } from "./file";
+//   import { Convert, Function, CapabilityType, ControlUnit, DeviceInfo, TrainState, EventType, Event, RFIDEvent, TrainCommand, Mp3Command } from "./file";
 //
 //   const function = Convert.toFunction(json);
-//   const deviceType = Convert.toDeviceType(json);
+//   const capabilityType = Convert.toCapabilityType(json);
 //   const controlUnit = Convert.toControlUnit(json);
 //   const deviceInfo = Convert.toDeviceInfo(json);
 //   const trainState = Convert.toTrainState(json);
@@ -17,7 +17,16 @@
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
 exports.__esModule = true;
-exports.Convert = exports.EventType = exports.Direction = exports.DeviceType = exports.Function = void 0;
+exports.Convert = exports.EventType = exports.Direction = exports.Function = exports.CapabilityType = void 0;
+var CapabilityType;
+(function (CapabilityType) {
+    CapabilityType["PlayID"] = "play_id";
+    CapabilityType["PlayURL"] = "play_url";
+    CapabilityType["Player"] = "player";
+    CapabilityType["StopPlay"] = "stop_play";
+    CapabilityType["Train"] = "train";
+    CapabilityType["Turnout"] = "turnout";
+})(CapabilityType = exports.CapabilityType || (exports.CapabilityType = {}));
 var Function;
 (function (Function) {
     Function["Break"] = "break";
@@ -29,12 +38,6 @@ var Function;
     Function["TurnoutPos1"] = "turnout_pos1";
     Function["TurnoutPos2"] = "turnout_pos2";
 })(Function = exports.Function || (exports.Function = {}));
-var DeviceType;
-(function (DeviceType) {
-    DeviceType["Player"] = "player";
-    DeviceType["Train"] = "train";
-    DeviceType["Turnout"] = "turnout";
-})(DeviceType = exports.DeviceType || (exports.DeviceType = {}));
 var Direction;
 (function (Direction) {
     Direction["Backward"] = "backward";
@@ -56,11 +59,11 @@ var Convert = /** @class */ (function () {
     Convert.functionToJson = function (value) {
         return JSON.stringify(uncast(value, r("Function")), null, 2);
     };
-    Convert.toDeviceType = function (json) {
-        return cast(JSON.parse(json), r("DeviceType"));
+    Convert.toCapabilityType = function (json) {
+        return cast(JSON.parse(json), r("CapabilityType"));
     };
-    Convert.deviceTypeToJson = function (value) {
-        return JSON.stringify(uncast(value, r("DeviceType")), null, 2);
+    Convert.capabilityTypeToJson = function (value) {
+        return JSON.stringify(uncast(value, r("CapabilityType")), null, 2);
     };
     Convert.toControlUnit = function (json) {
         return cast(JSON.parse(json), r("ControlUnit"));
@@ -271,9 +274,13 @@ var typeMap = {
         { json: "id", js: "id", typ: "" },
     ], "any"),
     "Device": o([
-        { json: "functions", js: "functions", typ: u(undefined, u(a(r("Function")), null)) },
+        { json: "capabilities", js: "capabilities", typ: a(r("Capability")) },
         { json: "id", js: "id", typ: "" },
-        { json: "type", js: "type", typ: r("DeviceType") },
+        { json: "type", js: "type", typ: "any" },
+    ], "any"),
+    "Capability": o([
+        { json: "type", js: "type", typ: r("CapabilityType") },
+        { json: "value", js: "value", typ: "" },
     ], "any"),
     "DeviceInfo": o([
         { json: "device", js: "device", typ: r("Device") },
@@ -304,6 +311,14 @@ var typeMap = {
     "Mp3Command": o([
         { json: "url", js: "url", typ: "" },
     ], "any"),
+    "CapabilityType": [
+        "play_id",
+        "play_url",
+        "player",
+        "stop_play",
+        "train",
+        "turnout",
+    ],
     "Function": [
         "break",
         "move_backward",
@@ -313,11 +328,6 @@ var typeMap = {
         "stop_play",
         "turnout_pos1",
         "turnout_pos2",
-    ],
-    "DeviceType": [
-        "player",
-        "train",
-        "turnout",
     ],
     "Direction": [
         "backward",

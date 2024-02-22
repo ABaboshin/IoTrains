@@ -30,7 +30,7 @@ class MP3Player : public BaseDevice
 public:
   MP3Player(
       int pin,
-      std::map<std::string, std::vector<unsigned char>> mp3);
+      const std::map<std::string, std::vector<unsigned char>>& mp3);
 
   std::shared_ptr<railschema::State> ProcessCommand(std::shared_ptr<railschema::Command>  command) override;
   std::shared_ptr<railschema::Event> Loop();

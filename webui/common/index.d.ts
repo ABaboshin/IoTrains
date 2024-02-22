@@ -4,23 +4,21 @@ export interface ControlUnit {
     [property: string]: any;
 }
 export interface Device {
-    functions?: Function[] | null;
+    capabilities: Capability[];
     id: string;
-    type: DeviceType;
+    type: any;
     [property: string]: any;
 }
-export declare enum Function {
-    Break = "break",
-    MoveBackward = "move_backward",
-    MoveForward = "move_forward",
+export interface Capability {
+    type: CapabilityType;
+    value: string;
+    [property: string]: any;
+}
+export declare enum CapabilityType {
     PlayID = "play_id",
     PlayURL = "play_url",
-    StopPlay = "stop_play",
-    TurnoutPos1 = "turnout_pos1",
-    TurnoutPos2 = "turnout_pos2"
-}
-export declare enum DeviceType {
     Player = "player",
+    StopPlay = "stop_play",
     Train = "train",
     Turnout = "turnout"
 }
@@ -39,6 +37,16 @@ export interface State {
 export interface Command {
     function: Function;
     [property: string]: any;
+}
+export declare enum Function {
+    Break = "break",
+    MoveBackward = "move_backward",
+    MoveForward = "move_forward",
+    PlayID = "play_id",
+    PlayURL = "play_url",
+    StopPlay = "stop_play",
+    TurnoutPos1 = "turnout_pos1",
+    TurnoutPos2 = "turnout_pos2"
 }
 export interface TrainState extends State {
     direction?: Direction;
@@ -72,8 +80,8 @@ export interface Mp3Command extends Command {
 export declare class Convert {
     static toFunction(json: string): Function;
     static functionToJson(value: Function): string;
-    static toDeviceType(json: string): DeviceType;
-    static deviceTypeToJson(value: DeviceType): string;
+    static toCapabilityType(json: string): CapabilityType;
+    static capabilityTypeToJson(value: CapabilityType): string;
     static toControlUnit(json: string): ControlUnit;
     static controlUnitToJson(value: ControlUnit): string;
     static toDeviceInfo(json: string): DeviceInfo;

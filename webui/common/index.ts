@@ -1,9 +1,9 @@
 // To parse this data:
 //
-//   import { Convert, Function, DeviceType, ControlUnit, DeviceInfo, TrainState, EventType, Event, RFIDEvent, TrainCommand, Mp3Command } from "./file";
+//   import { Convert, Function, CapabilityType, ControlUnit, DeviceInfo, TrainState, EventType, Event, RFIDEvent, TrainCommand, Mp3Command } from "./file";
 //
 //   const function = Convert.toFunction(json);
-//   const deviceType = Convert.toDeviceType(json);
+//   const capabilityType = Convert.toCapabilityType(json);
 //   const controlUnit = Convert.toControlUnit(json);
 //   const deviceInfo = Convert.toDeviceInfo(json);
 //   const trainState = Convert.toTrainState(json);
@@ -23,25 +23,23 @@ export interface ControlUnit{
 }
 
 export interface Device{
-    functions?: Function[] | null;
-    id:         string;
-    type:       DeviceType;
+    capabilities: Capability[];
+    id:           string;
+    type:         any;
     [property: string]: any;
 }
 
-export enum Function {
-    Break = "break",
-    MoveBackward = "move_backward",
-    MoveForward = "move_forward",
-    PlayID = "play_id",
-    PlayURL = "play_url",
-    StopPlay = "stop_play",
-    TurnoutPos1 = "turnout_pos1",
-    TurnoutPos2 = "turnout_pos2",
+export interface Capability{
+    type:  CapabilityType;
+    value: string;
+    [property: string]: any;
 }
 
-export enum DeviceType {
+export enum CapabilityType {
+    PlayID = "play_id",
+    PlayURL = "play_url",
     Player = "player",
+    StopPlay = "stop_play",
     Train = "train",
     Turnout = "turnout",
 }
@@ -63,6 +61,17 @@ export interface State{
 export interface Command{
     function: Function;
     [property: string]: any;
+}
+
+export enum Function {
+    Break = "break",
+    MoveBackward = "move_backward",
+    MoveForward = "move_forward",
+    PlayID = "play_id",
+    PlayURL = "play_url",
+    StopPlay = "stop_play",
+    TurnoutPos1 = "turnout_pos1",
+    TurnoutPos2 = "turnout_pos2",
 }
 
 export interface TrainState extends State {
@@ -112,12 +121,12 @@ export class Convert {
         return JSON.stringify(uncast(value, r("Function")), null, 2);
     }
 
-    public static toDeviceType(json: string): DeviceType {
-        return cast(JSON.parse(json), r("DeviceType"));
+    public static toCapabilityType(json: string): CapabilityType {
+        return cast(JSON.parse(json), r("CapabilityType"));
     }
 
-    public static deviceTypeToJson(value: DeviceType): string {
-        return JSON.stringify(uncast(value, r("DeviceType")), null, 2);
+    public static capabilityTypeToJson(value: CapabilityType): string {
+        return JSON.stringify(uncast(value, r("CapabilityType")), null, 2);
     }
 
     public static toControlUnit(json: string): ControlUnit {
@@ -343,9 +352,13 @@ const typeMap: any = {
         { json: "id", js: "id", typ: "" },
     ], "any"),
     "Device": o([
-        { json: "functions", js: "functions", typ: u(undefined, u(a(r("Function")), null)) },
+        { json: "capabilities", js: "capabilities", typ: a(r("Capability")) },
         { json: "id", js: "id", typ: "" },
-        { json: "type", js: "type", typ: r("DeviceType") },
+        { json: "type", js: "type", typ: "any" },
+    ], "any"),
+    "Capability": o([
+        { json: "type", js: "type", typ: r("CapabilityType") },
+        { json: "value", js: "value", typ: "" },
     ], "any"),
     "DeviceInfo": o([
         { json: "device", js: "device", typ: r("Device") },
@@ -376,6 +389,14 @@ const typeMap: any = {
     "Mp3Command": o([
         { json: "url", js: "url", typ: "" },
     ], "any"),
+    "CapabilityType": [
+        "play_id",
+        "play_url",
+        "player",
+        "stop_play",
+        "train",
+        "turnout",
+    ],
     "Function": [
         "break",
         "move_backward",
@@ -385,11 +406,6 @@ const typeMap: any = {
         "stop_play",
         "turnout_pos1",
         "turnout_pos2",
-    ],
-    "DeviceType": [
-        "player",
-        "train",
-        "turnout",
     ],
     "Direction": [
         "backward",

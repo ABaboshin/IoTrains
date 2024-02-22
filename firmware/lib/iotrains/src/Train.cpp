@@ -6,6 +6,10 @@
 
 Train::Train(std::uint8_t fwdPin, std::uint8_t revPin, std::uint8_t fwdLedPin, std::uint8_t revLedPin) : drv(fwdPin, revPin), fwdLed(fwdLedPin), revLed(revLedPin)
 {
+  railschema::Capability trainCapability;
+  trainCapability.type = railschema::CapabilityType::TRAIN;
+  trainCapability.value = "";
+  capabilities.push_back(trainCapability);
 }
 
 std::shared_ptr<railschema::State> Train::ProcessCommand(std::shared_ptr<railschema::Command> command)

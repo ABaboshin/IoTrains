@@ -5,7 +5,7 @@
 //  Then include this file, and then do
 //
 //     Function data = nlohmann::json::parse(jsonString);
-//     DeviceType data = nlohmann::json::parse(jsonString);
+//     CapabilityType data = nlohmann::json::parse(jsonString);
 //     ControlUnit data = nlohmann::json::parse(jsonString);
 //     DeviceInfo data = nlohmann::json::parse(jsonString);
 //     TrainState data = nlohmann::json::parse(jsonString);
@@ -93,9 +93,17 @@ namespace railschema {
     }
     #endif
 
-    enum class Function : int { BREAK, MOVE_BACKWARD, MOVE_FORWARD, PLAY_ID, PLAY_URL, STOP_PLAY, TURNOUT_POS1, TURNOUT_POS2 };
+    enum class CapabilityType : int { PLAYER, PLAY_ID, PLAY_URL, STOP_PLAY, TRAIN, TURNOUT };
 
-    enum class DeviceType : int { PLAYER, TRAIN, TURNOUT };
+    class Capability {
+        public:
+        std::string discriminator;
+        Capability()= default;
+        virtual ~Capability() = default;
+
+        CapabilityType type;
+        std::string value;
+    };
 
     class Device {
         public:
@@ -103,9 +111,9 @@ namespace railschema {
         Device()= default;
         virtual ~Device() = default;
 
-        std::optional<std::vector<Function>> functions;
+        std::vector<Capability> capabilities;
         std::string id;
-        DeviceType type;
+        nlohmann::json type;
     };
 
     class ControlUnit {
@@ -117,6 +125,8 @@ namespace railschema {
         std::vector<Device> devices;
         std::string id;
     };
+
+    enum class Function : int { BREAK, MOVE_BACKWARD, MOVE_FORWARD, PLAY_ID, PLAY_URL, STOP_PLAY, TURNOUT_POS1, TURNOUT_POS2 };
 
     class Command {
         public:
@@ -201,6 +211,9 @@ namespace railschema {
 }
 
 namespace railschema {
+    void from_json(const json & j, Capability * x);
+    void to_json(json & j, const Capability * x);
+
     void from_json(const json & j, Device * x);
     void to_json(json & j, const Device * x);
 
@@ -231,11 +244,11 @@ namespace railschema {
     void from_json(const json & j, Mp3Command * x);
     void to_json(json & j, const Mp3Command * x);
 
+    void from_json(const json & j, CapabilityType & x);
+    void to_json(json & j, const CapabilityType & x);
+
     void from_json(const json & j, Function & x);
     void to_json(json & j, const Function & x);
-
-    void from_json(const json & j, DeviceType & x);
-    void to_json(json & j, const DeviceType & x);
 
     void from_json(const json & j, Direction & x);
     void to_json(json & j, const Direction & x);
@@ -243,15 +256,26 @@ namespace railschema {
     void from_json(const json & j, EventType & x);
     void to_json(json & j, const EventType & x);
 
+    inline void from_json(const json & j, Capability& x) {
+        x.type = j.at("type").get<CapabilityType>();
+        x.value = j.at("value").get<std::string>();
+    }
+
+    inline void to_json(json & j, const Capability & x) {
+        j = json::object();
+        j["type"] = x.type;
+        j["value"] = x.value;
+    }
+
     inline void from_json(const json & j, Device& x) {
-        x.functions = get_stack_optional<std::vector<Function>>(j, "functions");
+        x.capabilities = j.at("capabilities").get<std::vector<Capability>>();
         x.id = j.at("id").get<std::string>();
-        x.type = j.at("type").get<DeviceType>();
+        x.type = get_untyped(j, "type");
     }
 
     inline void to_json(json & j, const Device & x) {
         j = json::object();
-        j["functions"] = x.functions;
+        j["capabilities"] = x.capabilities;
         j["id"] = x.id;
         j["type"] = x.type;
     }
@@ -369,6 +393,28 @@ namespace railschema {
         j["url"] = x.url;
     }
 
+    inline void from_json(const json & j, CapabilityType & x) {
+        if (j == "player") x = CapabilityType::PLAYER;
+        else if (j == "play_id") x = CapabilityType::PLAY_ID;
+        else if (j == "play_url") x = CapabilityType::PLAY_URL;
+        else if (j == "stop_play") x = CapabilityType::STOP_PLAY;
+        else if (j == "train") x = CapabilityType::TRAIN;
+        else if (j == "turnout") x = CapabilityType::TURNOUT;
+        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+    }
+
+    inline void to_json(json & j, const CapabilityType & x) {
+        switch (x) {
+            case CapabilityType::PLAYER: j = "player"; break;
+            case CapabilityType::PLAY_ID: j = "play_id"; break;
+            case CapabilityType::PLAY_URL: j = "play_url"; break;
+            case CapabilityType::STOP_PLAY: j = "stop_play"; break;
+            case CapabilityType::TRAIN: j = "train"; break;
+            case CapabilityType::TURNOUT: j = "turnout"; break;
+            default: throw std::runtime_error("This should not happen");
+        }
+    }
+
     inline void from_json(const json & j, Function & x) {
         if (j == "break") x = Function::BREAK;
         else if (j == "move_backward") x = Function::MOVE_BACKWARD;
@@ -391,22 +437,6 @@ namespace railschema {
             case Function::STOP_PLAY: j = "stop_play"; break;
             case Function::TURNOUT_POS1: j = "turnout_pos1"; break;
             case Function::TURNOUT_POS2: j = "turnout_pos2"; break;
-            default: throw std::runtime_error("This should not happen");
-        }
-    }
-
-    inline void from_json(const json & j, DeviceType & x) {
-        if (j == "player") x = DeviceType::PLAYER;
-        else if (j == "train") x = DeviceType::TRAIN;
-        else if (j == "turnout") x = DeviceType::TURNOUT;
-        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
-    }
-
-    inline void to_json(json & j, const DeviceType & x) {
-        switch (x) {
-            case DeviceType::PLAYER: j = "player"; break;
-            case DeviceType::TRAIN: j = "train"; break;
-            case DeviceType::TURNOUT: j = "turnout"; break;
             default: throw std::runtime_error("This should not happen");
         }
     }
