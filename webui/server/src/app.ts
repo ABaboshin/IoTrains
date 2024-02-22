@@ -6,7 +6,7 @@ import { connect } from "mqtt";
 import moment from "moment";
 
 const PORT = process.env.PORT || 3001;
-const MQTT_URL = process.env.MQTT_URL || "mqtt://localhost";
+const MQTT_URL = process.env.MQTT_URL || "mqtt://192.168.31.208";
 const MQTT_USERNAME = process.env.MQTT_USERNAME || "manager";
 const MQTT_PASSWORD = process.env.MQTT_PASSWORD || "!manager";
 const client = connect(MQTT_URL, { username: MQTT_USERNAME, password: MQTT_PASSWORD });

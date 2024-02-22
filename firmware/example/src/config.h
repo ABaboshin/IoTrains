@@ -1,9 +1,9 @@
 #pragma once
 #include <string>
 
-const std::string wifiNetwork = "";
-const std::string wifiPassword = "";
-const std::string mqttServer = "192.168.31.90";
-const std::string mqttClientId = "manager";
-const std::string mqttLogin = "manager";
-const std::string mqttPassword = "!manager";
+const std::string wifiNetwork = "iotrains";
+const std::string wifiPassword = "iotrains";
+const std::string mqttServer = "10.0.0.1";
+const std::string mqttClientId = "train";
+const std::string mqttLogin = "train";
+const std::string mqttPassword = "train";
