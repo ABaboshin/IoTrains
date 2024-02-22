@@ -12,14 +12,12 @@ void setup()
   Serial.begin(115200);
   cu.id = "basic train";
 
-  std::vector<railschema::Function> functions;
-
   Serial.println("train");
-  std::shared_ptr<BaseDevice> train = std::make_shared<SoundTrain>(1, 2, 3, 4, 0, std::map<std::string, std::vector<unsigned char>>());
+  std::map<std::string, std::vector<unsigned char>> sounds;
+  sounds["test"] = std::vector<unsigned char>();
+  std::shared_ptr<BaseDevice> train = std::make_shared<SoundTrain>(1, 2, 3, 4, 0, sounds);
 
   train->id = "train1";
-  train->functions = functions;
-  train->type = railschema::DeviceType::TRAIN;
 
   cu.devices.push_back(train);
 

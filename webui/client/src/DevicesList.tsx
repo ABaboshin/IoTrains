@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import { DeviceInfo, DeviceType } from 'common';
+import { CapabilityType, DeviceInfo } from 'common';
 import { useEffect, useState } from 'react';
 import { TrainControl } from './TrainControl';
 import { Divider } from '@mui/material';
@@ -42,13 +42,13 @@ export default function DevicesList() {
               {row.device.id}
               <Divider />
               {
-                row.device.type === DeviceType.Train && <TrainControl device={row.device} state={row.state} />
+                row.device.capabilities.map((x, i, ar) => x.type).includes(CapabilityType.Train) && <TrainControl device={row.device} state={row.state} />
               }
               {
-                row.device.type === DeviceType.Player && <MP3Control device={row.device} state={row.state} />
+                row.device.capabilities.map((x, i, ar) => x.type).includes(CapabilityType.Player) && <MP3Control device={row.device} state={row.state} />
               }
               {
-                row.device.type === DeviceType.Turnout && <TurnoutControl device={row.device} state={row.state} />
+                row.device.capabilities.map((x, i, ar) => x.type).includes(CapabilityType.Turnout) && <TurnoutControl device={row.device} state={row.state} />
               }
             </Box>
           );

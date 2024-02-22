@@ -17,10 +17,8 @@ async function quicktypeJSONSchema(targetLanguage: string | TargetLanguage) {
   const schemaInput = new JSONSchemaInput(new FetchingJSONSchemaStore(), [extendsAttributeProducer, responseAttributeProducer, nameAttributeProducer]);
 
   await schemaInput.addSource({ name: "Function", schema: await readFromFileOrURL("./function.json") });
-  await schemaInput.addSource({ name: "DeviceType", schema: await readFromFileOrURL("./devicetype.json") });
-  // await schemaInput.addSource({ name: "Command", schema: await readFromFileOrURL("./command.json") });
+  await schemaInput.addSource({ name: "CapabilityType", schema: await readFromFileOrURL("./capabilitytype.json") });
   await schemaInput.addSource({ name: "ControlUnit", schema: await readFromFileOrURL("./controlunit.json") });
-  // await schemaInput.addSource({ name: "State", schema: await readFromFileOrURL("./state.json") });
   await schemaInput.addSource({ name: "DeviceInfo", schema: await readFromFileOrURL("./deviceinfo.json") });
   await schemaInput.addSource({ name: "TrainState", schema: await readFromFileOrURL("./trainstate.json") });
   await schemaInput.addSource({ name: "EventType", schema: await readFromFileOrURL("./eventtype.json") });

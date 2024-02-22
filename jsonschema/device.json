@@ -5,28 +5,19 @@
     "id": {
       "type": "string"
     },
-    "type": {
-      "$ref": "devicetype.json"
-    },
-    "functions": {
-      "oneOf": [
+    "capabilities": {
+      "type": "array",
+      "items": [
         {
-          "type": "null"
-        },
-        {
-          "type": "array",
-          "items": [
-            {
-              "$ref": "function.json"
-            }
-          ]
+          "$ref": "capability.json"
         }
       ]
     }
   },
   "required": [
     "id",
-    "type"
+    "type",
+    "capabilities"
   ],
   "processing": true
 }

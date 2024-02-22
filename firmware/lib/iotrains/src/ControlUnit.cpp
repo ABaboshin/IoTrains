@@ -15,9 +15,8 @@ bool ControlUnit::send_report(void *argument)
   for (auto it = instance->devices.begin(); it != instance->devices.end(); it++)
   {
     railschema::Device d;
-    d.functions = it->get()->functions;
+    d.capabilities = it->get()->capabilities;
     d.id = it->get()->id;
-    d.type = it->get()->type;
     cu.devices.push_back(d);
   }
 

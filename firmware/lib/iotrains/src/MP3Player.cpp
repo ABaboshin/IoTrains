@@ -20,9 +20,7 @@ Stream* MP3Player::callbackNextStream(int offset)
   return mp3PlayerInstance->current.get();
 }
 
-MP3Player::MP3Player(
-    int pin,
-std::map < std::string, std::vector < unsigned char>> mp3) : mp3(mp3)
+MP3Player::MP3Player(int pin, const std::map<std::string, std::vector<unsigned char>> &mp3) : mp3(mp3)
 {
   AudioLogger::instance().begin(Serial, AudioLogger::Error);
 
@@ -46,6 +44,28 @@ std::map < std::string, std::vector < unsigned char>> mp3) : mp3(mp3)
 #endif
 
   mp3PlayerInstance = this;
+
+  railschema::Capability playerCapability;
+  playerCapability.type = railschema::CapabilityType::PLAYER;
+  playerCapability.value = "";
+
+  railschema::Capability playUrlCapability;
+  playUrlCapability.type = railschema::CapabilityType::PLAY_URL;
+  playUrlCapability.value = "";
+
+  railschema::Capability stopCapability;
+  stopCapability.type = railschema::CapabilityType::STOP_PLAY;
+  stopCapability.value = "";
+
+  capabilities.push_back(playerCapability);
+  capabilities.push_back(playUrlCapability);
+  capabilities.push_back(stopCapability);
+  for (auto it = this->mp3.begin(); it != this->mp3.end(); it++) {
+    railschema::Capability cap;
+    cap.type = railschema::CapabilityType::PLAY_ID;
+    cap.value = it->first;
+    capabilities.push_back(cap);
+  }
 }
 
 std::shared_ptr<railschema::State> MP3Player::ProcessCommand(std::shared_ptr<railschema::Command> command)

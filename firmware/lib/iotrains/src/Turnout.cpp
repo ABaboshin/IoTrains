@@ -3,6 +3,10 @@
 
 Turnout::Turnout(std::uint8_t pin1, std::uint8_t pin2) : sw1(pin1), sw2(pin2)
 {
+  railschema::Capability cap;
+  cap.type = railschema::CapabilityType::TURNOUT;
+  cap.value = "";
+  capabilities.push_back(cap);
 }
 
 std::shared_ptr<railschema::State> Turnout::ProcessCommand(std::shared_ptr<railschema::Command> command)
