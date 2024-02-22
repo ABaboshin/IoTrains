@@ -24,11 +24,12 @@ class ControlUnit
   std::string mqttClientId;
   std::string mqttLogin;
   std::string mqttPassword;
+  std::uint32_t connectionTimeoutMs;
 
   static bool send_report(void *argument);
 
 public:
-  ControlUnit(std::string wifiNetwork, std::string wifiPassword, std::string mqttServer, std::string mqttClientId, std::string mqttLogin, std::string mqttPassword);
+  ControlUnit(std::string wifiNetwork, std::string wifiPassword, std::string mqttServer, std::string mqttClientId, std::string mqttLogin, std::string mqttPassword, std::uint32_t connectionTimeoutMs);
   void Setup();
   void Loop();
 

@@ -14,7 +14,7 @@ rst d3
 
 */
 
-RFIDReader::RFIDReader(std::uint8_t ssPin, std::uint8_t rstPin) : mfrc522(ssPin, rstPin)
+RFIDReader::RFIDReader(const std::string &id, std::uint8_t ssPin, std::uint8_t rstPin) : BaseDevice(id), mfrc522(ssPin, rstPin)
 {
   this->ssPin = ssPin;
   this->rstPin = rstPin;

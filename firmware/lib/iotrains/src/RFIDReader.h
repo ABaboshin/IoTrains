@@ -12,7 +12,7 @@ class RFIDReader : public BaseDevice
   MFRC522 mfrc522;
 
 public:
-  RFIDReader(std::uint8_t ssPin, std::uint8_t rstPin);
+  RFIDReader(const std::string &id, std::uint8_t ssPin, std::uint8_t rstPin);
 
   std::shared_ptr<railschema::Event> Loop();
   std::shared_ptr<railschema::State> ProcessCommand(std::shared_ptr<railschema::Command> command) override { return nullptr; }
