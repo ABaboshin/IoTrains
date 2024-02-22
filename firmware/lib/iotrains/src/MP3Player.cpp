@@ -20,7 +20,7 @@ Stream* MP3Player::callbackNextStream(int offset)
   return mp3PlayerInstance->current.get();
 }
 
-MP3Player::MP3Player(int pin, const std::map<std::string, std::vector<unsigned char>> &mp3) : mp3(mp3)
+MP3Player::MP3Player(const std::string &id, int pin, const std::map<std::string, std::vector<unsigned char>> &mp3) : BaseDevice(id), mp3(mp3)
 {
   AudioLogger::instance().begin(Serial, AudioLogger::Error);
 

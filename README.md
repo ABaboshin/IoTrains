@@ -16,9 +16,8 @@ The projects consists of:
  - Connect an audio amplifier to an i2s capable pin i.e. DAC_1.
 
 ## TODO
- - credentials for firmware and backend
  - docker for backend
- - std train
- - responsive ui
+ - responsive ui / refresh on update
+ - process rfid events
  - sqlite3
  - schematic

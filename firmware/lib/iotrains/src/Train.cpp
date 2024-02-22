@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include "Train.h"
 
-Train::Train(std::uint8_t fwdPin, std::uint8_t revPin, std::uint8_t fwdLedPin, std::uint8_t revLedPin) : drv(fwdPin, revPin), fwdLed(fwdLedPin), revLed(revLedPin)
+Train::Train(const std::string &id, std::uint8_t fwdPin, std::uint8_t revPin, std::uint8_t fwdLedPin, std::uint8_t revLedPin) : BaseDevice(id), drv(fwdPin, revPin), fwdLed(fwdLedPin), revLed(revLedPin)
 {
   railschema::Capability trainCapability;
   trainCapability.type = railschema::CapabilityType::TRAIN;
@@ -59,4 +59,10 @@ std::shared_ptr<railschema::State> Train::ProcessCommand(std::shared_ptr<railsch
 std::shared_ptr<railschema::Event> Train::Loop()
 {
   return nullptr;
+}
+
+void Train::DefaultAction() {
+  drv.Forward(50);
+  fwdLed.On();
+  revLed.Off();
 }

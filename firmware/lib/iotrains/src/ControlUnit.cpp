@@ -4,6 +4,7 @@
 
 ControlUnit *instance;
 
+const std::uint32_t defaultWaitIntervalMs = 500;
 auto timer = timer_create_default();
 
 bool ControlUnit::send_report(void *argument)
@@ -25,13 +26,14 @@ bool ControlUnit::send_report(void *argument)
   return true;
 }
 
-ControlUnit::ControlUnit(std::string wifiNetwork, std::string wifiPassword, std::string mqttServer, std::string mqttClientId, std::string mqttLogin, std::string mqttPassword) : client(espClient),
-                                                                                                                                                                                 wifiNetwork(wifiNetwork),
-                                                                                                                                                                                 wifiPassword(wifiPassword),
-                                                                                                                                                                                 mqttServer(mqttServer),
-                                                                                                                                                                                 mqttClientId(mqttClientId),
-                                                                                                                                                                                 mqttLogin(mqttLogin),
-                                                                                                                                                                                 mqttPassword(mqttPassword)
+ControlUnit::ControlUnit(std::string wifiNetwork, std::string wifiPassword, std::string mqttServer, std::string mqttClientId, std::string mqttLogin, std::string mqttPassword, std::uint32_t connectionTimeoutMs) : client(espClient),
+                                                                                                                                                                                                                    wifiNetwork(wifiNetwork),
+                                                                                                                                                                                                                    wifiPassword(wifiPassword),
+                                                                                                                                                                                                                    mqttServer(mqttServer),
+                                                                                                                                                                                                                    mqttClientId(mqttClientId),
+                                                                                                                                                                                                                    mqttLogin(mqttLogin),
+                                                                                                                                                                                                                    mqttPassword(mqttPassword),
+                                                                                                                                                                                                                    connectionTimeoutMs(connectionTimeoutMs)
 {
   instance = this;
 }
@@ -45,10 +47,17 @@ void ControlUnit::Setup()
   WiFi.mode(WIFI_STA);
   WiFi.begin(wifiNetwork.c_str(), wifiPassword.c_str());
 
+  std::uint32_t wait = 0;
   while (WiFi.status() != WL_CONNECTED)
   {
-    delay(500);
+    wait += defaultWaitIntervalMs;
+    delay(defaultWaitIntervalMs);
     Serial.print(".");
+    if (wait > connectionTimeoutMs) {
+      Serial.println("wifi not connected");
+      devices[0]->DefaultAction();
+      return;
+    }
   }
 
   Serial.println("");
@@ -129,6 +138,7 @@ void ControlUnit::Loop()
 
 void ControlUnit::reconnect()
 {
+  std::uint32_t wait = 0;
   while (!client.connected())
   {
     Serial.printf("Attempting MQTT connection... %s %s %s", mqttClientId, mqttLogin, mqttPassword);
@@ -144,8 +154,14 @@ void ControlUnit::reconnect()
     {
       Serial.print("failed, rc=");
       Serial.print(client.state());
-      Serial.println(" try again in 5 seconds");
-      delay(5000);
+      Serial.println(" try again later");
+      delay(defaultWaitIntervalMs);
+      wait += defaultWaitIntervalMs;
+      if (wait > connectionTimeoutMs) {
+        Serial.println("wifi not connected");
+        devices[0]->DefaultAction();
+        return;
+      }
     }
   }
 }
