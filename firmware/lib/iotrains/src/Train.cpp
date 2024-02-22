@@ -4,8 +4,8 @@
 #include <Arduino.h>
 #include "Train.h"
 
-
-Train::Train() : drv(5, 6) {
+Train::Train(std::uint8_t fwdPin, std::uint8_t revPin, std::uint8_t fwdLedPin, std::uint8_t revLedPin) : drv(fwdPin, revPin), fwdLed(fwdLedPin), revLed(revLedPin)
+{
 }
 
 std::shared_ptr<railschema::State> Train::ProcessCommand(std::shared_ptr<railschema::Command> command)
@@ -19,6 +19,8 @@ std::shared_ptr<railschema::State> Train::ProcessCommand(std::shared_ptr<railsch
   if (command->function == railschema::Function::MOVE_FORWARD)
   {
     drv.Forward(trainCommand->speed);
+    fwdLed.On();
+    revLed.Off();
 
     ts->direction = railschema::Direction::FORWARD;
     ts->speed = trainCommand->speed;
@@ -28,6 +30,9 @@ std::shared_ptr<railschema::State> Train::ProcessCommand(std::shared_ptr<railsch
   if (command->function == railschema::Function::MOVE_BACKWARD)
   {
     drv.Backward(trainCommand->speed);
+    fwdLed.Off();
+    revLed.On();
+
     ts->direction = railschema::Direction::BACKWARD;
     ts->speed = trainCommand->speed;
     ts->ok = true;
@@ -36,6 +41,9 @@ std::shared_ptr<railschema::State> Train::ProcessCommand(std::shared_ptr<railsch
   if (command->function == railschema::Function::BREAK)
   {
     drv.Stop();
+    fwdLed.Off();
+    revLed.Off();
+
     ts->direction = railschema::Direction::STOP;
     ts->speed = 0;
     ts->ok = true;

@@ -1,15 +1,20 @@
 #pragma once
 
+#include <cstdint>
+#include "BaseDevice.h"
 #include "schema.hpp"
 #include "MotorDriver.h"
-#include "BaseDevice.h"
+#include "Switch.h"
 
 class Train : public BaseDevice
 {
 private:
     MotorDriver drv;
-public:
-    Train();
-    std::shared_ptr<railschema::State> ProcessCommand(std::shared_ptr<railschema::Command> command) override;
-    std::shared_ptr<railschema::Event> Loop();
+    Switch fwdLed;
+    Switch revLed;
+
+  public:
+    Train(std::uint8_t fwdPin, std::uint8_t revPin, std::uint8_t fwdLedPin, std::uint8_t revLedPin);
+    virtual std::shared_ptr<railschema::State> ProcessCommand(std::shared_ptr<railschema::Command> command) override;
+    virtual std::shared_ptr<railschema::Event> Loop();
 };

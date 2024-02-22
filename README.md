@@ -16,8 +16,9 @@ The projects consists of:
  - Connect an audio amplifier to an i2s capable pin i.e. DAC_1.
 
 ## TODO
- - advertise built-in mp3 in player
+ - credentials for firmware and backend
+ - docker for backend
+ - std train
  - responsive ui
- - nanomq/emqx
  - sqlite3
  - schematic
