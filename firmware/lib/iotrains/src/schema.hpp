@@ -484,6 +484,7 @@ namespace railschema {
               if (discriminator == "State") {
                 std::shared_ptr<State> ptr;
                 from_json(j, *ptr);
+                ptr->discriminator = "State";
                 return ptr;
               }
               
@@ -491,6 +492,7 @@ namespace railschema {
               if (discriminator == "TrainState") {
                 std::shared_ptr<State> ptr = std::make_shared<TrainState>();
                 from_json(j, *(TrainState*)ptr.get());
+                ptr->discriminator = "TrainState";
                 return ptr;
               }
               
@@ -511,6 +513,7 @@ namespace railschema {
               if (discriminator == "Event") {
                 std::shared_ptr<Event> ptr;
                 from_json(j, *ptr);
+                ptr->discriminator = "Event";
                 return ptr;
               }
               
@@ -518,6 +521,7 @@ namespace railschema {
               if (discriminator == "RfidEvent") {
                 std::shared_ptr<Event> ptr = std::make_shared<RfidEvent>();
                 from_json(j, *(RfidEvent*)ptr.get());
+                ptr->discriminator = "RfidEvent";
                 return ptr;
               }
               
@@ -538,6 +542,7 @@ namespace railschema {
               if (discriminator == "Command") {
                 std::shared_ptr<Command> ptr;
                 from_json(j, *ptr);
+                ptr->discriminator = "Command";
                 return ptr;
               }
               
@@ -545,6 +550,7 @@ namespace railschema {
               if (discriminator == "TrainCommand") {
                 std::shared_ptr<Command> ptr = std::make_shared<TrainCommand>();
                 from_json(j, *(TrainCommand*)ptr.get());
+                ptr->discriminator = "TrainCommand";
                 return ptr;
               }
               
@@ -552,6 +558,7 @@ namespace railschema {
               if (discriminator == "Mp3Command") {
                 std::shared_ptr<Command> ptr = std::make_shared<Mp3Command>();
                 from_json(j, *(Mp3Command*)ptr.get());
+                ptr->discriminator = "Mp3Command";
                 return ptr;
               }
               

@@ -335,6 +335,7 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
           if (discriminator == "${baseType}") {
             std::shared_ptr<${baseType}> ptr;
             from_json(j, *ptr);
+            ptr->discriminator = "${baseType}";
             return ptr;
           }
           `
@@ -346,6 +347,7 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
           if (discriminator == "${derivedType}") {
             std::shared_ptr<${baseType}> ptr = std::make_shared<${derivedType}>();
             from_json(j, *(${derivedType}*)ptr.get());
+            ptr->discriminator = "${derivedType}";
             return ptr;
           }
           `
