@@ -11,7 +11,7 @@ function(embed_resource resource_file_name source_file_name variable_name)
 
         string(REGEX REPLACE ", $" "" content "${content}")
 
-        set(array_definition "std::vector<unsigned char> ${variable_name} =\n{\n${content}\n};")
+        set(array_definition "static const /*std::vector<unsigned char>*/ unsigned char ${variable_name}[] PROGMEM =\n{\n${content}\n};")
 
         set(source "// Auto generated file.\n${array_definition}\n")
 

@@ -17,8 +17,9 @@ void setup()
 
   Serial.println("train");
   std::map<std::string, std::vector<unsigned char>> sounds;
-  sounds["test"] = std::vector<unsigned char>();
+  sounds["test"] = std::vector<unsigned char>(); //(outputmp3, outputmp3 + sizeof(outputmp3));
   std::shared_ptr<BaseDevice> train = std::make_shared<SoundTrain>(STRINGIZE_VALUE_OF(NAME), 1, 2, 3, 4, 0, sounds);
+  // std::shared_ptr<BaseDevice> train = std::make_shared<Train>(STRINGIZE_VALUE_OF(NAME), 1, 2, 3, 4);
 
   cu.devices.push_back(train);
 

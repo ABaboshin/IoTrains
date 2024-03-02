@@ -25,10 +25,12 @@ MP3Player::MP3Player(const std::string &id, int pin, const std::map<std::string,
   AudioLogger::instance().begin(Serial, AudioLogger::Error);
 
 #ifdef AUDIO_ANALOG
+  Serial.println("analog aduio");
   auto cfg = out.defaultConfig();
   out.begin(cfg);
 #endif
 #ifdef AUDIO_I2S
+  Serial.println("i2s aduio");
   auto cfg = out.defaultConfig(TX_MODE);
   if (pin != -1)
   {
@@ -37,6 +39,7 @@ MP3Player::MP3Player(const std::string &id, int pin, const std::map<std::string,
   out.begin(cfg);
 #endif
 #ifdef AUDIO_PWM
+  Serial.println("pwm aduio");
   auto cfg = out.defaultConfig();
   Pins pwm_pins;
   pwm_pins.push_back(pin);
@@ -79,30 +82,43 @@ std::shared_ptr<railschema::State> MP3Player::ProcessCommand(std::shared_ptr<rai
 
   if (mp3Command->function == railschema::Function::PLAY_URL)
   {
+    Serial.println("play url");
+    Serial.println(mp3Command->url.c_str());
     HTTPClient http;
     WiFiClient client;
     if (http.begin(client, mp3Command->url.c_str()))
     {
+      Serial.println("begin download");
       auto httpCode = http.GET();
       if (httpCode > 0)
       {
+        Serial.println("http code > 0");
         if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY)
         {
+          Serial.println("http ok");
           auto size = http.getSize();
+          Serial.println(size);
           buf.resize(size);
           WiFiClient *stream = &client;
           int c = stream->readBytes(&buf[0], size);
           if (c > 0)
           {
+            Serial.println("download done");
             current = std::make_shared<MemoryStream>(&buf[0], size);
             source = std::make_shared<AudioSourceCallback>(callbackNextStream);
             player = std::make_shared<AudioPlayer>(*source, out, decoder);
             player->begin();
 
             ts->ok = true;
+          } else {
+            Serial.println("download failed");
           }
+        } else {
+          Serial.println("http not ok");
         }
       }
+    } else {
+      Serial.println("begin download failed");
     }
   }
 
