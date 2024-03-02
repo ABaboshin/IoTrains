@@ -17,3 +17,5 @@ obj
 dist
 .pio
 .vscode
+firmware/sound/
+!firmware/sound/CMakeLists.txt

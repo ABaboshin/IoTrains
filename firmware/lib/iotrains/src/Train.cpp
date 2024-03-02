@@ -3,8 +3,16 @@
 #include <bits/shared_ptr.h>
 #include <Arduino.h>
 #include "Train.h"
+#include <cmath>
 
-Train::Train(const std::string &id, std::uint8_t fwdPin, std::uint8_t revPin, std::uint8_t fwdLedPin, std::uint8_t revLedPin) : BaseDevice(id), drv(fwdPin, revPin), fwdLed(fwdLedPin), revLed(revLedPin)
+inline int calculateSpeed(int speed100)
+{
+  double devider = 255;
+  auto newSpeed = speed100 * devider / 100;
+  return (int)std::abs(newSpeed);
+}
+
+Train::Train(const std::string &id, std::uint8_t fwdPin, std::uint8_t revPin, std::uint8_t fwdLedPin, std::uint8_t revLedPin) : BaseDevice(id), drv(fwdPin, revPin, 2, 3), fwdLed(fwdLedPin), revLed(revLedPin)
 {
   railschema::Capability trainCapability;
   trainCapability.type = railschema::CapabilityType::TRAIN;
@@ -22,7 +30,7 @@ std::shared_ptr<railschema::State> Train::ProcessCommand(std::shared_ptr<railsch
 
   if (command->function == railschema::Function::MOVE_FORWARD)
   {
-    drv.Forward(trainCommand->speed);
+    drv.motorGo(calculateSpeed(trainCommand->speed));
     fwdLed.On();
     revLed.Off();
 
@@ -33,7 +41,7 @@ std::shared_ptr<railschema::State> Train::ProcessCommand(std::shared_ptr<railsch
 
   if (command->function == railschema::Function::MOVE_BACKWARD)
   {
-    drv.Backward(trainCommand->speed);
+    drv.motorRev(calculateSpeed(trainCommand->speed));
     fwdLed.Off();
     revLed.On();
 
@@ -44,7 +52,7 @@ std::shared_ptr<railschema::State> Train::ProcessCommand(std::shared_ptr<railsch
 
   if (command->function == railschema::Function::BREAK)
   {
-    drv.Stop();
+    drv.motorStop();
     fwdLed.Off();
     revLed.Off();
 
@@ -62,7 +70,7 @@ std::shared_ptr<railschema::Event> Train::Loop()
 }
 
 void Train::DefaultAction() {
-  drv.Forward(50);
+  drv.motorGo(50);
   fwdLed.On();
   revLed.Off();
 }

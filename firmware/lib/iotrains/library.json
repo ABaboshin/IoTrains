@@ -26,7 +26,8 @@
     "arduino-libhelix": "https://github.com/pschatzmann/arduino-libhelix.git#main",
     "SPI": "2.0.0",
     "ESPmDNS": "2.0.0",
-    "ESP8266mDNS": "1.2"
+    "ESP8266mDNS": "1.2",
+    "MX1508": "https://github.com/ElectroMagus/ESP32MX1508.git#main"
   },
   "frameworks": ["arduino"],
   "platforms": [
