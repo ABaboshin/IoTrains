@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "Turnout.h"
 
-Turnout::Turnout(const std::string &id, std::uint8_t pin1, std::uint8_t pin2) : BaseDevice(id), sw1(pin1), sw2(pin2)
+Turnout::Turnout(const std::string &id, std::uint8_t pin1, std::uint8_t pin2) : BaseDevice(id), sw1("built-in", pin1), sw2("built-in", pin2)
 {
   railschema::Capability cap;
   cap.type = railschema::CapabilityType::TURNOUT;

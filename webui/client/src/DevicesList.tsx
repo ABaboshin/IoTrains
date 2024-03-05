@@ -6,6 +6,7 @@ import { TrainControl } from './TrainControl';
 import { Divider } from '@mui/material';
 import { MP3Control } from './MP3Control';
 import { TurnoutControl } from './TurnoutControl';
+import { LightControl } from './LightControl';
 
 export default function DevicesList() {
   async function fetchApi() {
@@ -49,6 +50,9 @@ export default function DevicesList() {
               }
               {
                 row.device.capabilities.map((x, i, ar) => x.type).includes(CapabilityType.Turnout) && <TurnoutControl device={row.device} state={row.state} />
+              }
+              {
+                row.device.capabilities.map((x, i, ar) => x.type).includes(CapabilityType.Light) && <LightControl device={row.device} state={row.state} />
               }
             </Box>
           );

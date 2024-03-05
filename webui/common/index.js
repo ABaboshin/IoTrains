@@ -1,7 +1,7 @@
 "use strict";
 // To parse this data:
 //
-//   import { Convert, Function, CapabilityType, ControlUnit, DeviceInfo, TrainState, EventType, Event, RFIDEvent, TrainCommand, Mp3Command } from "./file";
+//   import { Convert, Function, CapabilityType, ControlUnit, DeviceInfo, TrainState, EventType, Event, RFIDEvent, TrainCommand, Mp3Command, LightCommand } from "./file";
 //
 //   const function = Convert.toFunction(json);
 //   const capabilityType = Convert.toCapabilityType(json);
@@ -13,6 +13,7 @@
 //   const rFIDEvent = Convert.toRFIDEvent(json);
 //   const trainCommand = Convert.toTrainCommand(json);
 //   const mp3Command = Convert.toMp3Command(json);
+//   const lightCommand = Convert.toLightCommand(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
@@ -20,6 +21,7 @@ exports.__esModule = true;
 exports.Convert = exports.EventType = exports.Direction = exports.Function = exports.CapabilityType = void 0;
 var CapabilityType;
 (function (CapabilityType) {
+    CapabilityType["Light"] = "light";
     CapabilityType["PlayID"] = "play_id";
     CapabilityType["PlayURL"] = "play_url";
     CapabilityType["Player"] = "player";
@@ -32,6 +34,8 @@ var Function;
     Function["Break"] = "break";
     Function["MoveBackward"] = "move_backward";
     Function["MoveForward"] = "move_forward";
+    Function["Off"] = "off";
+    Function["On"] = "on";
     Function["PlayID"] = "play_id";
     Function["PlayURL"] = "play_url";
     Function["StopPlay"] = "stop_play";
@@ -112,6 +116,12 @@ var Convert = /** @class */ (function () {
     };
     Convert.mp3CommandToJson = function (value) {
         return JSON.stringify(uncast(value, r("Mp3Command")), null, 2);
+    };
+    Convert.toLightCommand = function (json) {
+        return cast(JSON.parse(json), r("LightCommand"));
+    };
+    Convert.lightCommandToJson = function (value) {
+        return JSON.stringify(uncast(value, r("LightCommand")), null, 2);
     };
     return Convert;
 }());
@@ -311,7 +321,11 @@ var typeMap = {
     "Mp3Command": o([
         { json: "url", js: "url", typ: "" },
     ], "any"),
+    "LightCommand": o([
+        { json: "name", js: "name", typ: "" },
+    ], "any"),
     "CapabilityType": [
+        "light",
         "play_id",
         "play_url",
         "player",
@@ -323,6 +337,8 @@ var typeMap = {
         "break",
         "move_backward",
         "move_forward",
+        "off",
+        "on",
         "play_id",
         "play_url",
         "stop_play",

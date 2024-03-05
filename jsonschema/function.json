@@ -9,6 +9,8 @@
     "turnout_pos2",
     "play_url",
     "play_id",
-    "stop_play"
+    "stop_play",
+    "on",
+    "off"
   ]
 }

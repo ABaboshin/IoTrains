@@ -15,6 +15,7 @@ export interface Capability {
     [property: string]: any;
 }
 export declare enum CapabilityType {
+    Light = "light",
     PlayID = "play_id",
     PlayURL = "play_url",
     Player = "player",
@@ -42,6 +43,8 @@ export declare enum Function {
     Break = "break",
     MoveBackward = "move_backward",
     MoveForward = "move_forward",
+    Off = "off",
+    On = "on",
     PlayID = "play_id",
     PlayURL = "play_url",
     StopPlay = "stop_play",
@@ -77,6 +80,10 @@ export interface Mp3Command extends Command {
     url: string;
     [property: string]: any;
 }
+export interface LightCommand extends Command {
+    name: string;
+    [property: string]: any;
+}
 export declare class Convert {
     static toFunction(json: string): Function;
     static functionToJson(value: Function): string;
@@ -98,4 +105,6 @@ export declare class Convert {
     static trainCommandToJson(value: TrainCommand): string;
     static toMp3Command(json: string): Mp3Command;
     static mp3CommandToJson(value: Mp3Command): string;
+    static toLightCommand(json: string): LightCommand;
+    static lightCommandToJson(value: LightCommand): string;
 }

@@ -14,6 +14,7 @@
 //     RfidEvent data = nlohmann::json::parse(jsonString);
 //     TrainCommand data = nlohmann::json::parse(jsonString);
 //     Mp3Command data = nlohmann::json::parse(jsonString);
+//     LightCommand data = nlohmann::json::parse(jsonString);
 
 #pragma once
 
@@ -93,7 +94,7 @@ namespace railschema {
     }
     #endif
 
-    enum class CapabilityType : int { PLAYER, PLAY_ID, PLAY_URL, STOP_PLAY, TRAIN, TURNOUT };
+    enum class CapabilityType : int { LIGHT, PLAYER, PLAY_ID, PLAY_URL, STOP_PLAY, TRAIN, TURNOUT };
 
     class Capability {
         public:
@@ -126,7 +127,7 @@ namespace railschema {
         std::string id;
     };
 
-    enum class Function : int { BREAK, MOVE_BACKWARD, MOVE_FORWARD, PLAY_ID, PLAY_URL, STOP_PLAY, TURNOUT_POS1, TURNOUT_POS2 };
+    enum class Function : int { BREAK, MOVE_BACKWARD, MOVE_FORWARD, OFF, ON, PLAY_ID, PLAY_URL, STOP_PLAY, TURNOUT_POS1, TURNOUT_POS2 };
 
     class Command {
         public:
@@ -208,6 +209,15 @@ namespace railschema {
 
         std::string url;
     };
+
+    class LightCommand : public Command {
+        public:
+        std::string discriminator;
+        LightCommand() { discriminator =  "LightCommand"; }
+        virtual ~LightCommand() = default;
+
+        std::string name;
+    };
 }
 
 namespace railschema {
@@ -243,6 +253,9 @@ namespace railschema {
 
     void from_json(const json & j, Mp3Command * x);
     void to_json(json & j, const Mp3Command * x);
+
+    void from_json(const json & j, LightCommand * x);
+    void to_json(json & j, const LightCommand * x);
 
     void from_json(const json & j, CapabilityType & x);
     void to_json(json & j, const CapabilityType & x);
@@ -393,8 +406,23 @@ namespace railschema {
         j["url"] = x.url;
     }
 
+    inline void from_json(const json & j, LightCommand& x) {
+        
+                  from_json(j, (Command&)x);
+                  
+        x.name = j.at("name").get<std::string>();
+    }
+
+    inline void to_json(json & j, const LightCommand & x) {
+        
+                  to_json(j, (const Command&)x);
+                  
+        j["name"] = x.name;
+    }
+
     inline void from_json(const json & j, CapabilityType & x) {
-        if (j == "player") x = CapabilityType::PLAYER;
+        if (j == "light") x = CapabilityType::LIGHT;
+        else if (j == "player") x = CapabilityType::PLAYER;
         else if (j == "play_id") x = CapabilityType::PLAY_ID;
         else if (j == "play_url") x = CapabilityType::PLAY_URL;
         else if (j == "stop_play") x = CapabilityType::STOP_PLAY;
@@ -405,6 +433,7 @@ namespace railschema {
 
     inline void to_json(json & j, const CapabilityType & x) {
         switch (x) {
+            case CapabilityType::LIGHT: j = "light"; break;
             case CapabilityType::PLAYER: j = "player"; break;
             case CapabilityType::PLAY_ID: j = "play_id"; break;
             case CapabilityType::PLAY_URL: j = "play_url"; break;
@@ -419,6 +448,8 @@ namespace railschema {
         if (j == "break") x = Function::BREAK;
         else if (j == "move_backward") x = Function::MOVE_BACKWARD;
         else if (j == "move_forward") x = Function::MOVE_FORWARD;
+        else if (j == "off") x = Function::OFF;
+        else if (j == "on") x = Function::ON;
         else if (j == "play_id") x = Function::PLAY_ID;
         else if (j == "play_url") x = Function::PLAY_URL;
         else if (j == "stop_play") x = Function::STOP_PLAY;
@@ -432,6 +463,8 @@ namespace railschema {
             case Function::BREAK: j = "break"; break;
             case Function::MOVE_BACKWARD: j = "move_backward"; break;
             case Function::MOVE_FORWARD: j = "move_forward"; break;
+            case Function::OFF: j = "off"; break;
+            case Function::ON: j = "on"; break;
             case Function::PLAY_ID: j = "play_id"; break;
             case Function::PLAY_URL: j = "play_url"; break;
             case Function::STOP_PLAY: j = "stop_play"; break;
@@ -562,6 +595,14 @@ namespace railschema {
                 return ptr;
               }
               
+    
+              if (discriminator == "LightCommand") {
+                std::shared_ptr<Command> ptr = std::make_shared<LightCommand>();
+                from_json(j, *(LightCommand*)ptr.get());
+                ptr->discriminator = "LightCommand";
+                return ptr;
+              }
+              
     return nullptr; }
     template<> inline void to_json(json& j, std::shared_ptr<Command> data) {
               if (data->discriminator == "Command") {
@@ -576,6 +617,11 @@ namespace railschema {
     
               if (data->discriminator == "Mp3Command") {
                 to_json(j, *(Mp3Command*)data.get());
+              }
+              
+    
+              if (data->discriminator == "LightCommand") {
+                to_json(j, *(LightCommand*)data.get());
               }
               
     }
