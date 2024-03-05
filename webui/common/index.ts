@@ -1,6 +1,6 @@
 // To parse this data:
 //
-//   import { Convert, Function, CapabilityType, ControlUnit, DeviceInfo, TrainState, EventType, Event, RFIDEvent, TrainCommand, Mp3Command, LightCommand } from "./file";
+//   import { Convert, Function, CapabilityType, ControlUnit, DeviceInfo, TrainState, EventType, Event, RFIDEvent, TrainCommand, Mp3Command, LightCommand, OtaCommand } from "./file";
 //
 //   const function = Convert.toFunction(json);
 //   const capabilityType = Convert.toCapabilityType(json);
@@ -13,6 +13,7 @@
 //   const trainCommand = Convert.toTrainCommand(json);
 //   const mp3Command = Convert.toMp3Command(json);
 //   const lightCommand = Convert.toLightCommand(json);
+//   const otaCommand = Convert.toOtaCommand(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
@@ -38,6 +39,7 @@ export interface Capability{
 
 export enum CapabilityType {
     Light = "light",
+    Ota = "ota",
     PlayID = "play_id",
     PlayURL = "play_url",
     Player = "player",
@@ -76,6 +78,7 @@ export enum Function {
     StopPlay = "stop_play",
     TurnoutPos1 = "turnout_pos1",
     TurnoutPos2 = "turnout_pos2",
+    Update = "update",
 }
 
 export interface TrainState extends State {
@@ -116,6 +119,11 @@ export interface Mp3Command extends Command {
 
 export interface LightCommand extends Command {
     name: string;
+    [property: string]: any;
+}
+
+export interface OtaCommand extends Command {
+    url: string;
     [property: string]: any;
 }
 
@@ -208,6 +216,14 @@ export class Convert {
 
     public static lightCommandToJson(value: LightCommand): string {
         return JSON.stringify(uncast(value, r("LightCommand")), null, 2);
+    }
+
+    public static toOtaCommand(json: string): OtaCommand {
+        return cast(JSON.parse(json), r("OtaCommand"));
+    }
+
+    public static otaCommandToJson(value: OtaCommand): string {
+        return JSON.stringify(uncast(value, r("OtaCommand")), null, 2);
     }
 }
 
@@ -409,8 +425,12 @@ const typeMap: any = {
     "LightCommand": o([
         { json: "name", js: "name", typ: "" },
     ], "any"),
+    "OtaCommand": o([
+        { json: "url", js: "url", typ: "" },
+    ], "any"),
     "CapabilityType": [
         "light",
+        "ota",
         "play_id",
         "play_url",
         "player",
@@ -429,6 +449,7 @@ const typeMap: any = {
         "stop_play",
         "turnout_pos1",
         "turnout_pos2",
+        "update",
     ],
     "Direction": [
         "backward",

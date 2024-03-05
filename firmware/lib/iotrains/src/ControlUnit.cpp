@@ -21,19 +21,25 @@ bool ControlUnit::send_report(void *argument)
     cu.devices.push_back(d);
   }
 
+  railschema::Device otaDevice;
+  otaDevice.id = instance->id;
+  otaDevice.capabilities = instance->ota.capabilities;
+  cu.devices.push_back(otaDevice);
+
   to_json(j, cu);
   instance->client.publish("report", j.dump().c_str());
   return true;
 }
 
-ControlUnit::ControlUnit(std::string wifiNetwork, std::string wifiPassword, std::string mqttServer, std::string mqttClientId, std::string mqttLogin, std::string mqttPassword, std::uint32_t connectionTimeoutMs) : client(espClient),
+ControlUnit::ControlUnit(std::string wifiNetwork, std::string wifiPassword, std::string mqttServer, std::string mqttClientId, std::string mqttLogin, std::string mqttPassword, std::uint32_t connectionTimeoutMs) : id (id), client(espClient),
                                                                                                                                                                                                                     wifiNetwork(wifiNetwork),
                                                                                                                                                                                                                     wifiPassword(wifiPassword),
                                                                                                                                                                                                                     mqttServer(mqttServer),
                                                                                                                                                                                                                     mqttClientId(mqttClientId),
                                                                                                                                                                                                                     mqttLogin(mqttLogin),
                                                                                                                                                                                                                     mqttPassword(mqttPassword),
-                                                                                                                                                                                                                    connectionTimeoutMs(connectionTimeoutMs)
+                                                                                                                                                                                                                    connectionTimeoutMs(connectionTimeoutMs),
+                                                                                                                                                                                                                    ota("built-in")
 {
   instance = this;
 }
@@ -94,13 +100,30 @@ void ControlUnit::callback(char *topic, byte *payload, unsigned int length)
 
   auto cmd = railschema::from_json<railschema::Command>(j);
 
-  for (auto i = 0; i < instance->devices.size(); i++) {
+  if (cmd->discriminator == "OtaCommand")
+  {
+    auto otaState = instance->ota.ProcessCommand(cmd);
+    if (otaState != nullptr)
+    {
+      // delay(500);
+      nlohmann::json j;
+      railschema::to_json<railschema::State>(j, otaState);
+      Serial.println(j.dump().c_str());
+      instance->client.publish("state", j.dump().c_str());
+    }
+
+    return;
+  }
+
+  for (auto i = 0; i < instance->devices.size(); i++)
+  {
     if (instance->devices[i]->id == topic)
     {
       Serial.println("process");
       auto state = (*instance->devices[i]).ProcessCommand(cmd);
-      if (state != nullptr) {
-        delay(500);
+      if (state != nullptr)
+      {
+        // delay(500);
         nlohmann::json j;
         railschema::to_json<railschema::State>(j, state);
         Serial.println(j.dump().c_str());

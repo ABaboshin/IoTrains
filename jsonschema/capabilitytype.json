@@ -8,6 +8,7 @@
     "play_url",
     "play_id",
     "stop_play",
-    "light"
+    "light",
+    "ota"
   ]
 }

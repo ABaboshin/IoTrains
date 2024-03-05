@@ -11,6 +11,7 @@
     "play_id",
     "stop_play",
     "on",
-    "off"
+    "off",
+    "update"
   ]
 }

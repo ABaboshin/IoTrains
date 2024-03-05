@@ -13,6 +13,7 @@ ControlUnit cu(wifiNetwork, wifiPassword, mqttServer, mqttClientId, mqttLogin, m
 void setup()
 {
   Serial.begin(115200);
+  delay(10);
   cu.id = STRINGIZE_VALUE_OF(NAME);
 
   Serial.println("train");
@@ -24,6 +25,9 @@ void setup()
   cu.devices.push_back(train);
 
   cu.Setup();
+
+  // digitalWrite(3, 1);
+  // digitalWrite(4, 1);
 }
 
 void loop()

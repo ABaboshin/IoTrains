@@ -15,6 +15,7 @@
 //     TrainCommand data = nlohmann::json::parse(jsonString);
 //     Mp3Command data = nlohmann::json::parse(jsonString);
 //     LightCommand data = nlohmann::json::parse(jsonString);
+//     OtaCommand data = nlohmann::json::parse(jsonString);
 
 #pragma once
 
@@ -94,7 +95,7 @@ namespace railschema {
     }
     #endif
 
-    enum class CapabilityType : int { LIGHT, PLAYER, PLAY_ID, PLAY_URL, STOP_PLAY, TRAIN, TURNOUT };
+    enum class CapabilityType : int { LIGHT, OTA, PLAYER, PLAY_ID, PLAY_URL, STOP_PLAY, TRAIN, TURNOUT };
 
     class Capability {
         public:
@@ -127,7 +128,7 @@ namespace railschema {
         std::string id;
     };
 
-    enum class Function : int { BREAK, MOVE_BACKWARD, MOVE_FORWARD, OFF, ON, PLAY_ID, PLAY_URL, STOP_PLAY, TURNOUT_POS1, TURNOUT_POS2 };
+    enum class Function : int { BREAK, MOVE_BACKWARD, MOVE_FORWARD, OFF, ON, PLAY_ID, PLAY_URL, STOP_PLAY, TURNOUT_POS1, TURNOUT_POS2, UPDATE };
 
     class Command {
         public:
@@ -218,6 +219,15 @@ namespace railschema {
 
         std::string name;
     };
+
+    class OtaCommand : public Command {
+        public:
+        std::string discriminator;
+        OtaCommand() { discriminator =  "OtaCommand"; }
+        virtual ~OtaCommand() = default;
+
+        std::string url;
+    };
 }
 
 namespace railschema {
@@ -256,6 +266,9 @@ namespace railschema {
 
     void from_json(const json & j, LightCommand * x);
     void to_json(json & j, const LightCommand * x);
+
+    void from_json(const json & j, OtaCommand * x);
+    void to_json(json & j, const OtaCommand * x);
 
     void from_json(const json & j, CapabilityType & x);
     void to_json(json & j, const CapabilityType & x);
@@ -420,8 +433,23 @@ namespace railschema {
         j["name"] = x.name;
     }
 
+    inline void from_json(const json & j, OtaCommand& x) {
+        
+                  from_json(j, (Command&)x);
+                  
+        x.url = j.at("url").get<std::string>();
+    }
+
+    inline void to_json(json & j, const OtaCommand & x) {
+        
+                  to_json(j, (const Command&)x);
+                  
+        j["url"] = x.url;
+    }
+
     inline void from_json(const json & j, CapabilityType & x) {
         if (j == "light") x = CapabilityType::LIGHT;
+        else if (j == "ota") x = CapabilityType::OTA;
         else if (j == "player") x = CapabilityType::PLAYER;
         else if (j == "play_id") x = CapabilityType::PLAY_ID;
         else if (j == "play_url") x = CapabilityType::PLAY_URL;
@@ -434,6 +462,7 @@ namespace railschema {
     inline void to_json(json & j, const CapabilityType & x) {
         switch (x) {
             case CapabilityType::LIGHT: j = "light"; break;
+            case CapabilityType::OTA: j = "ota"; break;
             case CapabilityType::PLAYER: j = "player"; break;
             case CapabilityType::PLAY_ID: j = "play_id"; break;
             case CapabilityType::PLAY_URL: j = "play_url"; break;
@@ -455,6 +484,7 @@ namespace railschema {
         else if (j == "stop_play") x = Function::STOP_PLAY;
         else if (j == "turnout_pos1") x = Function::TURNOUT_POS1;
         else if (j == "turnout_pos2") x = Function::TURNOUT_POS2;
+        else if (j == "update") x = Function::UPDATE;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
 
@@ -470,6 +500,7 @@ namespace railschema {
             case Function::STOP_PLAY: j = "stop_play"; break;
             case Function::TURNOUT_POS1: j = "turnout_pos1"; break;
             case Function::TURNOUT_POS2: j = "turnout_pos2"; break;
+            case Function::UPDATE: j = "update"; break;
             default: throw std::runtime_error("This should not happen");
         }
     }
@@ -603,6 +634,14 @@ namespace railschema {
                 return ptr;
               }
               
+    
+              if (discriminator == "OtaCommand") {
+                std::shared_ptr<Command> ptr = std::make_shared<OtaCommand>();
+                from_json(j, *(OtaCommand*)ptr.get());
+                ptr->discriminator = "OtaCommand";
+                return ptr;
+              }
+              
     return nullptr; }
     template<> inline void to_json(json& j, std::shared_ptr<Command> data) {
               if (data->discriminator == "Command") {
@@ -622,6 +661,11 @@ namespace railschema {
     
               if (data->discriminator == "LightCommand") {
                 to_json(j, *(LightCommand*)data.get());
+              }
+              
+    
+              if (data->discriminator == "OtaCommand") {
+                to_json(j, *(OtaCommand*)data.get());
               }
               
     }
