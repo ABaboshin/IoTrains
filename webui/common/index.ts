@@ -1,6 +1,6 @@
 // To parse this data:
 //
-//   import { Convert, Function, CapabilityType, ControlUnit, DeviceInfo, TrainState, EventType, Event, RFIDEvent, TrainCommand, Mp3Command } from "./file";
+//   import { Convert, Function, CapabilityType, ControlUnit, DeviceInfo, TrainState, EventType, Event, RFIDEvent, TrainCommand, Mp3Command, LightCommand } from "./file";
 //
 //   const function = Convert.toFunction(json);
 //   const capabilityType = Convert.toCapabilityType(json);
@@ -12,6 +12,7 @@
 //   const rFIDEvent = Convert.toRFIDEvent(json);
 //   const trainCommand = Convert.toTrainCommand(json);
 //   const mp3Command = Convert.toMp3Command(json);
+//   const lightCommand = Convert.toLightCommand(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
@@ -36,6 +37,7 @@ export interface Capability{
 }
 
 export enum CapabilityType {
+    Light = "light",
     PlayID = "play_id",
     PlayURL = "play_url",
     Player = "player",
@@ -67,6 +69,8 @@ export enum Function {
     Break = "break",
     MoveBackward = "move_backward",
     MoveForward = "move_forward",
+    Off = "off",
+    On = "on",
     PlayID = "play_id",
     PlayURL = "play_url",
     StopPlay = "stop_play",
@@ -107,6 +111,11 @@ export interface TrainCommand extends Command {
 
 export interface Mp3Command extends Command {
     url: string;
+    [property: string]: any;
+}
+
+export interface LightCommand extends Command {
+    name: string;
     [property: string]: any;
 }
 
@@ -191,6 +200,14 @@ export class Convert {
 
     public static mp3CommandToJson(value: Mp3Command): string {
         return JSON.stringify(uncast(value, r("Mp3Command")), null, 2);
+    }
+
+    public static toLightCommand(json: string): LightCommand {
+        return cast(JSON.parse(json), r("LightCommand"));
+    }
+
+    public static lightCommandToJson(value: LightCommand): string {
+        return JSON.stringify(uncast(value, r("LightCommand")), null, 2);
     }
 }
 
@@ -389,7 +406,11 @@ const typeMap: any = {
     "Mp3Command": o([
         { json: "url", js: "url", typ: "" },
     ], "any"),
+    "LightCommand": o([
+        { json: "name", js: "name", typ: "" },
+    ], "any"),
     "CapabilityType": [
+        "light",
         "play_id",
         "play_url",
         "player",
@@ -401,6 +422,8 @@ const typeMap: any = {
         "break",
         "move_backward",
         "move_forward",
+        "off",
+        "on",
         "play_id",
         "play_url",
         "stop_play",

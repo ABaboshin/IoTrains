@@ -12,16 +12,40 @@ inline int calculateSpeed(int speed100)
   return (int)std::abs(newSpeed);
 }
 
-Train::Train(const std::string &id, std::uint8_t fwdPin, std::uint8_t revPin, std::uint8_t fwdLedPin, std::uint8_t revLedPin) : BaseDevice(id), drv(fwdPin, revPin, 2, 3), fwdLed(fwdLedPin), revLed(revLedPin)
+Train::Train(const std::string &id, std::uint8_t fwdPin, std::uint8_t revPin, std::uint8_t fwdLedPin, std::uint8_t revLedPin) : BaseDevice(id), drv(fwdPin, revPin, 2, 3), fwdLed("built-in", fwdLedPin), revLed("built-in", revLedPin)
 {
   railschema::Capability trainCapability;
   trainCapability.type = railschema::CapabilityType::TRAIN;
   trainCapability.value = "";
   capabilities.push_back(trainCapability);
+
+  railschema::Capability fwdLightCapability;
+  fwdLightCapability.type = railschema::CapabilityType::LIGHT;
+  fwdLightCapability.value = "fwd";
+  capabilities.push_back(fwdLightCapability);
+
+  railschema::Capability revLightCapability;
+  revLightCapability.type = railschema::CapabilityType::LIGHT;
+  revLightCapability.value = "rev";
+  capabilities.push_back(revLightCapability);
 }
 
 std::shared_ptr<railschema::State> Train::ProcessCommand(std::shared_ptr<railschema::Command> command)
 {
+  if (command->discriminator == "LightCommand")
+  {
+    auto lightCommand = (railschema::LightCommand *)command.get();
+    if (lightCommand->name == "fwd")
+    {
+      return fwdLed.ProcessCommand(command);
+    }
+
+    if (lightCommand->name == "rev")
+    {
+      return revLed.ProcessCommand(command);
+    }
+  }
+
   auto ts = std::make_shared<railschema::TrainState>();
   ts->id = this->id;
 

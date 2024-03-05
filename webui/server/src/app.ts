@@ -44,7 +44,7 @@ let states = new Map<string, State>();
 let events = new Array<Event>();
 
 client.on("message", (topic, message) => {
-  console.log(`${moment().format('yyyy-mm-dd:hh:mm:ss')} ${topic} ${message.toString() }`);
+  console.log(`${moment().format('yyyy-MM-DD HH:mm:ss')} ${topic} ${message.toString() }`);
   if (topic === reportQueue) {
     const cu = Convert.toControlUnit(message.toString());
 
