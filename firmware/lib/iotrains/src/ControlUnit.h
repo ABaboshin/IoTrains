@@ -12,6 +12,7 @@
 #include <PubSubClient.h>
 #include <arduino-timer.h>
 #include "BaseDevice.h"
+#include "OTA.h"
 
 class ControlUnit
 {
@@ -25,6 +26,7 @@ class ControlUnit
   std::string mqttLogin;
   std::string mqttPassword;
   std::uint32_t connectionTimeoutMs;
+  OTA ota;
 
   static bool send_report(void *argument);
 

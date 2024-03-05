@@ -1,7 +1,7 @@
 "use strict";
 // To parse this data:
 //
-//   import { Convert, Function, CapabilityType, ControlUnit, DeviceInfo, TrainState, EventType, Event, RFIDEvent, TrainCommand, Mp3Command, LightCommand } from "./file";
+//   import { Convert, Function, CapabilityType, ControlUnit, DeviceInfo, TrainState, EventType, Event, RFIDEvent, TrainCommand, Mp3Command, LightCommand, OtaCommand } from "./file";
 //
 //   const function = Convert.toFunction(json);
 //   const capabilityType = Convert.toCapabilityType(json);
@@ -14,6 +14,7 @@
 //   const trainCommand = Convert.toTrainCommand(json);
 //   const mp3Command = Convert.toMp3Command(json);
 //   const lightCommand = Convert.toLightCommand(json);
+//   const otaCommand = Convert.toOtaCommand(json);
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
@@ -22,6 +23,7 @@ exports.Convert = exports.EventType = exports.Direction = exports.Function = exp
 var CapabilityType;
 (function (CapabilityType) {
     CapabilityType["Light"] = "light";
+    CapabilityType["Ota"] = "ota";
     CapabilityType["PlayID"] = "play_id";
     CapabilityType["PlayURL"] = "play_url";
     CapabilityType["Player"] = "player";
@@ -41,6 +43,7 @@ var Function;
     Function["StopPlay"] = "stop_play";
     Function["TurnoutPos1"] = "turnout_pos1";
     Function["TurnoutPos2"] = "turnout_pos2";
+    Function["Update"] = "update";
 })(Function = exports.Function || (exports.Function = {}));
 var Direction;
 (function (Direction) {
@@ -122,6 +125,12 @@ var Convert = /** @class */ (function () {
     };
     Convert.lightCommandToJson = function (value) {
         return JSON.stringify(uncast(value, r("LightCommand")), null, 2);
+    };
+    Convert.toOtaCommand = function (json) {
+        return cast(JSON.parse(json), r("OtaCommand"));
+    };
+    Convert.otaCommandToJson = function (value) {
+        return JSON.stringify(uncast(value, r("OtaCommand")), null, 2);
     };
     return Convert;
 }());
@@ -324,8 +333,12 @@ var typeMap = {
     "LightCommand": o([
         { json: "name", js: "name", typ: "" },
     ], "any"),
+    "OtaCommand": o([
+        { json: "url", js: "url", typ: "" },
+    ], "any"),
     "CapabilityType": [
         "light",
+        "ota",
         "play_id",
         "play_url",
         "player",
@@ -344,6 +357,7 @@ var typeMap = {
         "stop_play",
         "turnout_pos1",
         "turnout_pos2",
+        "update",
     ],
     "Direction": [
         "backward",

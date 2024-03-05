@@ -16,6 +16,7 @@ export interface Capability {
 }
 export declare enum CapabilityType {
     Light = "light",
+    Ota = "ota",
     PlayID = "play_id",
     PlayURL = "play_url",
     Player = "player",
@@ -49,7 +50,8 @@ export declare enum Function {
     PlayURL = "play_url",
     StopPlay = "stop_play",
     TurnoutPos1 = "turnout_pos1",
-    TurnoutPos2 = "turnout_pos2"
+    TurnoutPos2 = "turnout_pos2",
+    Update = "update"
 }
 export interface TrainState extends State {
     direction?: Direction;
@@ -84,6 +86,10 @@ export interface LightCommand extends Command {
     name: string;
     [property: string]: any;
 }
+export interface OtaCommand extends Command {
+    url: string;
+    [property: string]: any;
+}
 export declare class Convert {
     static toFunction(json: string): Function;
     static functionToJson(value: Function): string;
@@ -107,4 +113,6 @@ export declare class Convert {
     static mp3CommandToJson(value: Mp3Command): string;
     static toLightCommand(json: string): LightCommand;
     static lightCommandToJson(value: LightCommand): string;
+    static toOtaCommand(json: string): OtaCommand;
+    static otaCommandToJson(value: OtaCommand): string;
 }

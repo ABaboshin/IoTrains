@@ -7,6 +7,7 @@ import { Divider } from '@mui/material';
 import { MP3Control } from './MP3Control';
 import { TurnoutControl } from './TurnoutControl';
 import { LightControl } from './LightControl';
+import { OTAControl } from './OTAControl';
 
 export default function DevicesList() {
   async function fetchApi() {
@@ -53,6 +54,9 @@ export default function DevicesList() {
               }
               {
                 row.device.capabilities.map((x, i, ar) => x.type).includes(CapabilityType.Light) && <LightControl device={row.device} state={row.state} />
+              }
+              {
+                row.device.capabilities.map((x, i, ar) => x.type).includes(CapabilityType.Ota) && <OTAControl device={row.device} state={row.state} />
               }
             </Box>
           );
