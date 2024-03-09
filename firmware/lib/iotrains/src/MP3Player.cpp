@@ -1,3 +1,4 @@
+#ifndef NO_AUDIO
 #include "MP3Player.h"
 #include <Arduino.h>
 #include <memory>
@@ -157,3 +158,5 @@ std::shared_ptr<railschema::Event> MP3Player::Loop()
 
   return nullptr;
 }
+
+#endif

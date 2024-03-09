@@ -11,7 +11,6 @@
 //     TrainState data = nlohmann::json::parse(jsonString);
 //     EventType data = nlohmann::json::parse(jsonString);
 //     Event data = nlohmann::json::parse(jsonString);
-//     RfidEvent data = nlohmann::json::parse(jsonString);
 //     TrainCommand data = nlohmann::json::parse(jsonString);
 //     Mp3Command data = nlohmann::json::parse(jsonString);
 //     LightCommand data = nlohmann::json::parse(jsonString);
@@ -95,7 +94,7 @@ namespace railschema {
     }
     #endif
 
-    enum class CapabilityType : int { LIGHT, OTA, PLAYER, PLAY_ID, PLAY_URL, STOP_PLAY, TRAIN, TURNOUT };
+    enum class CapabilityType : int { DETECTOR, LIGHT, OTA, PLAYER, PLAY_ID, PLAY_URL, STOP_PLAY, TRAIN, TURNOUT };
 
     class Capability {
         public:
@@ -115,7 +114,6 @@ namespace railschema {
 
         std::vector<Capability> capabilities;
         std::string id;
-        nlohmann::json type;
     };
 
     class ControlUnit {
@@ -181,15 +179,8 @@ namespace railschema {
         Event() { discriminator =  "Event"; }
         virtual ~Event() = default;
 
+        std::string source;
         EventType type;
-    };
-
-    class RfidEvent : public Event {
-        public:
-        std::string discriminator;
-        RfidEvent() { discriminator =  "RfidEvent"; }
-        virtual ~RfidEvent() = default;
-
         std::string value;
     };
 
@@ -255,9 +246,6 @@ namespace railschema {
     void from_json(const json & j, Event * x);
     void to_json(json & j, const Event * x);
 
-    void from_json(const json & j, RfidEvent * x);
-    void to_json(json & j, const RfidEvent * x);
-
     void from_json(const json & j, TrainCommand * x);
     void to_json(json & j, const TrainCommand * x);
 
@@ -296,14 +284,12 @@ namespace railschema {
     inline void from_json(const json & j, Device& x) {
         x.capabilities = j.at("capabilities").get<std::vector<Capability>>();
         x.id = j.at("id").get<std::string>();
-        x.type = get_untyped(j, "type");
     }
 
     inline void to_json(json & j, const Device & x) {
         j = json::object();
         j["capabilities"] = x.capabilities;
         j["id"] = x.id;
-        j["type"] = x.type;
     }
 
     inline void from_json(const json & j, ControlUnit& x) {
@@ -369,25 +355,15 @@ namespace railschema {
     }
 
     inline void from_json(const json & j, Event& x) {
+        x.source = j.at("source").get<std::string>();
         x.type = j.at("type").get<EventType>();
+        x.value = j.at("value").get<std::string>();
     }
 
     inline void to_json(json & j, const Event & x) {
         j = json::object();
+        j["source"] = x.source;
         j["type"] = x.type;
-    }
-
-    inline void from_json(const json & j, RfidEvent& x) {
-        
-                  from_json(j, (Event&)x);
-                  
-        x.value = j.at("value").get<std::string>();
-    }
-
-    inline void to_json(json & j, const RfidEvent & x) {
-        
-                  to_json(j, (const Event&)x);
-                  
         j["value"] = x.value;
     }
 
@@ -448,7 +424,8 @@ namespace railschema {
     }
 
     inline void from_json(const json & j, CapabilityType & x) {
-        if (j == "light") x = CapabilityType::LIGHT;
+        if (j == "detector") x = CapabilityType::DETECTOR;
+        else if (j == "light") x = CapabilityType::LIGHT;
         else if (j == "ota") x = CapabilityType::OTA;
         else if (j == "player") x = CapabilityType::PLAYER;
         else if (j == "play_id") x = CapabilityType::PLAY_ID;
@@ -461,6 +438,7 @@ namespace railschema {
 
     inline void to_json(json & j, const CapabilityType & x) {
         switch (x) {
+            case CapabilityType::DETECTOR: j = "detector"; break;
             case CapabilityType::LIGHT: j = "light"; break;
             case CapabilityType::OTA: j = "ota"; break;
             case CapabilityType::PLAYER: j = "player"; break;
@@ -569,35 +547,6 @@ namespace railschema {
     
               if (data->discriminator == "TrainState") {
                 to_json(j, *(TrainState*)data.get());
-              }
-              
-    }
-    template<> inline std::shared_ptr<Event> from_json<Event>(const json& j) {
-              const auto discriminator = j.at("discriminator").get<std::string>();
-              if (discriminator == "Event") {
-                std::shared_ptr<Event> ptr;
-                from_json(j, *ptr);
-                ptr->discriminator = "Event";
-                return ptr;
-              }
-              
-    
-              if (discriminator == "RfidEvent") {
-                std::shared_ptr<Event> ptr = std::make_shared<RfidEvent>();
-                from_json(j, *(RfidEvent*)ptr.get());
-                ptr->discriminator = "RfidEvent";
-                return ptr;
-              }
-              
-    return nullptr; }
-    template<> inline void to_json(json& j, std::shared_ptr<Event> data) {
-              if (data->discriminator == "Event") {
-                to_json(j, *data.get());
-              }
-              
-    
-              if (data->discriminator == "RfidEvent") {
-                to_json(j, *(RfidEvent*)data.get());
               }
               
     }

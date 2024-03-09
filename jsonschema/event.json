@@ -5,8 +5,14 @@
   "properties": {
     "type": {
       "$ref": "eventtype.json"
+    },
+    "value": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
     }
   },
   "response": true,
-  "required": ["type"]
+  "required": ["type", "value", "source"]
 }

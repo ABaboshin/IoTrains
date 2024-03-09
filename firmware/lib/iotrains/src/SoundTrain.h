@@ -1,4 +1,5 @@
 #pragma once
+#ifndef NO_AUDIO
 
 #include <cstdint>
 #include "Train.h"
@@ -14,3 +15,5 @@ private:
     std::shared_ptr<railschema::State> ProcessCommand(std::shared_ptr<railschema::Command> command) override;
     std::shared_ptr<railschema::Event> Loop() override;
 };
+
+#endif

@@ -1,3 +1,4 @@
+#ifndef NO_AUDIO
 #include <string>
 #include <memory>
 #include <bits/shared_ptr.h>
@@ -24,3 +25,5 @@ std::shared_ptr<railschema::Event> SoundTrain::Loop()
 {
   return mp3.Loop();
 }
+
+#endif

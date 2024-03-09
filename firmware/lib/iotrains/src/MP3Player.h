@@ -1,9 +1,12 @@
 #pragma once
 
+#ifndef NO_AUDIO
 #include <cstdint>
 #include <map>
 #include <vector>
 #include <string>
+
+
 #include <AudioTools.h>
 #include <AudioCodecs/CodecMP3Helix.h>
 #include "BaseDevice.h"
@@ -35,3 +38,4 @@ public:
 
   static Stream* callbackNextStream(int offset);
 };
+#endif

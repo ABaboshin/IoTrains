@@ -6,7 +6,6 @@ export interface ControlUnit {
 export interface Device {
     capabilities: Capability[];
     id: string;
-    type: any;
     [property: string]: any;
 }
 export interface Capability {
@@ -15,6 +14,7 @@ export interface Capability {
     [property: string]: any;
 }
 export declare enum CapabilityType {
+    Detector = "detector",
     Light = "light",
     Ota = "ota",
     PlayID = "play_id",
@@ -64,15 +64,13 @@ export declare enum Direction {
     Stop = "stop"
 }
 export interface Event {
+    source: string;
     type: EventType;
+    value: string;
     [property: string]: any;
 }
 export declare enum EventType {
     Train = "train"
-}
-export interface RFIDEvent extends Event {
-    value: string;
-    [property: string]: any;
 }
 export interface TrainCommand extends Command {
     speed: number;
@@ -105,8 +103,6 @@ export declare class Convert {
     static eventTypeToJson(value: EventType): string;
     static toEvent(json: string): Event;
     static eventToJson(value: Event): string;
-    static toRFIDEvent(json: string): RFIDEvent;
-    static rFIDEventToJson(value: RFIDEvent): string;
     static toTrainCommand(json: string): TrainCommand;
     static trainCommandToJson(value: TrainCommand): string;
     static toMp3Command(json: string): Mp3Command;

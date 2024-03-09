@@ -12,7 +12,11 @@ inline int calculateSpeed(int speed100)
   return (int)std::abs(newSpeed);
 }
 
-Train::Train(const std::string &id, std::uint8_t fwdPin, std::uint8_t revPin, std::uint8_t fwdLedPin, std::uint8_t revLedPin) : BaseDevice(id), drv(fwdPin, revPin, 2, 3), fwdLed("built-in", fwdLedPin), revLed("built-in", revLedPin)
+Train::Train(const std::string &id, std::uint8_t fwdPin, std::uint8_t revPin, std::uint8_t fwdLedPin, std::uint8_t revLedPin) : BaseDevice(id),
+#ifndef NO_MOTOR
+drv(fwdPin, revPin, 2, 3),
+#endif
+fwdLed("built-in", fwdLedPin), revLed("built-in", revLedPin)
 {
   railschema::Capability trainCapability;
   trainCapability.type = railschema::CapabilityType::TRAIN;
@@ -49,6 +53,8 @@ std::shared_ptr<railschema::State> Train::ProcessCommand(std::shared_ptr<railsch
   auto ts = std::make_shared<railschema::TrainState>();
   ts->id = this->id;
 
+#ifndef NO_MOTOR
+
   auto trainCommand = (railschema::TrainCommand*)command.get();
   ts->command = *trainCommand;
 
@@ -84,6 +90,7 @@ std::shared_ptr<railschema::State> Train::ProcessCommand(std::shared_ptr<railsch
     ts->speed = 0;
     ts->ok = true;
   }
+  #endif
 
   return ts;
 }
@@ -94,7 +101,9 @@ std::shared_ptr<railschema::Event> Train::Loop()
 }
 
 void Train::DefaultAction() {
-  drv.motorGo(50);
+#ifndef NO_MOTOR
+  drv.motorGo(100);
   fwdLed.On();
   revLed.Off();
+#endif
 }

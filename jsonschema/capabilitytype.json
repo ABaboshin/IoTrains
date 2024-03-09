@@ -9,6 +9,7 @@
     "play_id",
     "stop_play",
     "light",
-    "ota"
+    "ota",
+    "detector"
   ]
 }

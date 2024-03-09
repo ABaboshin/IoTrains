@@ -1,7 +1,7 @@
 "use strict";
 // To parse this data:
 //
-//   import { Convert, Function, CapabilityType, ControlUnit, DeviceInfo, TrainState, EventType, Event, RFIDEvent, TrainCommand, Mp3Command, LightCommand, OtaCommand } from "./file";
+//   import { Convert, Function, CapabilityType, ControlUnit, DeviceInfo, TrainState, EventType, Event, TrainCommand, Mp3Command, LightCommand, OtaCommand } from "./file";
 //
 //   const function = Convert.toFunction(json);
 //   const capabilityType = Convert.toCapabilityType(json);
@@ -10,7 +10,6 @@
 //   const trainState = Convert.toTrainState(json);
 //   const eventType = Convert.toEventType(json);
 //   const event = Convert.toEvent(json);
-//   const rFIDEvent = Convert.toRFIDEvent(json);
 //   const trainCommand = Convert.toTrainCommand(json);
 //   const mp3Command = Convert.toMp3Command(json);
 //   const lightCommand = Convert.toLightCommand(json);
@@ -22,6 +21,7 @@ exports.__esModule = true;
 exports.Convert = exports.EventType = exports.Direction = exports.Function = exports.CapabilityType = void 0;
 var CapabilityType;
 (function (CapabilityType) {
+    CapabilityType["Detector"] = "detector";
     CapabilityType["Light"] = "light";
     CapabilityType["Ota"] = "ota";
     CapabilityType["PlayID"] = "play_id";
@@ -101,12 +101,6 @@ var Convert = /** @class */ (function () {
     };
     Convert.eventToJson = function (value) {
         return JSON.stringify(uncast(value, r("Event")), null, 2);
-    };
-    Convert.toRFIDEvent = function (json) {
-        return cast(JSON.parse(json), r("RFIDEvent"));
-    };
-    Convert.rFIDEventToJson = function (value) {
-        return JSON.stringify(uncast(value, r("RFIDEvent")), null, 2);
     };
     Convert.toTrainCommand = function (json) {
         return cast(JSON.parse(json), r("TrainCommand"));
@@ -295,7 +289,6 @@ var typeMap = {
     "Device": o([
         { json: "capabilities", js: "capabilities", typ: a(r("Capability")) },
         { json: "id", js: "id", typ: "" },
-        { json: "type", js: "type", typ: "any" },
     ], "any"),
     "Capability": o([
         { json: "type", js: "type", typ: r("CapabilityType") },
@@ -319,9 +312,8 @@ var typeMap = {
         { json: "speed", js: "speed", typ: 0 },
     ], "any"),
     "Event": o([
+        { json: "source", js: "source", typ: "" },
         { json: "type", js: "type", typ: r("EventType") },
-    ], "any"),
-    "RFIDEvent": o([
         { json: "value", js: "value", typ: "" },
     ], "any"),
     "TrainCommand": o([
@@ -337,6 +329,7 @@ var typeMap = {
         { json: "url", js: "url", typ: "" },
     ], "any"),
     "CapabilityType": [
+        "detector",
         "light",
         "ota",
         "play_id",

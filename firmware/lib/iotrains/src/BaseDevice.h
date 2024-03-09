@@ -15,4 +15,5 @@ public:
   virtual std::shared_ptr<railschema::State> ProcessCommand(std::shared_ptr<railschema::Command> command) = 0;
   virtual std::shared_ptr<railschema::Event> Loop() = 0;
   virtual void DefaultAction() {}
+  virtual void Init() {}
 };

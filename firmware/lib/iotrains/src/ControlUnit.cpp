@@ -28,6 +28,7 @@ bool ControlUnit::send_report(void *argument)
 
   to_json(j, cu);
   instance->client.publish("report", j.dump().c_str());
+  Serial.println(j.dump().c_str());
   return true;
 }
 
@@ -84,6 +85,11 @@ void ControlUnit::Setup()
   ip.fromString(mqttServer.c_str());
   client.setServer(ip, 1883);
   client.setCallback(callback);
+
+  for (auto i = 0; i < devices.size(); i++)
+  {
+    devices[i]->Init();
+  }
 
   timer.every(5000, ControlUnit::send_report);
 }
@@ -151,7 +157,8 @@ void ControlUnit::Loop()
     if (event != nullptr)
     {
       nlohmann::json j;
-      railschema::to_json<railschema::Event>(j, event);
+      railschema::to_json(j, *event);
+      Serial.println(j.dump().c_str());
       client.publish("event", j.dump().c_str());
     }
   }
