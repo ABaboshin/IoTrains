@@ -2,11 +2,14 @@
 #include <memory>
 #include <ControlUnit.h>
 #include "RFIDReader.h"
+#include "Turnout.h"
 #include "helpers.h"
 
 #include "config.h"
 
 ControlUnit cu(wifiNetwork, wifiPassword, mqttServer, mqttClientId, mqttLogin, mqttPassword, 1000 * 5);
+
+// std::shared_ptr<BaseDevice> turnout1;
 
 void setup()
 {
@@ -19,10 +22,17 @@ void setup()
   std::shared_ptr<BaseDevice> rfid1 = std::make_shared<RFIDReader>("rfid1", 32, 22);
   cu.devices.push_back(rfid1);
 
+  std::shared_ptr<BaseDevice> turnout1 = std::make_shared<Turnout>("turnout1", 4, 16);
+  cu.devices.push_back(turnout1);
+
   cu.Setup();
 }
 
 void loop()
 {
   cu.Loop();
+  // ((Turnout*)turnout1.get())->Pos1();
+  // delay(500);
+  // ((Turnout *)turnout1.get())->Pos2();
+  // delay(500);
 }
