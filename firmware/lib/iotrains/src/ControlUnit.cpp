@@ -83,6 +83,7 @@ void ControlUnit::Setup()
 
   IPAddress ip;
   ip.fromString(mqttServer.c_str());
+  client.setBufferSize(16 * 1024);
   client.setServer(ip, 1883);
   client.setCallback(callback);
 

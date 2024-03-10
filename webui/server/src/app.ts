@@ -39,6 +39,11 @@ client.on("connect", (x) => {
   });
 });
 
+client.on("error", (err) => {
+  console.warn(err)
+  client.end()
+});
+
 let units = new Map<string, ControlUnit>();
 let states = new Map<string, State>();
 let events = new Array<Event>();
