@@ -6,6 +6,7 @@
   ],
   "scripts": {
     "build": "npm install && cd common && npm install && npm run build && cd .. && cd client && npm install && npm run build && cd .. && cd server && npm run build",
+    "build:docker": "docker build -t ababoshin/iotrains .",
     "start": "cd server && npm run start"
   },
   "devDependencies": {
