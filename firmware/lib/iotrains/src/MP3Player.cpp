@@ -22,7 +22,7 @@ Stream *MP3Player::callbackNextStream(int offset)
   return mp3PlayerInstance->current.get();
 }
 
-MP3Player::MP3Player(const std::string &id, int pin, const std::map<std::string, std::vector<unsigned char>> &mp3) : BaseDevice(id), mp3(mp3)
+MP3Player::MP3Player(const std::string &id, int pin, const std::map<std::string, MP3File> &mp3) : BaseDevice(id), mp3(mp3)
 {
   AudioLogger::instance().begin(Serial, AudioLogger::Error);
 
@@ -145,10 +145,21 @@ std::shared_ptr<railschema::State> MP3Player::ProcessCommand(std::shared_ptr<rai
   {
     if (mp3.find(mp3Command->url) != mp3.end())
     {
-      current = std::make_shared<MemoryStream>(&mp3[mp3Command->url][0], mp3[mp3Command->url].size());
-      source = std::make_shared<AudioSourceCallback>(callbackNextStream);
-      player = std::make_shared<AudioPlayer>(*source, out, decoder);
-      player->begin();
+      if (player != nullptr)
+      {
+        player->stop();
+        current = std::make_shared<MemoryStream>(mp3[mp3Command->url].data, mp3[mp3Command->url].size);
+        player->next();
+      }
+      else
+      {
+        current = std::make_shared<MemoryStream>(mp3[mp3Command->url].data, mp3[mp3Command->url].size);
+        source = std::make_shared<AudioSourceCallback>(callbackNextStream);
+        player = std::make_shared<AudioPlayer>(*source, out, decoder);
+        player->begin();
+      }
+
+      ts->ok = true;
     }
     else
     {
