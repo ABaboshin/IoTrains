@@ -5,8 +5,8 @@
 
 #include "config.h"
 
-#define STRINGIZE(x) #x
-#define STRINGIZE_VALUE_OF(x) STRINGIZE(x)
+#include "helpers.h"
+#include "mp3.h"
 
 ControlUnit cu(wifiNetwork, wifiPassword, mqttServer, mqttClientId, mqttLogin, mqttPassword, 1000 * 5);
 
@@ -17,10 +17,12 @@ void setup()
   cu.id = STRINGIZE_VALUE_OF(NAME);
 
   Serial.println("train");
-  std::map<std::string, std::vector<unsigned char>> sounds;
-  sounds["test"] = std::vector<unsigned char>(); //(outputmp3, outputmp3 + sizeof(outputmp3));
-  // std::shared_ptr<BaseDevice> train = std::make_shared<SoundTrain>(STRINGIZE_VALUE_OF(NAME), 1, 2, 3, 4, 0, sounds);
-  std::shared_ptr<BaseDevice> train = std::make_shared<Train>(STRINGIZE_VALUE_OF(NAME), 1, 2, 3, 4);
+  std::map<std::string, MP3File> sounds;
+  sounds["test"].data = outputmp3;
+  sounds["test"].size = outputmp3_size;
+  // = {outputmp3, outputmp3_size}; //(outputmp3, outputmp3 + sizeof(outputmp3));
+  std::shared_ptr<BaseDevice> train = std::make_shared<SoundTrain>(STRINGIZE_VALUE_OF(NAME), 1, 2, 3, 4, 0, sounds);
+  // std::shared_ptr<BaseDevice> train = std::make_shared<Train>(STRINGIZE_VALUE_OF(NAME), 1, 2, 3, 4);
 
   cu.devices.push_back(train);
 

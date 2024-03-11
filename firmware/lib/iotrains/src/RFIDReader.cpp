@@ -2,25 +2,36 @@
 #include <Arduino.h>
 #include <memory>
 
-/*
-sda d8
-sck d5
-mosi d7
-miso d6
-irq -
-gnd gnd
-rst d3
-3.3 3.3
+static bool spiInitialized = false;
 
-*/
-
-RFIDReader::RFIDReader(const std::string &id, std::uint8_t ssPin, std::uint8_t rstPin) : BaseDevice(id), mfrc522(ssPin, rstPin)
+RFIDReader::RFIDReader(const std::string &id, std::uint8_t ssPin, std::uint8_t rstPin) : BaseDevice(id) //, mfrc522(ssPin, rstPin)
 {
   this->ssPin = ssPin;
   this->rstPin = rstPin;
+  if (!spiInitialized)
+  {
+    Serial.println("spi init");
+    SPI.begin();
+    spiInitialized = true;
+    pinMode(rstPin, OUTPUT);
+    digitalWrite(rstPin, HIGH);
+  }
 
-  SPI.begin();
-  mfrc522.PCD_Init();
+  pinMode(ssPin, OUTPUT);
+  digitalWrite(ssPin, HIGH);
+
+  railschema::Capability capability;
+  capability.type = railschema::CapabilityType::DETECTOR;
+  capability.value = "";
+  capabilities.push_back(capability);
+}
+
+
+void RFIDReader::Init()
+{
+  Serial.print(id.c_str());
+  Serial.println(" init");
+  mfrc522.PCD_Init(ssPin, rstPin);
   delay(4);
   mfrc522.PCD_DumpVersionToSerial();
 }
@@ -37,11 +48,10 @@ std::shared_ptr<railschema::Event> RFIDReader::Loop()
     return nullptr;
   }
 
-  mfrc522.PICC_DumpToSerial(&(mfrc522.uid));
-
-  std::shared_ptr<railschema::Event> event = std::make_shared<railschema::RfidEvent>();
+  std::shared_ptr<railschema::Event> event = std::make_shared<railschema::Event>();
 
   event->type = railschema::EventType::TRAIN;
+  event->source = id;
   std::string value = "";
 
   for (byte i = 0; i < mfrc522.uid.size; i++)
@@ -53,9 +63,11 @@ std::shared_ptr<railschema::Event> RFIDReader::Loop()
     value += std::to_string(mfrc522.uid.uidByte[i]);
   }
 
+  value.erase(value.begin(), std::find_if(value.begin(), value.end(), [](unsigned char ch) { return !std::isspace(ch); }));
+
   Serial.println(value.c_str());
 
-  ((railschema::RfidEvent*) event.get())->value = value;
+  event->value = value;
 
   return event;
 }

@@ -3,13 +3,17 @@
 #include <cstdint>
 #include "BaseDevice.h"
 #include "schema.hpp"
+#ifndef NO_MOTOR
 #include "ESP32MX1508.h"
+#endif
 #include "Switch.h"
 
 class Train : public BaseDevice
 {
 private:
+#ifndef NO_MOTOR
   MX1508 drv;
+#endif
   Switch fwdLed;
   Switch revLed;
 

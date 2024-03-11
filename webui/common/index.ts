@@ -1,6 +1,6 @@
 // To parse this data:
 //
-//   import { Convert, Function, CapabilityType, ControlUnit, DeviceInfo, TrainState, EventType, Event, RFIDEvent, TrainCommand, Mp3Command, LightCommand, OtaCommand } from "./file";
+//   import { Convert, Function, CapabilityType, ControlUnit, DeviceInfo, TrainState, EventType, Event, TrainCommand, Mp3Command, LightCommand, OtaCommand } from "./file";
 //
 //   const function = Convert.toFunction(json);
 //   const capabilityType = Convert.toCapabilityType(json);
@@ -9,7 +9,6 @@
 //   const trainState = Convert.toTrainState(json);
 //   const eventType = Convert.toEventType(json);
 //   const event = Convert.toEvent(json);
-//   const rFIDEvent = Convert.toRFIDEvent(json);
 //   const trainCommand = Convert.toTrainCommand(json);
 //   const mp3Command = Convert.toMp3Command(json);
 //   const lightCommand = Convert.toLightCommand(json);
@@ -27,7 +26,6 @@ export interface ControlUnit{
 export interface Device{
     capabilities: Capability[];
     id:           string;
-    type:         any;
     [property: string]: any;
 }
 
@@ -38,6 +36,7 @@ export interface Capability{
 }
 
 export enum CapabilityType {
+    Detector = "detector",
     Light = "light",
     Ota = "ota",
     PlayID = "play_id",
@@ -94,17 +93,14 @@ export enum Direction {
 }
 
 export interface Event{
-    type: EventType;
+    source: string;
+    type:   EventType;
+    value:  string;
     [property: string]: any;
 }
 
 export enum EventType {
     Train = "train",
-}
-
-export interface RFIDEvent extends Event {
-    value: string;
-    [property: string]: any;
 }
 
 export interface TrainCommand extends Command {
@@ -184,14 +180,6 @@ export class Convert {
 
     public static eventToJson(value: Event): string {
         return JSON.stringify(uncast(value, r("Event")), null, 2);
-    }
-
-    public static toRFIDEvent(json: string): RFIDEvent {
-        return cast(JSON.parse(json), r("RFIDEvent"));
-    }
-
-    public static rFIDEventToJson(value: RFIDEvent): string {
-        return JSON.stringify(uncast(value, r("RFIDEvent")), null, 2);
     }
 
     public static toTrainCommand(json: string): TrainCommand {
@@ -387,7 +375,6 @@ const typeMap: any = {
     "Device": o([
         { json: "capabilities", js: "capabilities", typ: a(r("Capability")) },
         { json: "id", js: "id", typ: "" },
-        { json: "type", js: "type", typ: "any" },
     ], "any"),
     "Capability": o([
         { json: "type", js: "type", typ: r("CapabilityType") },
@@ -411,9 +398,8 @@ const typeMap: any = {
         { json: "speed", js: "speed", typ: 0 },
     ], "any"),
     "Event": o([
+        { json: "source", js: "source", typ: "" },
         { json: "type", js: "type", typ: r("EventType") },
-    ], "any"),
-    "RFIDEvent": o([
         { json: "value", js: "value", typ: "" },
     ], "any"),
     "TrainCommand": o([
@@ -429,6 +415,7 @@ const typeMap: any = {
         { json: "url", js: "url", typ: "" },
     ], "any"),
     "CapabilityType": [
+        "detector",
         "light",
         "ota",
         "play_id",

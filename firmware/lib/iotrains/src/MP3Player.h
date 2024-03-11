@@ -1,12 +1,21 @@
 #pragma once
 
+#ifndef NO_AUDIO
 #include <cstdint>
 #include <map>
 #include <vector>
 #include <string>
+
 #include <AudioTools.h>
 #include <AudioCodecs/CodecMP3Helix.h>
 #include "BaseDevice.h"
+
+class MP3File
+{
+public:
+  const unsigned char *data;
+  long size;
+};
 
 // 128kbps
 class MP3Player : public BaseDevice
@@ -25,13 +34,14 @@ class MP3Player : public BaseDevice
   PWMAudioOutput out;
 #endif
 
-  std::map<std::string, std::vector<unsigned char>> mp3;
+  std::map<std::string, MP3File> mp3;
 
 public:
-  MP3Player(const std::string &id, int pin, const std::map<std::string, std::vector<unsigned char>> &mp3);
+  MP3Player(const std::string &id, int pin, const std::map<std::string, MP3File> &mp3);
 
-  std::shared_ptr<railschema::State> ProcessCommand(std::shared_ptr<railschema::Command>  command) override;
+  std::shared_ptr<railschema::State> ProcessCommand(std::shared_ptr<railschema::Command> command) override;
   std::shared_ptr<railschema::Event> Loop();
 
-  static Stream* callbackNextStream(int offset);
+  static Stream *callbackNextStream(int offset);
 };
+#endif

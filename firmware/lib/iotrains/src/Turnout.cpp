@@ -7,6 +7,9 @@ Turnout::Turnout(const std::string &id, std::uint8_t pin1, std::uint8_t pin2) : 
   cap.type = railschema::CapabilityType::TURNOUT;
   cap.value = "";
   capabilities.push_back(cap);
+
+  sw1.Off();
+  sw2.Off();
 }
 
 std::shared_ptr<railschema::State> Turnout::ProcessCommand(std::shared_ptr<railschema::Command> command)
@@ -19,17 +22,13 @@ std::shared_ptr<railschema::State> Turnout::ProcessCommand(std::shared_ptr<rails
 
   if (command->function == railschema::Function::TURNOUT_POS1)
   {
-    sw1.On();
-    delay(100);
-    sw1.Off();
+    Pos1();
     state->ok = true;
   }
 
   if (command->function == railschema::Function::TURNOUT_POS2)
   {
-    sw2.On();
-    delay(100);
-    sw2.Off();
+    Pos2();
     state->ok = true;
   }
 
@@ -39,4 +38,18 @@ std::shared_ptr<railschema::State> Turnout::ProcessCommand(std::shared_ptr<rails
 std::shared_ptr<railschema::Event> Turnout::Loop()
 {
   return nullptr;
+}
+
+void Turnout::Pos1()
+{
+  sw1.On();
+  delay(100);
+  sw1.Off();
+}
+
+void Turnout::Pos2()
+{
+  sw2.On();
+  delay(100);
+  sw2.Off();
 }

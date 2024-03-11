@@ -16,7 +16,6 @@
   },
   "required": [
     "id",
-    "type",
     "capabilities"
   ],
   "processing": true

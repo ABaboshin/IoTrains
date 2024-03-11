@@ -16,8 +16,7 @@ The projects consists of:
  - Connect an audio amplifier to an i2s capable pin i.e. DAC_1.
 
 ## TODO
- - light on/off commands for trains etc
- - docker for backend
+ - multiple rfid
  - responsive ui / refresh on update
  - process rfid events
  - sqlite3

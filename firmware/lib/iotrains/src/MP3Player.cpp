@@ -1,3 +1,4 @@
+#ifndef NO_AUDIO
 #include "MP3Player.h"
 #include <Arduino.h>
 #include <memory>
@@ -13,14 +14,15 @@
 // data
 std::vector<std::uint8_t> buf;
 
-MP3Player* mp3PlayerInstance;
+MP3Player *mp3PlayerInstance;
 
-Stream* MP3Player::callbackNextStream(int offset)
+Stream *MP3Player::callbackNextStream(int offset)
 {
+  // Serial.println("callbackNextStream");
   return mp3PlayerInstance->current.get();
 }
 
-MP3Player::MP3Player(const std::string &id, int pin, const std::map<std::string, std::vector<unsigned char>> &mp3) : BaseDevice(id), mp3(mp3)
+MP3Player::MP3Player(const std::string &id, int pin, const std::map<std::string, MP3File> &mp3) : BaseDevice(id), mp3(mp3)
 {
   AudioLogger::instance().begin(Serial, AudioLogger::Error);
 
@@ -63,7 +65,8 @@ MP3Player::MP3Player(const std::string &id, int pin, const std::map<std::string,
   capabilities.push_back(playerCapability);
   capabilities.push_back(playUrlCapability);
   capabilities.push_back(stopCapability);
-  for (auto it = this->mp3.begin(); it != this->mp3.end(); it++) {
+  for (auto it = this->mp3.begin(); it != this->mp3.end(); it++)
+  {
     railschema::Capability cap;
     cap.type = railschema::CapabilityType::PLAY_ID;
     cap.value = it->first;
@@ -103,33 +106,63 @@ std::shared_ptr<railschema::State> MP3Player::ProcessCommand(std::shared_ptr<rai
           int c = stream->readBytes(&buf[0], size);
           if (c > 0)
           {
+
             Serial.println("download done");
-            current = std::make_shared<MemoryStream>(&buf[0], size);
-            source = std::make_shared<AudioSourceCallback>(callbackNextStream);
-            player = std::make_shared<AudioPlayer>(*source, out, decoder);
-            player->begin();
+            if (player != nullptr)
+            {
+              player->stop();
+              current = std::make_shared<MemoryStream>(&buf[0], size);
+              player->next();
+            }
+            else
+            {
+              current = std::make_shared<MemoryStream>(&buf[0], size);
+              source = std::make_shared<AudioSourceCallback>(callbackNextStream);
+              player = std::make_shared<AudioPlayer>(*source, out, decoder);
+              player->begin();
+            }
 
             ts->ok = true;
-          } else {
+          }
+          else
+          {
             Serial.println("download failed");
           }
-        } else {
+        }
+        else
+        {
           Serial.println("http not ok");
         }
       }
-    } else {
+    }
+    else
+    {
       Serial.println("begin download failed");
     }
   }
 
   if (mp3Command->function == railschema::Function::PLAY_ID)
   {
-    if (mp3.find(mp3Command->url) != mp3.end()) {
-      current = std::make_shared<MemoryStream>(&mp3[mp3Command->url][0], mp3[mp3Command->url].size());
-      source = std::make_shared<AudioSourceCallback>(callbackNextStream);
-      player = std::make_shared<AudioPlayer>(*source, out, decoder);
-      player->begin();
-    } else {
+    if (mp3.find(mp3Command->url) != mp3.end())
+    {
+      if (player != nullptr)
+      {
+        player->stop();
+        current = std::make_shared<MemoryStream>(mp3[mp3Command->url].data, mp3[mp3Command->url].size);
+        player->next();
+      }
+      else
+      {
+        current = std::make_shared<MemoryStream>(mp3[mp3Command->url].data, mp3[mp3Command->url].size);
+        source = std::make_shared<AudioSourceCallback>(callbackNextStream);
+        player = std::make_shared<AudioPlayer>(*source, out, decoder);
+        player->begin();
+      }
+
+      ts->ok = true;
+    }
+    else
+    {
       ts->ok = false;
     }
   }
@@ -152,8 +185,11 @@ std::shared_ptr<railschema::Event> MP3Player::Loop()
 {
   if (player != nullptr)
   {
+    // Serial.println("before copy");
     player->copy();
   }
 
   return nullptr;
 }
+
+#endif
