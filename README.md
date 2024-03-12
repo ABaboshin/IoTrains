@@ -22,5 +22,9 @@ The projects consists of:
  - sqlite3
  - schematic
  - bogie
-  - crown gear
-  - involute gear
+  x crown gear
+  x involute gear
+  - beautiful sides
+  - train
+ - esp32c3 - 25x19x4.3mm
+ - motor driver - 20x24x7 mm
