@@ -21,3 +21,6 @@ The projects consists of:
  - process rfid events
  - sqlite3
  - schematic
+ - bogie
+  - crown gear
+  - involute gear
