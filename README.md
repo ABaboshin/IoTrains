@@ -24,7 +24,14 @@ The projects consists of:
  - bogie
   x crown gear
   x involute gear
-  - beautiful sides
- - train
+  x sides
+  x roof
+  x seats
+  x driver seat
+  - separator
+  - control panel
+  - front
+  - tail
+  - base
  - esp32c3 - 25x19x4.3mm
  - motor driver - 20x24x7 mm
