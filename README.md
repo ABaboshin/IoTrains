@@ -32,6 +32,6 @@ The projects consists of:
   - control panel
   - front
   - tail
-  - base
+  x base
  - esp32c3 - 25x19x4.3mm
  - motor driver - 20x24x7 mm
