@@ -28,8 +28,8 @@ The projects consists of:
   x roof
   x seats
   x driver seat
-  - separator
-  - control panel
+  x separator
+  x control panel
   - front
   - tail
   x base
