@@ -28,8 +28,7 @@ The projects consists of:
   x roof
   x seats
   x driver seat
-  - tail
-    - use curves workbench
+  x tail
   x base
   x separator
   x control panel
