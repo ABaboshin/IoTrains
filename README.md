@@ -28,12 +28,12 @@ The projects consists of:
   x roof
   x seats
   x driver seat
-  x separator
-  x control panel
-  - front
   - tail
     - use curves workbench
   x base
+  x separator
+  x control panel
+  - front
   - check all sizes
  - esp32c3 - 25x19x4.3mm
  - motor driver - 20x24x7 mm
