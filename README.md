@@ -32,7 +32,7 @@ The projects consists of:
   x base
   x separator
   x control panel
-  - front
+  x face
   - check all sizes
  - esp32c3 - 25x19x4.3mm
  - motor driver - 20x24x7 mm
