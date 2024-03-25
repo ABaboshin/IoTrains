@@ -21,3 +21,18 @@ The projects consists of:
  - process rfid events
  - sqlite3
  - schematic
+ - bogie
+  x crown gear
+  x involute gear
+  x sides
+  x roof
+  x seats
+  x driver seat
+  x tail
+  x base
+  x separator
+  x control panel
+  x face
+  - check all sizes
+ - esp32c3 - 25x19x4.3mm
+ - motor driver - 20x24x7 mm
