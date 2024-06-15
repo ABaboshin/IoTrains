@@ -1,0 +1,13 @@
+1x  full-reworked-81-717-full.stl
+6x  full-reworked-Big window glass.stl or cut it from acrylglas/petg/etc
+2x  full-reworked-cabel chanel.stl
+1x  full-reworked-control panel.stl
+10x full-reworked-door left whole.stl
+9x  full-reworked-door right whole.stl
+1x  full-reworked-driverseat.stl
+1x  full-reworked-front window glas.stl
+1x  full-reworked-M logo 0.5mm.stl optional
+11x full-reworked-one light holder.stl
+6x  full-reworked-seat3.stl
+19x full-reworked-small door window glass.stl or cut it from acrylglas/petg/etc
+4x  full-reworked-small window glass.stl

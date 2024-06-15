@@ -12,6 +12,12 @@ The projects consists of:
  - as well [frontend](./webui/client/) in react,
  - [json schema](./jsonschema/) describes a mqtt based protocol.
 
+
+# License
+The source code and schematic are licensed under MIT license.
+
+The train's STL files are licensed under CC BY-NC-SA 4.0.
+
 # Notes
  - Connect an audio amplifier to an i2s capable pin i.e. DAC_1.
 
@@ -21,3 +27,9 @@ The projects consists of:
  - process rfid events
  - sqlite3
  - schematic
+ - bogie
+ - gears
+ - 817-814
+  - face
+ - esp32c3 - 25x19x4.3mm
+ - motor driver - 20x24x7 mm
