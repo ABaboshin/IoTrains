@@ -1,15 +1,25 @@
-import { ClassType, EnumType, Name, OptionValues, RenderContext, Sourcelike, TargetLanguage, Type, UnionType, cPlusPlusOptions, defined, getOptionValues, removeNullFromUnion } from "quicktype-core";
+import { RendererOptions } from "quicktype-core/dist/language/options.types";
+import { LanguageName } from "quicktype-core/dist/language/types";
+import { RenderContext } from "quicktype-core/dist/Renderer";
+import { OptionValues, getOptionValues } from "quicktype-core/dist/RendererOptions";
+import { TargetLanguage } from "quicktype-core/dist/TargetLanguage";
+import { cPlusPlusOptions, CPlusPlusTargetLanguage } from "./CPlusPlus/language";
+import { CPlusPlusRenderer } from "./CPlusPlus/CPlusPlusRenderer";
+import { ClassType, EnumType, Type, UnionType } from "quicktype-core/dist/Type/Type";
+import { Name } from "quicktype-core/dist/Naming";
 import { extendsTypeAttributeKind } from "./extendattribute";
 import { nameTypeAttributeKind } from "./nameattribute";
-import { CPlusPlusRenderer, CPlusPlusTargetLanguage, WrappingCode } from "./CPlusPlus";
+import { Sourcelike } from "quicktype-core/dist/Source";
+import { defined } from "quicktype-core/dist/support/Support";
+import { WrappingCode } from "./CPlusPlus/utils";
 import { stringEscape } from "quicktype-core/dist/support/Strings";
+import { removeNullFromUnion } from "quicktype-core/dist/Type/TypeUtils";
 
 export class CustomCPPTargetLanguage extends CPlusPlusTargetLanguage {
-  constructor() {
-    super("C++", ["cpp"], "cpp");
-  }
-
-  protected makeRenderer(renderContext: RenderContext, untypedOptionValues: { [name: string]: any }): CPlusPlusRenderer {
+  protected makeRenderer<Lang extends LanguageName = "c++">(
+      renderContext: RenderContext,
+      untypedOptionValues: RendererOptions<Lang>,
+    ): CPlusPlusRenderer {
     let options = getOptionValues(cPlusPlusOptions, untypedOptionValues);
     options.codeFormat = false;
     options.includeLocation = false;

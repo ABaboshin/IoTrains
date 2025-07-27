@@ -13,7 +13,7 @@ import { extendsAttributeProducer } from "./extendattribute";
 import { responseAttributeProducer } from "./responseattribute";
 import { nameAttributeProducer } from "./nameattribute";
 
-async function quicktypeJSONSchema(targetLanguage: string | TargetLanguage) {
+async function quicktypeJSONSchema(targetLanguage: TargetLanguage) {
   const schemaInput = new JSONSchemaInput(new FetchingJSONSchemaStore(), [extendsAttributeProducer, responseAttributeProducer, nameAttributeProducer]);
 
   await schemaInput.addSource({ name: "Function", schema: await readFromFileOrURL("./function.json") });

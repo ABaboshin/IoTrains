@@ -17,7 +17,7 @@
 //
 // These functions will throw an error if the JSON doesn't
 // match the expected interface, even if the JSON is valid.
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Convert = exports.EventType = exports.Direction = exports.Function = exports.CapabilityType = void 0;
 var CapabilityType;
 (function (CapabilityType) {
@@ -30,7 +30,7 @@ var CapabilityType;
     CapabilityType["StopPlay"] = "stop_play";
     CapabilityType["Train"] = "train";
     CapabilityType["Turnout"] = "turnout";
-})(CapabilityType = exports.CapabilityType || (exports.CapabilityType = {}));
+})(CapabilityType || (exports.CapabilityType = CapabilityType = {}));
 var Function;
 (function (Function) {
     Function["Break"] = "break";
@@ -44,17 +44,17 @@ var Function;
     Function["TurnoutPos1"] = "turnout_pos1";
     Function["TurnoutPos2"] = "turnout_pos2";
     Function["Update"] = "update";
-})(Function = exports.Function || (exports.Function = {}));
+})(Function || (exports.Function = Function = {}));
 var Direction;
 (function (Direction) {
     Direction["Backward"] = "backward";
     Direction["Forward"] = "forward";
     Direction["Stop"] = "stop";
-})(Direction = exports.Direction || (exports.Direction = {}));
+})(Direction || (exports.Direction = Direction = {}));
 var EventType;
 (function (EventType) {
     EventType["Train"] = "train";
-})(EventType = exports.EventType || (exports.EventType = {}));
+})(EventType || (exports.EventType = EventType = {}));
 // Converts JSON strings to/from your types
 // and asserts the results of JSON.parse at runtime
 var Convert = /** @class */ (function () {
@@ -359,5 +359,5 @@ var typeMap = {
     ],
     "EventType": [
         "train",
-    ]
+    ],
 };
