@@ -1,10 +1,7 @@
 import { Box, Button } from "@mui/material";
-import { Function, DeviceInfo, Command } from "common";
-import { FunctionComponent } from "react";
+import { Function, DeviceInfo, Command } from "../../common";
 
-export const TurnoutControl: FunctionComponent<DeviceInfo> = (
-  mp3: DeviceInfo
-) => {
+export const TurnoutControl = (mp3: DeviceInfo) => {
   async function SendCommand(id: string, command: Command) {
     fetch(`/api/v1/device/${id}`, {
       headers: {

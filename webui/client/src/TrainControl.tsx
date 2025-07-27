@@ -1,39 +1,32 @@
 import { Box, Button } from "@mui/material";
 import Slider from "@mui/material/Slider";
-import { Function, DeviceInfo, TrainCommand } from "common";
-import { FunctionComponent } from "react";
+import { Function, DeviceInfo, TrainCommand } from "../../common";
 
-export const TrainControl: FunctionComponent<DeviceInfo> = (
-  train: DeviceInfo
-) => {
-  async function SendCommand(v: any) {
-    if (typeof v === "number") {
-      const speed = v as number;
-
-      if (train.state !== undefined) {
-        train.state.speed = v;
-      }
-
-      const command: TrainCommand = {
-        function:
-          speed === 0
-            ? Function.Break
-            : speed > 0
-            ? Function.MoveForward
-            : Function.MoveBackward,
-        speed: speed,
-        discriminator: "TrainCommand",
-      };
-
-      fetch(`/api/v1/device/${train.device.id}`, {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        method: "PUT",
-        body: JSON.stringify(command),
-      });
+export const TrainControl = (train: DeviceInfo) => {
+  async function SendCommand(speed: number) {
+    if (train.state !== undefined) {
+      train.state.speed = speed;
     }
+
+    const command: TrainCommand = {
+      function:
+        speed === 0
+          ? Function.Break
+          : speed > 0
+          ? Function.MoveForward
+          : Function.MoveBackward,
+      speed: speed,
+      discriminator: "TrainCommand",
+    };
+
+    fetch(`/api/v1/device/${train.device.id}`, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "PUT",
+      body: JSON.stringify(command),
+    });
   }
 
   return (
@@ -44,7 +37,7 @@ export const TrainControl: FunctionComponent<DeviceInfo> = (
         valueLabelDisplay="on"
         min={-100}
         max={100}
-        onChange={(e, v, a) => SendCommand(v)}
+        onChange={(_, v, __) => SendCommand(v)}
       />
       <Button variant="contained" onClick={() => SendCommand(0)}>
         Stop

@@ -1,4 +1,3 @@
-import "./App.css";
 import DevicesList from "./DevicesList";
 
 function App() {

@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
-import { CapabilityType, DeviceInfo } from "common";
+import { CapabilityType, DeviceInfo } from "../../common";
 import { useEffect, useState } from "react";
 import { TrainControl } from "./TrainControl";
 import { Divider } from "@mui/material";
@@ -42,33 +42,33 @@ export default function DevicesList() {
     <Box sx={{ width: "90%" }}>
       <Paper sx={{ width: "90%", mb: 2 }}>
         {rows &&
-          rows.map((row, index) => {
+          rows.map((row, _) => {
             return (
               <Box key={row.device.id}>
                 {row.device.id}
                 <Divider />
                 {row.device.capabilities
-                  .map((x, i, ar) => x.type)
+                  .map((x, _, __) => x.type)
                   .includes(CapabilityType.Train) && (
                   <TrainControl device={row.device} state={row.state} />
                 )}
                 {row.device.capabilities
-                  .map((x, i, ar) => x.type)
+                  .map((x, _, __) => x.type)
                   .includes(CapabilityType.Player) && (
                   <MP3Control device={row.device} state={row.state} />
                 )}
                 {row.device.capabilities
-                  .map((x, i, ar) => x.type)
+                  .map((x, _, __) => x.type)
                   .includes(CapabilityType.Turnout) && (
                   <TurnoutControl device={row.device} state={row.state} />
                 )}
                 {row.device.capabilities
-                  .map((x, i, ar) => x.type)
+                  .map((x, _, __) => x.type)
                   .includes(CapabilityType.Light) && (
                   <LightControl device={row.device} state={row.state} />
                 )}
                 {row.device.capabilities
-                  .map((x, i, ar) => x.type)
+                  .map((x, _, __) => x.type)
                   .includes(CapabilityType.Ota) && (
                   <OTAControl device={row.device} state={row.state} />
                 )}

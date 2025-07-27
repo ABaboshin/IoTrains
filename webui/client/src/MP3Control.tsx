@@ -1,8 +1,7 @@
 import { Box, Button, Input } from "@mui/material";
-import { Function, DeviceInfo, Mp3Command, CapabilityType } from "common";
-import { FunctionComponent } from "react";
+import { Function, DeviceInfo, Mp3Command, CapabilityType } from "../../common";
 
-export const MP3Control: FunctionComponent<DeviceInfo> = (mp3: DeviceInfo) => {
+export const MP3Control = (mp3: DeviceInfo) => {
   let url = "";
 
   async function SendCommand(id: string, command: Mp3Command) {
@@ -16,18 +15,18 @@ export const MP3Control: FunctionComponent<DeviceInfo> = (mp3: DeviceInfo) => {
     });
   }
 
-  function ChangeUrl(e: any) {
-    url = e.target.value;
+  function ChangeUrl(e: string) {
+    url = e;
   }
 
   return (
     <Box>
       {mp3.device.capabilities
-        .map((x, i, ar) => x.type)
+        .map((x, _, __) => x.type)
         .includes(CapabilityType.PlayURL) && (
         <Box>
           <form>
-            <Input placeholder="url" onChange={(e) => ChangeUrl(e)} />
+            <Input placeholder="url" onChange={(e) => ChangeUrl(e.target.value)} />
             <Button
               variant="contained"
               onClick={() =>
@@ -45,11 +44,11 @@ export const MP3Control: FunctionComponent<DeviceInfo> = (mp3: DeviceInfo) => {
       )}
 
       {mp3.device.capabilities
-        .map((x, i, ar) => x.type)
+        .map((x, _, __) => x.type)
         .includes(CapabilityType.PlayID) &&
         mp3.device.capabilities
           .filter((x) => x.type === CapabilityType.PlayID)
-          .map((x, i, ar) => x.value)
+          .map((x, _, __) => x.value)
           .map((x) => (
             <Button
               variant="contained"

@@ -1,8 +1,7 @@
 import { Box, Button, Input } from "@mui/material";
-import { Function, DeviceInfo, OtaCommand } from "common";
-import { FunctionComponent } from "react";
+import { Function, DeviceInfo, OtaCommand } from "../../common";
 
-export const OTAControl: FunctionComponent<DeviceInfo> = (ota: DeviceInfo) => {
+export const OTAControl = (ota: DeviceInfo) => {
   let url = "";
 
   async function SendCommand(id: string, command: OtaCommand) {
@@ -16,8 +15,8 @@ export const OTAControl: FunctionComponent<DeviceInfo> = (ota: DeviceInfo) => {
     });
   }
 
-  function ChangeUrl(e: any) {
-    url = e.target.value;
+  function ChangeUrl(e: string) {
+    url = e;
   }
 
   return (
@@ -25,7 +24,7 @@ export const OTAControl: FunctionComponent<DeviceInfo> = (ota: DeviceInfo) => {
       {
         <Box>
           <form>
-            <Input placeholder="url" onChange={(e) => ChangeUrl(e)} />
+            <Input placeholder="url" onChange={(e) => ChangeUrl(e.target.value)} />
             <Button
               variant="contained"
               onClick={() =>
