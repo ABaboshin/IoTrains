@@ -7,7 +7,7 @@
 #include <string>
 
 #include <AudioTools.h>
-#include <AudioCodecs/CodecMP3Helix.h>
+#include <AudioTools/AudioCodecs/CodecMP3Helix.h>
 #include "BaseDevice.h"
 
 class MP3File

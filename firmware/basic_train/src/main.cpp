@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <memory>
 #include <ControlUnit.h>
+#include "MP3Player.h"
 #include "SoundTrain.h"
 
 #include "config.h"
