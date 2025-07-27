@@ -1,8 +1,0 @@
-Designator,Val,Package,Mid X,Mid Y,Rotation,Layer
-C1,100nF,C_0402,85.0,-47.0,0.0,top
-C2,10uF,C_0402,88.0,-42.0,0.0,top
-C3,47pF,C_0402,88.0,-47.0,0.0,top
-DB1,MB10S,MBS_L4.7-W3.8-P2.40-LS7.0-TL,87.0,-62.0,0.0,top
-R1,C270629,R_0402,98.0,-54.0,0.0,top
-U1,AMS1117-3.3,SOT-223-3_TabPin2,94.0,-44.0,0.0,top
-U2,DRV8870DDA,Texas_HTSOP-8-1EP_3.9x4.9mm_P1.27mm_EP2.95x4.9mm_Mask2.4x3.1mm_ThermalVias,92.0,-55.0,0.0,top
