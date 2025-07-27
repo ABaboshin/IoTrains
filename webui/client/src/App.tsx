@@ -1,8 +1,7 @@
-import './App.css';
+import "./App.css";
 import DevicesList from "./DevicesList";
 
 function App() {
-
   return (
     <div className="App">
       <header className="App-header">
