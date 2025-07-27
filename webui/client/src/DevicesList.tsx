@@ -39,8 +39,9 @@ export default function DevicesList() {
   }, []);
 
   return (
-    <Box sx={{ width: "90%" }}>
-      <Paper sx={{ width: "90%", mb: 2 }}>
+    <Box className="w-[90%] h-full">
+      <Paper className="w-[90%] h-full mb-2">
+        test
         {rows &&
           rows.map((row, _) => {
             return (
