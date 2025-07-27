@@ -1,7 +1,12 @@
 import { RendererOptions } from "quicktype-core/dist/language/options.types";
 import { LanguageName } from "quicktype-core/dist/language/types";
 import { RenderContext } from "quicktype-core/dist/Renderer";
-import { BooleanOption, EnumOption, StringOption, getOptionValues } from "quicktype-core/dist/RendererOptions";
+import {
+  BooleanOption,
+  EnumOption,
+  StringOption,
+  getOptionValues,
+} from "quicktype-core/dist/RendererOptions";
 import { TargetLanguage } from "quicktype-core/dist/TargetLanguage";
 import { CPlusPlusRenderer } from "./CPlusPlusRenderer";
 
@@ -24,7 +29,7 @@ export const cPlusPlusOptions = {
       "multi-source": false,
     } as const,
     "single-source",
-    "secondary",
+    "secondary"
   ),
   includeLocation: new EnumOption(
     "include-location",
@@ -34,7 +39,7 @@ export const cPlusPlusOptions = {
       "global-include": false,
     } as const,
     "local-include",
-    "secondary",
+    "secondary"
   ),
   codeFormat: new EnumOption(
     "code-format",
@@ -43,7 +48,7 @@ export const cPlusPlusOptions = {
       "with-struct": false,
       "with-getter-setter": true,
     } as const,
-    "with-getter-setter",
+    "with-getter-setter"
   ),
   wstring: new EnumOption(
     "wstring",
@@ -52,7 +57,7 @@ export const cPlusPlusOptions = {
       "use-string": false,
       "use-wstring": true,
     } as const,
-    "use-string",
+    "use-string"
   ),
   westConst: new EnumOption(
     "const-style",
@@ -61,49 +66,49 @@ export const cPlusPlusOptions = {
       "west-const": true,
       "east-const": false,
     } as const,
-    "west-const",
+    "west-const"
   ),
   justTypes: new BooleanOption("just-types", "Plain types only", false),
   namespace: new StringOption(
     "namespace",
     "Name of the generated namespace(s)",
     "NAME",
-    "quicktype",
+    "quicktype"
   ),
   enumType: new StringOption(
     "enum-type",
     "Type of enum class",
     "NAME",
     "int",
-    "secondary",
+    "secondary"
   ),
   typeNamingStyle: new EnumOption(
     "type-style",
     "Naming style for types",
     namingStyles,
-    "pascal-case",
+    "pascal-case"
   ),
   memberNamingStyle: new EnumOption(
     "member-style",
     "Naming style for members",
     namingStyles,
-    "underscore-case",
+    "underscore-case"
   ),
   enumeratorNamingStyle: new EnumOption(
     "enumerator-style",
     "Naming style for enumerators",
     namingStyles,
-    "upper-underscore-case",
+    "upper-underscore-case"
   ),
   boost: new BooleanOption(
     "boost",
     "Require a dependency on boost. Without boost, C++17 is required",
-    true,
+    true
   ),
   hideNullOptional: new BooleanOption(
     "hide-null-optional",
     "Hide null value for optional field",
-    false,
+    false
   ),
 };
 
@@ -134,12 +139,12 @@ export class CPlusPlusTargetLanguage extends TargetLanguage<
 
   protected makeRenderer<Lang extends LanguageName = "c++">(
     renderContext: RenderContext,
-    untypedOptionValues: RendererOptions<Lang>,
+    untypedOptionValues: RendererOptions<Lang>
   ): CPlusPlusRenderer {
     return new CPlusPlusRenderer(
       this,
       renderContext,
-      getOptionValues(cPlusPlusOptions, untypedOptionValues),
+      getOptionValues(cPlusPlusOptions, untypedOptionValues)
     );
   }
 }

@@ -9,7 +9,11 @@ import {
 import { TypeAttributeKind } from "quicktype-core/dist/attributes/TypeAttributes";
 import { EnumType } from "quicktype-core/dist/Type/Type";
 import { JSONSchema } from "quicktype-core/dist/input/JSONSchemaStore";
-import { JSONSchemaAttributes, JSONSchemaType, Ref } from "quicktype-core/dist/input/JSONSchemaInput";
+import {
+  JSONSchemaAttributes,
+  JSONSchemaType,
+  Ref,
+} from "quicktype-core/dist/input/JSONSchemaInput";
 
 class EnumValuesTypeAttributeKind extends TypeAttributeKind<AccessorNames> {
   public constructor() {
@@ -26,10 +30,10 @@ export const enumValuesTypeAttributeKind: TypeAttributeKind<AccessorNames> =
 
 export function enumCaseValues(
   e: EnumType,
-  language: string,
+  language: string
 ): Map<string, [string, boolean] | undefined> {
   const enumValues = enumValuesTypeAttributeKind.tryGetInAttributes(
-    e.getAttributes(),
+    e.getAttributes()
   );
   if (enumValues === undefined)
     return mapMap(e.cases.entries(), (_) => undefined);
@@ -39,7 +43,7 @@ export function enumCaseValues(
 export function enumValuesAttributeProducer(
   schema: JSONSchema,
   _canonicalRef: Ref | undefined,
-  _types: Set<JSONSchemaType>,
+  _types: Set<JSONSchemaType>
 ): JSONSchemaAttributes | undefined {
   if (typeof schema !== "object") return undefined;
 
@@ -49,7 +53,7 @@ export function enumValuesAttributeProducer(
 
   return {
     forType: enumValuesTypeAttributeKind.makeAttributes(
-      makeAccessorNames(maybeEnumValues),
+      makeAccessorNames(maybeEnumValues)
     ),
   };
 }

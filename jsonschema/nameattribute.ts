@@ -1,4 +1,10 @@
-import { JSONSchema, JSONSchemaAttributes, JSONSchemaType, Ref, TypeAttributeKind } from "quicktype-core";
+import {
+  JSONSchema,
+  JSONSchemaAttributes,
+  JSONSchemaType,
+  Ref,
+  TypeAttributeKind,
+} from "quicktype-core";
 
 class NameTypeAttributeKind extends TypeAttributeKind<string> {
   constructor() {
@@ -31,4 +37,3 @@ export function nameAttributeProducer(
 
   return { forType: nameTypeAttributeKind.makeAttributes(schema.name) };
 }
-

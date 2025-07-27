@@ -1,17 +1,24 @@
-import { MinMaxConstraint, minMaxValueForType } from "quicktype-core/dist/attributes/Constraints";
+import {
+  MinMaxConstraint,
+  minMaxValueForType,
+} from "quicktype-core/dist/attributes/Constraints";
 import { Type } from "quicktype-core/dist/Type/Type";
 import { minMaxLengthForType, patternForType } from "../Constraints";
-import { isAscii, isLetterOrUnderscoreOrDigit, legalizeCharacters } from "quicktype-core/dist/support/Strings";
+import {
+  isAscii,
+  isLetterOrUnderscoreOrDigit,
+  legalizeCharacters,
+} from "quicktype-core/dist/support/Strings";
 import { TypeKind } from "quicktype-core/dist/Type/TransformedStringType";
 import { Name } from "quicktype-core/dist/Naming";
 import { Sourcelike } from "quicktype-core/dist/Source";
 
 export function constraintsForType(t: Type):
   | {
-    minMax?: MinMaxConstraint;
-    minMaxLength?: MinMaxConstraint;
-    pattern?: string;
-  }
+      minMax?: MinMaxConstraint;
+      minMaxLength?: MinMaxConstraint;
+      pattern?: string;
+    }
   | undefined {
   const minMax = minMaxValueForType(t);
   const minMaxLength = minMaxLengthForType(t);
@@ -26,7 +33,7 @@ export function constraintsForType(t: Type):
 }
 
 export const legalizeName = legalizeCharacters(
-  (cp) => isAscii(cp) && isLetterOrUnderscoreOrDigit(cp),
+  (cp) => isAscii(cp) && isLetterOrUnderscoreOrDigit(cp)
 );
 
 /// Type to use as an optional if cycle breaking is required
@@ -125,14 +132,14 @@ export interface StringType {
     qualifier: Sourcelike[],
     fromType: Sourcelike,
     toType: Sourcelike,
-    inner: Sourcelike,
+    inner: Sourcelike
   ) => Sourcelike;
   wrapToString: (inner: Sourcelike) => Sourcelike;
 }
 
 export function addQualifier(
   qualifier: Sourcelike,
-  qualified: Sourcelike[],
+  qualified: Sourcelike[]
 ): Sourcelike[] {
   if (qualified.length === 0) {
     return [];
@@ -144,8 +151,8 @@ export function addQualifier(
 export class WrappingCode {
   public constructor(
     private readonly start: Sourcelike[],
-    private readonly end: Sourcelike[],
-  ) { }
+    private readonly end: Sourcelike[]
+  ) {}
 
   public wrap(qualifier: Sourcelike, inner: Sourcelike): Sourcelike {
     return [addQualifier(qualifier, this.start), inner, this.end];
@@ -177,7 +184,7 @@ export class BaseString {
     stringLiteralPrefix: string,
     toString: WrappingCode,
     encodingClass: string,
-    encodingFunction: string,
+    encodingFunction: string
   ) {
     this._stringType = stringType;
     this._constStringType = constStringType;

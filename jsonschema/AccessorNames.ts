@@ -8,12 +8,29 @@ import {
   mapMergeInto,
   setUnionManyInto,
 } from "collection-utils";
-import { TypeAttributeKind, TypeAttributes } from "quicktype-core/dist/attributes/TypeAttributes";
-import { JSONSchemaAttributes, JSONSchemaType, Ref } from "quicktype-core/dist/input/JSONSchemaInput";
+import {
+  TypeAttributeKind,
+  TypeAttributes,
+} from "quicktype-core/dist/attributes/TypeAttributes";
+import {
+  JSONSchemaAttributes,
+  JSONSchemaType,
+  Ref,
+} from "quicktype-core/dist/input/JSONSchemaInput";
 import { JSONSchema } from "quicktype-core/dist/input/JSONSchemaStore";
 import { messageAssert } from "quicktype-core/dist/Messages";
-import { checkArray, checkStringMap, defined, isStringMap } from "quicktype-core/dist/support/Support";
-import { EnumType, ObjectType, Type, UnionType } from "quicktype-core/dist/Type/Type";
+import {
+  checkArray,
+  checkStringMap,
+  defined,
+  isStringMap,
+} from "quicktype-core/dist/support/Support";
+import {
+  EnumType,
+  ObjectType,
+  Type,
+  UnionType,
+} from "quicktype-core/dist/Type/Type";
 
 export type AccessorEntry = string | Map<string, string>;
 
@@ -35,7 +52,7 @@ export const accessorNamesTypeAttributeKind: TypeAttributeKind<AccessorNames> =
 // Returns [name, isFixed].
 function getFromEntry(
   entry: AccessorEntry,
-  language: string,
+  language: string
 ): [string, boolean] | undefined {
   if (typeof entry === "string") return [entry, false];
 
@@ -51,7 +68,7 @@ function getFromEntry(
 export function lookupKey(
   accessors: AccessorNames,
   key: string,
-  language: string,
+  language: string
 ): [string, boolean] | undefined {
   const entry = accessors.get(key);
   if (entry === undefined) return undefined;
@@ -60,10 +77,10 @@ export function lookupKey(
 
 export function objectPropertyNames(
   o: ObjectType,
-  language: string,
+  language: string
 ): Map<string, [string, boolean] | undefined> {
   const accessors = accessorNamesTypeAttributeKind.tryGetInAttributes(
-    o.getAttributes(),
+    o.getAttributes()
   );
   const map = o.getProperties();
   if (accessors === undefined) return mapMap(map, (_) => undefined);
@@ -72,10 +89,10 @@ export function objectPropertyNames(
 
 export function enumCaseNames(
   e: EnumType,
-  language: string,
+  language: string
 ): Map<string, [string, boolean] | undefined> {
   const accessors = accessorNamesTypeAttributeKind.tryGetInAttributes(
-    e.getAttributes(),
+    e.getAttributes()
   );
   if (accessors === undefined)
     return mapMap(e.cases.entries(), (_) => undefined);
@@ -84,7 +101,7 @@ export function enumCaseNames(
 
 export function getAccessorName(
   names: Map<string, [string, boolean] | undefined>,
-  original: string,
+  original: string
 ): [string | undefined, boolean] {
   const maybeName = names.get(original);
   if (maybeName === undefined) return [undefined, false];
@@ -122,7 +139,7 @@ let nextUnionIdentifier = 0;
 
 export function makeUnionIdentifierAttribute(): TypeAttributes {
   const attributes = unionIdentifierTypeAttributeKind.makeAttributes(
-    new Set([nextUnionIdentifier]),
+    new Set([nextUnionIdentifier])
   );
   nextUnionIdentifier += 1;
   return attributes;
@@ -136,7 +153,7 @@ class UnionMemberNamesTypeAttributeKind extends TypeAttributeKind<
   }
 
   public combine(
-    arr: Array<Map<number, AccessorEntry>>,
+    arr: Array<Map<number, AccessorEntry>>
   ): Map<number, AccessorEntry> {
     const result = new Map<number, AccessorEntry>();
     for (const m of arr) {
@@ -153,10 +170,10 @@ export const unionMemberNamesTypeAttributeKind: TypeAttributeKind<
 
 export function makeUnionMemberNamesAttribute(
   unionAttributes: TypeAttributes,
-  entry: AccessorEntry,
+  entry: AccessorEntry
 ): TypeAttributes {
   const identifiers = defined(
-    unionIdentifierTypeAttributeKind.tryGetInAttributes(unionAttributes),
+    unionIdentifierTypeAttributeKind.tryGetInAttributes(unionAttributes)
   );
   const map = mapFromIterable(identifiers, (_) => entry);
   return unionMemberNamesTypeAttributeKind.makeAttributes(map);
@@ -165,15 +182,15 @@ export function makeUnionMemberNamesAttribute(
 export function unionMemberName(
   u: UnionType,
   member: Type,
-  language: string,
+  language: string
 ): [string | undefined, boolean] {
   const identifiers = unionIdentifierTypeAttributeKind.tryGetInAttributes(
-    u.getAttributes(),
+    u.getAttributes()
   );
   if (identifiers === undefined) return [undefined, false];
 
   const memberNames = unionMemberNamesTypeAttributeKind.tryGetInAttributes(
-    member.getAttributes(),
+    member.getAttributes()
   );
   if (memberNames === undefined) return [undefined, false];
 
@@ -213,7 +230,7 @@ export function unionMemberName(
 }
 
 function isAccessorEntry(
-  x: unknown,
+  x: unknown
 ): x is string | { [language: string]: string } {
   if (typeof x === "string") {
     return true;
@@ -223,7 +240,7 @@ function isAccessorEntry(
 }
 
 function makeAccessorEntry(
-  ae: string | { [language: string]: string },
+  ae: string | { [language: string]: string }
 ): AccessorEntry {
   if (typeof ae === "string") return ae;
   return mapFromObject(ae);
@@ -239,7 +256,7 @@ export function accessorNamesAttributeProducer(
   schema: JSONSchema,
   canonicalRef: Ref,
   _types: Set<JSONSchemaType>,
-  cases: JSONSchema[] | undefined,
+  cases: JSONSchema[] | undefined
 ): JSONSchemaAttributes | undefined {
   if (typeof schema !== "object") return undefined;
   const maybeAccessors = schema["qt-accessors"];
@@ -248,7 +265,7 @@ export function accessorNamesAttributeProducer(
   if (cases === undefined) {
     return {
       forType: accessorNamesTypeAttributeKind.makeAttributes(
-        makeAccessorNames(maybeAccessors),
+        makeAccessorNames(maybeAccessors)
       ),
     };
   } else {
@@ -261,13 +278,13 @@ export function accessorNamesAttributeProducer(
       {
         operation: "oneOf",
         ref: canonicalRef.push("oneOf"),
-      },
+      }
     );
     const caseAttributes = accessors.map((accessor) =>
       makeUnionMemberNamesAttribute(
         identifierAttribute,
-        makeAccessorEntry(accessor),
-      ),
+        makeAccessorEntry(accessor)
+      )
     );
     return { forUnion: identifierAttribute, forCases: caseAttributes };
   }

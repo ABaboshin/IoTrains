@@ -1,14 +1,16 @@
 // from https://github.com/glideapps/quicktype/blob/master/packages/quicktype-core/src/attributes/Constraints.ts
 
 import { TypeAttributeKind } from "quicktype-core/dist/attributes/TypeAttributes";
-import { JSONSchemaAttributes, JSONSchemaType, Ref } from "quicktype-core/dist/input/JSONSchemaInput";
+import {
+  JSONSchemaAttributes,
+  JSONSchemaType,
+  Ref,
+} from "quicktype-core/dist/input/JSONSchemaInput";
 import { JSONSchema } from "quicktype-core/dist/input/JSONSchemaStore";
 import { messageError } from "quicktype-core/dist/Messages";
 import { assert } from "quicktype-core/dist/support/Support";
 import { TypeKind } from "quicktype-core/dist/Type/TransformedStringType";
 import { Type } from "quicktype-core/dist/Type/Type";
-
-
 
 // This can't be an object type, unfortunately, because it's in the
 // type's identity and as such must be comparable and hashable with
@@ -16,7 +18,7 @@ import { Type } from "quicktype-core/dist/Type/Type";
 export type MinMaxConstraint = [number | undefined, number | undefined];
 
 function checkMinMaxConstraint(
-  minmax: MinMaxConstraint,
+  minmax: MinMaxConstraint
 ): MinMaxConstraint | undefined {
   const [min, max] = minmax;
   if (typeof min === "number" && typeof max === "number" && min > max) {
@@ -35,7 +37,7 @@ export class MinMaxConstraintTypeAttributeKind extends TypeAttributeKind<MinMaxC
     name: string,
     private readonly _typeKinds: Set<TypeKind>,
     private _minSchemaProperty: string,
-    private _maxSchemaProperty: string,
+    private _maxSchemaProperty: string
   ) {
     super(name);
   }
@@ -95,7 +97,7 @@ export class MinMaxConstraintTypeAttributeKind extends TypeAttributeKind<MinMaxC
   public addToSchema(
     schema: { [name: string]: unknown },
     t: Type,
-    attr: MinMaxConstraint,
+    attr: MinMaxConstraint
   ): void {
     if (this._typeKinds.has(t.kind)) return;
 
@@ -119,7 +121,7 @@ export const minMaxTypeAttributeKind: TypeAttributeKind<MinMaxConstraint> =
     "minMax",
     new Set<TypeKind>(["integer", "double"]),
     "minimum",
-    "maximum",
+    "maximum"
   );
 
 export const minMaxLengthTypeAttributeKind: TypeAttributeKind<MinMaxConstraint> =
@@ -127,13 +129,13 @@ export const minMaxLengthTypeAttributeKind: TypeAttributeKind<MinMaxConstraint> 
     "minMaxLength",
     new Set<TypeKind>(["string"]),
     "minLength",
-    "maxLength",
+    "maxLength"
   );
 
 function producer(
   schema: JSONSchema,
   minProperty: string,
-  maxProperty: string,
+  maxProperty: string
 ): MinMaxConstraint | undefined {
   if (!(typeof schema === "object")) return undefined;
 
@@ -155,7 +157,7 @@ function producer(
 export function minMaxAttributeProducer(
   schema: JSONSchema,
   _ref: Ref,
-  types: Set<JSONSchemaType>,
+  types: Set<JSONSchemaType>
 ): JSONSchemaAttributes | undefined {
   if (!types.has("number") && !types.has("integer")) return undefined;
 
@@ -167,15 +169,14 @@ export function minMaxAttributeProducer(
 export function minMaxLengthAttributeProducer(
   schema: JSONSchema,
   _ref: Ref,
-  types: Set<JSONSchemaType>,
+  types: Set<JSONSchemaType>
 ): JSONSchemaAttributes | undefined {
   if (!types.has("string")) return undefined;
 
   const maybeMinMaxLength = producer(schema, "minLength", "maxLength");
   if (maybeMinMaxLength === undefined) return undefined;
   return {
-    forString:
-      minMaxLengthTypeAttributeKind.makeAttributes(maybeMinMaxLength),
+    forString: minMaxLengthTypeAttributeKind.makeAttributes(maybeMinMaxLength),
   };
 }
 
@@ -213,7 +214,7 @@ export class PatternTypeAttributeKind extends TypeAttributeKind<string> {
   public addToSchema(
     schema: { [name: string]: unknown },
     t: Type,
-    attr: string,
+    attr: string
   ): void {
     if (t.kind !== "string") return;
     schema.pattern = attr;
@@ -226,7 +227,7 @@ export const patternTypeAttributeKind: TypeAttributeKind<string> =
 export function patternAttributeProducer(
   schema: JSONSchema,
   _ref: Ref,
-  types: Set<JSONSchemaType>,
+  types: Set<JSONSchemaType>
 ): JSONSchemaAttributes | undefined {
   if (!(typeof schema === "object")) return undefined;
   if (!types.has("string")) return undefined;

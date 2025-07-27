@@ -1,11 +1,22 @@
 import { RendererOptions } from "quicktype-core/dist/language/options.types";
 import { LanguageName } from "quicktype-core/dist/language/types";
 import { RenderContext } from "quicktype-core/dist/Renderer";
-import { OptionValues, getOptionValues } from "quicktype-core/dist/RendererOptions";
+import {
+  OptionValues,
+  getOptionValues,
+} from "quicktype-core/dist/RendererOptions";
 import { TargetLanguage } from "quicktype-core/dist/TargetLanguage";
-import { cPlusPlusOptions, CPlusPlusTargetLanguage } from "./CPlusPlus/language";
+import {
+  cPlusPlusOptions,
+  CPlusPlusTargetLanguage,
+} from "./CPlusPlus/language";
 import { CPlusPlusRenderer } from "./CPlusPlus/CPlusPlusRenderer";
-import { ClassType, EnumType, Type, UnionType } from "quicktype-core/dist/Type/Type";
+import {
+  ClassType,
+  EnumType,
+  Type,
+  UnionType,
+} from "quicktype-core/dist/Type/Type";
 import { Name } from "quicktype-core/dist/Naming";
 import { extendsTypeAttributeKind } from "./extendattribute";
 import { nameTypeAttributeKind } from "./nameattribute";
@@ -17,9 +28,9 @@ import { removeNullFromUnion } from "quicktype-core/dist/Type/TypeUtils";
 
 export class CustomCPPTargetLanguage extends CPlusPlusTargetLanguage {
   protected makeRenderer<Lang extends LanguageName = "c++">(
-      renderContext: RenderContext,
-      untypedOptionValues: RendererOptions<Lang>,
-    ): CPlusPlusRenderer {
+    renderContext: RenderContext,
+    untypedOptionValues: RendererOptions<Lang>
+  ): CPlusPlusRenderer {
     let options = getOptionValues(cPlusPlusOptions, untypedOptionValues);
     options.codeFormat = false;
     options.includeLocation = false;
@@ -28,10 +39,13 @@ export class CustomCPPTargetLanguage extends CPlusPlusTargetLanguage {
 }
 
 class CustomCPPRenderer extends CPlusPlusRenderer {
-
   protected baseClasses: Map<string, string>;
 
-  constructor(targetLanguage: TargetLanguage, renderContext: RenderContext, _options: OptionValues<typeof cPlusPlusOptions>) {
+  constructor(
+    targetLanguage: TargetLanguage,
+    renderContext: RenderContext,
+    _options: OptionValues<typeof cPlusPlusOptions>
+  ) {
     super(targetLanguage, renderContext, _options);
     this.baseClasses = new Map<string, string>();
   }
@@ -49,38 +63,45 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
       }
     }
 
-    this.emitBlock(["class ", className, baseclass === undefined ? "" : " : public " + baseclass], true, () => {
-      const constraints = this.generateClassConstraints(c);
-      this.emitLine("public:");
-      this.emitLine("std::string discriminator;");
-      if (constraints === undefined) {
-        if (name === undefined) {
-          this.emitLine(className, "()= default;");
+    this.emitBlock(
+      [
+        "class ",
+        className,
+        baseclass === undefined ? "" : " : public " + baseclass,
+      ],
+      true,
+      () => {
+        const constraints = this.generateClassConstraints(c);
+        this.emitLine("public:");
+        this.emitLine("std::string discriminator;");
+        if (constraints === undefined) {
+          if (name === undefined) {
+            this.emitLine(className, "()= default;");
+          } else {
+            this.emitLine(className, `() { discriminator =  "${name}"; }`);
+          }
         } else {
-          this.emitLine(className, `() { discriminator =  "${name}"; }`);
+          this.emitLine(className, "() :");
+          let numEmits = 0;
+          constraints.forEach((initializer: Sourcelike, _propName: string) => {
+            numEmits++;
+            this.indent(() => {
+              if (numEmits === constraints.size) {
+                this.emitLine(initializer);
+              } else {
+                this.emitLine(initializer, ",");
+              }
+            });
+          });
+          this.emitLine("{}");
         }
 
-      } else {
-        this.emitLine(className, "() :");
-        let numEmits = 0;
-        constraints.forEach((initializer: Sourcelike, _propName: string) => {
-          numEmits++;
-          this.indent(() => {
-            if (numEmits === constraints.size) {
-              this.emitLine(initializer);
-            } else {
-              this.emitLine(initializer, ",");
-            }
-          });
-        });
-        this.emitLine("{}");
+        this.emitLine("virtual ~", className, "() = default;");
+        this.ensureBlankLine();
+
+        this.emitClassMembers(c, constraints);
       }
-
-      this.emitLine("virtual ~", className, "() = default;");
-      this.ensureBlankLine();
-
-      this.emitClassMembers(c, constraints);
-    });
+    );
   }
 
   protected emitClassFunctions(c: ClassType, className: Name): void {
@@ -92,7 +113,14 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
     const baseclass = extendsTypeAttributeKind.tryGetInAttributes(attributes);
 
     this.emitBlock(
-      ["inline void from_json(", this.withConst("json"), " & j, ", ourQualifier, className, "& x)"],
+      [
+        "inline void from_json(",
+        this.withConst("json"),
+        " & j, ",
+        ourQualifier,
+        className,
+        "& x)",
+      ],
       false,
       () => {
         if (baseclass !== undefined) {
@@ -101,10 +129,10 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
           `);
         }
         this.forEachClassProperty(c, "none", (name, json, p) => {
-          const [, , setterName] = defined(this._gettersAndSettersForPropertyName.get(name));
+          const [, , setterName] = defined(
+            this._gettersAndSettersForPropertyName.get(name)
+          );
           const propType = p.type;
-
-
 
           let assignment: WrappingCode;
           if (this._options.codeFormat) {
@@ -126,7 +154,7 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
                     this.NarrowString.getType(),
                     [this._stringType.createStringLiteral([stringEscape(json)])]
                   ),
-                  ")"
+                  ")",
                 ]
               ),
               ";"
@@ -134,9 +162,15 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
             return;
           }
           if (p.isOptional || propType instanceof UnionType) {
-            const [nullOrOptional, typeSet] = (function (): [boolean, ReadonlySet<Type>] {
+            const [nullOrOptional, typeSet] = (function (): [
+              boolean,
+              ReadonlySet<Type>
+            ] {
               if (propType instanceof UnionType) {
-                const [maybeNull, nonNulls] = removeNullFromUnion(propType, true);
+                const [maybeNull, nonNulls] = removeNullFromUnion(
+                  propType,
+                  true
+                );
                 return [maybeNull !== null || p.isOptional, nonNulls];
               } else {
                 const set = new Set<Type>();
@@ -150,7 +184,7 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
                 {
                   needsForwardIndirection: false,
                   needsOptionalIndirection: false,
-                  inJsonNamespace: false
+                  inJsonNamespace: false,
                 },
                 false,
                 true
@@ -160,7 +194,7 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
                 {
                   needsForwardIndirection: false,
                   needsOptionalIndirection: false,
-                  inJsonNamespace: false
+                  inJsonNamespace: false,
                 },
                 false,
                 false
@@ -182,11 +216,15 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
                           [ourQualifier],
                           this._stringType.getType(),
                           this.NarrowString.getType(),
-                          [this._stringType.createStringLiteral([stringEscape(json)])]
+                          [
+                            this._stringType.createStringLiteral([
+                              stringEscape(json),
+                            ]),
+                          ]
                         ),
-                        ")"
+                        ")",
                       ]
-                    )
+                    ),
                   ]
                 ),
                 ";"
@@ -199,7 +237,7 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
             {
               needsForwardIndirection: true,
               needsOptionalIndirection: true,
-              inJsonNamespace: false
+              inJsonNamespace: false,
             },
             false,
             true,
@@ -210,7 +248,7 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
             {
               needsForwardIndirection: true,
               needsOptionalIndirection: true,
-              inJsonNamespace: false
+              inJsonNamespace: false,
             },
             false,
             false,
@@ -219,18 +257,23 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
           this.emitLine(
             assignment.wrap(
               [],
-              this._stringType.wrapEncodingChange([ourQualifier], cppType, toType, [
-                "j.at(",
-                this._stringType.wrapEncodingChange(
-                  [ourQualifier],
-                  this._stringType.getType(),
-                  this.NarrowString.getType(),
-                  this._stringType.createStringLiteral([stringEscape(json)])
-                ),
-                ").get<",
+              this._stringType.wrapEncodingChange(
+                [ourQualifier],
                 cppType,
-                ">()"
-              ])
+                toType,
+                [
+                  "j.at(",
+                  this._stringType.wrapEncodingChange(
+                    [ourQualifier],
+                    this._stringType.getType(),
+                    this.NarrowString.getType(),
+                    this._stringType.createStringLiteral([stringEscape(json)])
+                  ),
+                  ").get<",
+                  cppType,
+                  ">()",
+                ]
+              )
             ),
             ";"
           );
@@ -240,7 +283,11 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
     this.ensureBlankLine();
 
     this.emitBlock(
-      ["inline void to_json(json & j, ", this.withConst([ourQualifier, className]), " & x)"],
+      [
+        "inline void to_json(json & j, ",
+        this.withConst([ourQualifier, className]),
+        " & x)",
+      ],
       false,
       () => {
         if (baseclass !== undefined) {
@@ -258,7 +305,7 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
             {
               needsForwardIndirection: true,
               needsOptionalIndirection: true,
-              inJsonNamespace: false
+              inJsonNamespace: false,
             },
             false,
             false,
@@ -269,13 +316,15 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
             {
               needsForwardIndirection: true,
               needsOptionalIndirection: true,
-              inJsonNamespace: false
+              inJsonNamespace: false,
             },
             false,
             true,
             p.isOptional
           );
-          const [getterName, ,] = defined(this._gettersAndSettersForPropertyName.get(name));
+          const [getterName, ,] = defined(
+            this._gettersAndSettersForPropertyName.get(name)
+          );
           let getter: Sourcelike[];
           if (this._options.codeFormat) {
             getter = [getterName, "()"];
@@ -291,15 +340,25 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
               this._stringType.createStringLiteral([stringEscape(json)])
             ),
             "] = ",
-            this._stringType.wrapEncodingChange([ourQualifier], cppType, toType, ["x.", getter]),
-            ";"
+            this._stringType.wrapEncodingChange(
+              [ourQualifier],
+              cppType,
+              toType,
+              ["x.", getter]
+            ),
+            ";",
           ];
           if (p.isOptional && this._options.hideNullOptional) {
             this.emitBlock(
               [
                 "if (",
-                this._stringType.wrapEncodingChange([ourQualifier], cppType, toType, ["x.", getter]),
-                ")"
+                this._stringType.wrapEncodingChange(
+                  [ourQualifier],
+                  cppType,
+                  toType,
+                  ["x.", getter]
+                ),
+                ")",
               ],
               false,
               () => {
@@ -315,8 +374,9 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
   }
 
   protected emitUserNamespaceImpls() {
-    this.forEachObject("leading-and-interposing", (c: ClassType, className: Name) =>
-      this.emitClassFunctions(c, className)
+    this.forEachObject(
+      "leading-and-interposing",
+      (c: ClassType, className: Name) => this.emitClassFunctions(c, className)
     );
 
     this.forEachEnum("leading-and-interposing", (e: EnumType, enumName: Name) =>
@@ -334,11 +394,11 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
     inline void to_json(json & j, std::shared_ptr<T> data) {
 
     }
-      `
+      `,
     ]);
 
     const baseTypes = [...new Set(Array.from(this.baseClasses.values()))];
-    baseTypes.forEach(baseType => {
+    baseTypes.forEach((baseType) => {
       this.emitLine([
         `template<> inline std::shared_ptr<${baseType}> from_json<${baseType}>(const json& j) {
           const auto discriminator = j.at("discriminator").get<std::string>();
@@ -348,10 +408,12 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
             ptr->discriminator = "${baseType}";
             return ptr;
           }
-          `
+          `,
       ]);
-      const derivedTypes = Array.from(this.baseClasses.entries()).filter(x => x[1] == baseType).map(x => x[0]);
-      derivedTypes.forEach(derivedType =>
+      const derivedTypes = Array.from(this.baseClasses.entries())
+        .filter((x) => x[1] == baseType)
+        .map((x) => x[0]);
+      derivedTypes.forEach((derivedType) =>
         this.emitLine([
           `
           if (discriminator == "${derivedType}") {
@@ -360,33 +422,29 @@ class CustomCPPRenderer extends CPlusPlusRenderer {
             ptr->discriminator = "${derivedType}";
             return ptr;
           }
-          `
+          `,
         ])
       );
-      this.emitLine([
-        `return nullptr; }`
-      ]);
+      this.emitLine([`return nullptr; }`]);
 
       this.emitLine([
         `template<> inline void to_json(json& j, std::shared_ptr<${baseType}> data) {
           if (data->discriminator == "${baseType}") {
             to_json(j, *data.get());
           }
-          `
+          `,
       ]);
 
-      derivedTypes.forEach(derivedType =>
+      derivedTypes.forEach((derivedType) =>
         this.emitLine([
           `
           if (data->discriminator == "${derivedType}") {
             to_json(j, *(${derivedType}*)data.get());
           }
-          `
+          `,
         ])
       );
-      this.emitLine([
-        `}`
-      ]);
+      this.emitLine([`}`]);
     });
   }
 }
