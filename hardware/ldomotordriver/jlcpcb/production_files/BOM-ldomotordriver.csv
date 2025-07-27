@@ -1,0 +1,16 @@
+Comment,Designator,Footprint,LCSC,Quantity
+100nF,C1,C_0402,C1525,1
+10uF,C2,C_0402,C15525,1
+47pF,C3,C_0402,C1567,1
+MB10S,DB1,MBS_L4.7-W3.8-P2.40-LS7.0-TL,C2488,1
+C270629,R1,R_0402,,1
+TestPoint,TP4,TestPoint_THTPad_1.5x1.5mm_Drill0.7mm,,1
+TestPoint,TP2,TestPoint_THTPad_1.5x1.5mm_Drill0.7mm,,1
+TestPoint,TP6,TestPoint_THTPad_1.5x1.5mm_Drill0.7mm,,1
+AMS1117-3.3,U1,SOT-223-3_TabPin2,,1
+TestPoint,TP7,TestPoint_THTPad_1.5x1.5mm_Drill0.7mm,,1
+TestPoint,TP8,TestPoint_THTPad_1.5x1.5mm_Drill0.7mm,,1
+TestPoint,TP3,TestPoint_THTPad_1.5x1.5mm_Drill0.7mm,,1
+TestPoint,TP5,TestPoint_THTPad_1.5x1.5mm_Drill0.7mm,,1
+TestPoint,TP1,TestPoint_THTPad_1.5x1.5mm_Drill0.7mm,,1
+DRV8870DDA,U2,Texas_HTSOP-8-1EP_3.9x4.9mm_P1.27mm_EP2.95x4.9mm_Mask2.4x3.1mm_ThermalVias,,1
