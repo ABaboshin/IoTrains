@@ -33,3 +33,8 @@ The train's STL files are licensed under CC BY-NC-SA 4.0.
   - face
  - esp32c3 - 25x19x4.3mm
  - motor driver - 20x24x7 mm
+
+22 mm max
+power lines 0.6mm
+mounting holes
+usb breakout?

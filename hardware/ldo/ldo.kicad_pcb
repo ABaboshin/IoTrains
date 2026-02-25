@@ -2639,7 +2639,7 @@
 			(size 1.1 1.9)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.227273)
-			(uuid "f22b8c9f-dc86-4b02-9d8c-b634f241fbbd")
+			(uuid "a4e02a30-328b-4401-8528-62e8865595b9")
 		)
 		(embedded_fonts no)
 		(model "${KICAD9_3DMODEL_DIR}/Connector_JST.3dshapes/JST_ZH_S2B-ZR-SM4A-TF_1x02-1MP_P1.50mm_Horizontal.step"
@@ -3066,7 +3066,7 @@
 			(size 1.1 1.9)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.227273)
-			(uuid "2e1ecf29-b2b4-492f-82c4-8b82e13558e3")
+			(uuid "8257b49f-ab08-48da-843d-0b3fb762fbc5")
 		)
 		(embedded_fonts no)
 		(model "${KICAD9_3DMODEL_DIR}/Connector_JST.3dshapes/JST_ZH_S2B-ZR-SM4A-TF_1x02-1MP_P1.50mm_Horizontal.step"
@@ -3493,7 +3493,7 @@
 			(size 1.1 1.9)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.227273)
-			(uuid "7f2be777-b1bd-49e4-b6d4-ca915a839ad1")
+			(uuid "a340f838-c99e-4c81-aaaf-ba3e7f1b67cf")
 		)
 		(embedded_fonts no)
 		(model "${KICAD9_3DMODEL_DIR}/Connector_JST.3dshapes/JST_ZH_S2B-ZR-SM4A-TF_1x02-1MP_P1.50mm_Horizontal.step"
