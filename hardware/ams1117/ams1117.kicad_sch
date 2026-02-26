@@ -1295,12 +1295,6 @@
 		(color 0 0 0 0)
 		(uuid "b172d2d5-def4-4a55-98f4-f1402df8a975")
 	)
-	(junction
-		(at 101.6 54.61)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "d503acd7-267b-4c54-8546-7536b66af5b9")
-	)
 	(wire
 		(pts
 			(xy 100.33 153.67) (xy 100.33 142.24)
@@ -1420,16 +1414,6 @@
 			(type default)
 		)
 		(uuid "510a216c-d8ce-4771-ad10-1970f27885ad")
-	)
-	(wire
-		(pts
-			(xy 115.57 54.61) (xy 101.6 54.61)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5251a2a2-ff9c-44ef-a724-717882643b32")
 	)
 	(wire
 		(pts
@@ -1573,26 +1557,6 @@
 	)
 	(wire
 		(pts
-			(xy 115.57 41.91) (xy 115.57 54.61)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "90e4464f-7b2f-49ed-ba3b-56b80ff2c2a2")
-	)
-	(wire
-		(pts
-			(xy 101.6 39.37) (xy 115.57 39.37)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9652c86a-c5fc-4dbc-b72a-7a3eedbec253")
-	)
-	(wire
-		(pts
 			(xy 153.67 33.02) (xy 140.97 33.02)
 		)
 		(stroke
@@ -1663,16 +1627,6 @@
 	)
 	(wire
 		(pts
-			(xy 153.67 40.64) (xy 144.78 40.64)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ca7688a5-7b5a-4d61-9c3c-1e3db43eb66f")
-	)
-	(wire
-		(pts
 			(xy 64.77 54.61) (xy 72.39 54.61)
 		)
 		(stroke
@@ -1740,6 +1694,73 @@
 			(type default)
 		)
 		(uuid "e586bc0f-da79-4217-837c-2fb6592d1c1c")
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 115.57 41.91 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "0caf459d-ec95-4206-ade0-8592b09fb442")
+		(property "Reference" "#PWR09"
+			(at 109.22 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 111.76 41.9099 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 115.57 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 115.57 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+			(at 115.57 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "706f796f-76b9-4089-96b9-f8d25dc6d45a")
+		)
+		(instances
+			(project "ams1117"
+				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
+					(reference "#PWR09")
+					(unit 1)
+				)
+			)
+		)
 	)
 	(symbol
 		(lib_id "Diode_Bridge:ABS2")
@@ -1977,6 +1998,72 @@
 			(project ""
 				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
 					(reference "U1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:VCC")
+		(at 115.57 39.37 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "39a973e5-c7bc-4356-bd73-a97c2d769086")
+		(property "Reference" "#PWR07"
+			(at 119.38 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "VCC"
+			(at 114.3 36.83 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 115.57 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 115.57 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"VCC\""
+			(at 115.57 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c061e012-ad47-48d1-8195-a91de8094a1b")
+		)
+		(instances
+			(project "ams1117"
+				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
+					(reference "#PWR07")
 					(unit 1)
 				)
 			)
@@ -2827,7 +2914,7 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_01x02")
-		(at 158.75 38.1 0)
+		(at 120.65 31.75 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2836,7 +2923,7 @@
 		(fields_autoplaced yes)
 		(uuid "b60d3f90-730d-4859-b934-a223a89a5597")
 		(property "Reference" "J5"
-			(at 161.29 38.0999 0)
+			(at 123.19 31.7499 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2845,7 +2932,7 @@
 			)
 		)
 		(property "Value" "Conn_01x02"
-			(at 161.29 40.6399 0)
+			(at 123.19 34.2899 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2854,7 +2941,7 @@
 			)
 		)
 		(property "Footprint" "Connector_JST:JST_ZH_S2B-ZR-SM4A-TF_1x02-1MP_P1.50mm_Horizontal"
-			(at 158.75 38.1 0)
+			(at 120.65 31.75 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2863,7 +2950,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 158.75 38.1 0)
+			(at 120.65 31.75 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2872,7 +2959,7 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 158.75 38.1 0)
+			(at 120.65 31.75 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2881,7 +2968,7 @@
 			)
 		)
 		(property "LCSC" "C157930"
-			(at 158.75 38.1 0)
+			(at 120.65 31.75 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2985,7 +3072,7 @@
 	)
 	(symbol
 		(lib_id "power:VCC")
-		(at 144.78 40.64 180)
+		(at 115.57 31.75 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2994,7 +3081,7 @@
 		(fields_autoplaced yes)
 		(uuid "e8077dcb-41ba-4658-91d7-3e8c7d0fac7f")
 		(property "Reference" "#PWR06"
-			(at 144.78 36.83 0)
+			(at 119.38 31.75 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3003,7 +3090,7 @@
 			)
 		)
 		(property "Value" "VCC"
-			(at 144.78 45.72 0)
+			(at 114.3 29.21 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3011,7 +3098,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 144.78 40.64 0)
+			(at 115.57 31.75 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3020,7 +3107,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 144.78 40.64 0)
+			(at 115.57 31.75 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3029,7 +3116,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"VCC\""
-			(at 144.78 40.64 0)
+			(at 115.57 31.75 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3051,7 +3138,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 153.67 38.1 270)
+		(at 115.57 34.29 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3060,7 +3147,7 @@
 		(fields_autoplaced yes)
 		(uuid "e8c83b2d-6f8b-4c16-a128-5c8d8cd000cf")
 		(property "Reference" "#PWR08"
-			(at 147.32 38.1 0)
+			(at 109.22 34.29 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3069,7 +3156,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 149.86 38.0999 90)
+			(at 111.76 34.2899 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3078,7 +3165,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 153.67 38.1 0)
+			(at 115.57 34.29 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3087,7 +3174,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 153.67 38.1 0)
+			(at 115.57 34.29 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3096,7 +3183,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 153.67 38.1 0)
+			(at 115.57 34.29 0)
 			(effects
 				(font
 					(size 1.27 1.27)
