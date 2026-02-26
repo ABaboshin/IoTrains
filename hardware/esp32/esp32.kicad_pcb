@@ -213,6 +213,18 @@
 				)
 			)
 		)
+		(property "LCSC" "C231329"
+			(at 0 0 0)
+			(layer "F.SilkS")
+			(hide yes)
+			(uuid "519c89a3-2c15-43b6-a5ec-ae57af5c716c")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(path "/261687ca-5d01-45ea-b714-9ad6210ee1c1")
 		(sheetname "/")
 		(sheetfile "esp32.kicad_sch")
@@ -890,6 +902,18 @@
 				)
 			)
 		)
+		(property "LCSC" "C25744"
+			(at 0 0 0)
+			(layer "F.SilkS")
+			(hide yes)
+			(uuid "4e8efcf5-5ccb-404c-9822-7108d92efdc7")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
 		(property ki_fp_filters "R_*")
 		(path "/6fce11fe-dc54-480a-bdba-1107d1645f2a")
 		(sheetname "/")
@@ -1077,6 +1101,18 @@
 			(effects
 				(font
 					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "LCSC" "C2913206"
+			(at 0 0 0)
+			(layer "F.SilkS")
+			(hide yes)
+			(uuid "9c775d75-95bf-4558-840c-675322da2a2d")
+			(effects
+				(font
+					(size 1.27 1.27)
 					(thickness 0.15)
 				)
 			)
@@ -2634,7 +2670,7 @@
 			(size 0.9 1.7)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.25)
-			(uuid "3ce16ece-e7ba-49fe-9ca1-141bdc9f3b97")
+			(uuid "c6dca1fe-bc81-46de-8bfb-8710e303e2c4")
 		)
 		(embedded_fonts no)
 		(model "${KICAD9_3DMODEL_DIR}/Connector_JST.3dshapes/JST_SHL_SM02B-SHLS-TF_1x02-1MP_P1.00mm_Horizontal.step"
@@ -2696,6 +2732,18 @@
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "d51d9998-d2f3-4f90-9548-67c84eda7bff")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "LCSC" "C233435"
+			(at 0 0 0)
+			(layer "F.SilkS")
+			(hide yes)
+			(uuid "0120b664-cbe4-4e83-8b43-2238d43abb11")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3049,6 +3097,18 @@
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "16c65cca-d030-4d85-a9c1-1d82842fc630")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "LCSC" "C233435"
+			(at 0 0 0)
+			(layer "F.SilkS")
+			(hide yes)
+			(uuid "082c5d59-837b-49a0-8496-22374650f3d7")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3563,6 +3623,18 @@
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "973efc56-4fd1-44a0-a721-71ab9ce7bfa1")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "LCSC" "C231329"
+			(at 0 0 0)
+			(layer "F.SilkS")
+			(hide yes)
+			(uuid "eeaaf3ff-8e35-4b9c-94ba-6901ebbbc6e7")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4508,6 +4580,18 @@
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "b3785484-49ac-43a2-8ccb-d26a5b05746a")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "LCSC" "C15849"
+			(at 0 0 0)
+			(layer "F.SilkS")
+			(hide yes)
+			(uuid "6cf6c175-113d-4817-a9fb-54085efff16d")
 			(effects
 				(font
 					(size 1.27 1.27)
