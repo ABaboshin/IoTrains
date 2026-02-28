@@ -34,7 +34,5 @@ The train's STL files are licensed under CC BY-NC-SA 4.0.
  - esp32c3 - 25x19x4.3mm
  - motor driver - 20x24x7 mm
 
-22 mm max
-power lines 0.6mm
-mounting holes
-usb breakout?
+ - tlc5940
+ - https://www.youtube.com/watch?v=EdEwRXiQsfc + https://github.com/MakersFunDuck/Ducky-Board-ESP32-S3
