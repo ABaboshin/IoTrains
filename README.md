@@ -35,4 +35,4 @@ The train's STL files are licensed under CC BY-NC-SA 4.0.
  - motor driver - 20x24x7 mm
 
  - tlc5940
- - https://www.youtube.com/watch?v=EdEwRXiQsfc + https://github.com/MakersFunDuck/Ducky-Board-ESP32-S3
+ - https://www.youtube.com/watch?v=EdEwRXiQsfc + https://github.com/MakersFunDuck/Ducky-Board-ESP32-S3https://github.com/MakersFunDuck/Ducky-Board-ESP32-S3
