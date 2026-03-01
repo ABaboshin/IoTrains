@@ -5002,7 +5002,7 @@
 	(segment
 		(start 114.5 67)
 		(end 116 65.5)
-		(width 0.1524)
+		(width 0.5)
 		(layer "F.Cu")
 		(net 1)
 		(uuid "5c1a6ccc-273a-4d42-a17a-d32159d283dc")
@@ -5066,7 +5066,7 @@
 	(segment
 		(start 116 65.5)
 		(end 116.5 65.5)
-		(width 0.1524)
+		(width 0.5)
 		(layer "F.Cu")
 		(net 1)
 		(uuid "9df638c3-85ba-4cbb-9c35-576e4f4c7d68")
