@@ -5,27 +5,24 @@
 	(uuid "9d64b1b8-57eb-4218-8a7c-add3e4ef813a")
 	(paper "A4")
 	(lib_symbols
-		(symbol "Connector:TestPoint"
-			(pin_numbers
-				(hide yes)
-			)
+		(symbol "Connector_Generic:Conn_01x01"
 			(pin_names
-				(offset 0.762)
+				(offset 1.016)
 				(hide yes)
 			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "TP"
-				(at 0 6.858 0)
+			(property "Reference" "J"
+				(at 0 2.54 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
 				)
 			)
-			(property "Value" "TestPoint"
-				(at 0 5.08 0)
+			(property "Value" "Conn_01x01"
+				(at 0 -2.54 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -33,7 +30,7 @@
 				)
 			)
 			(property "Footprint" ""
-				(at 5.08 0 0)
+				(at 0 0 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -42,15 +39,6 @@
 				)
 			)
 			(property "Datasheet" "~"
-				(at 5.08 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "test point"
 				(at 0 0 0)
 				(effects
 					(font
@@ -59,7 +47,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_keywords" "test point tp"
+			(property "Description" "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)"
 				(at 0 0 0)
 				(effects
 					(font
@@ -68,7 +56,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_fp_filters" "Pin* Test*"
+			(property "ki_keywords" "connector"
 				(at 0 0 0)
 				(effects
 					(font
@@ -77,24 +65,42 @@
 					(hide yes)
 				)
 			)
-			(symbol "TestPoint_0_1"
-				(circle
-					(center 0 3.302)
-					(radius 0.762)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Conn_01x01_1_1"
+				(rectangle
+					(start -1.27 1.27)
+					(end 1.27 -1.27)
 					(stroke
-						(width 0)
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(rectangle
+					(start -1.27 0.127)
+					(end 0 -0.127)
+					(stroke
+						(width 0.1524)
 						(type default)
 					)
 					(fill
 						(type none)
 					)
 				)
-			)
-			(symbol "TestPoint_1_1"
 				(pin passive line
-					(at 0 0 90)
-					(length 2.54)
-					(name "1"
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_1"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2207,17 +2213,17 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 157.48 66.04 270)
+		(lib_id "Connector_Generic:Conn_01x01")
+		(at 162.56 66.04 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "0afc4509-5121-407d-9c12-d67a3979d933")
-		(property "Reference" "TP6"
-			(at 162.56 64.7699 90)
+		(uuid "1298fb1a-3100-4759-bb5a-e2bbcc3858f5")
+		(property "Reference" "J8"
+			(at 165.1 64.7699 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2225,8 +2231,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TestPoint"
-			(at 162.56 67.3099 90)
+		(property "Value" "Conn_01x01"
+			(at 165.1 67.3099 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2234,8 +2240,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 157.48 71.12 0)
+		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+			(at 162.56 66.04 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2244,7 +2250,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 157.48 71.12 0)
+			(at 162.56 66.04 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2252,8 +2258,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "test point"
-			(at 157.48 66.04 0)
+		(property "Description" "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 162.56 66.04 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2262,29 +2268,29 @@
 			)
 		)
 		(pin "1"
-			(uuid "44b0ad44-ef13-46a9-b477-f23f8b5babbf")
+			(uuid "97812dc2-3cf5-48cc-be86-5424cc6c5b42")
 		)
 		(instances
 			(project "tlc5940"
 				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
-					(reference "TP6")
+					(reference "J8")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 157.48 63.5 270)
+		(lib_id "Connector_Generic:Conn_01x01")
+		(at 162.56 76.2 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "21c247ba-0d17-4853-af5f-42b24f253148")
-		(property "Reference" "TP5"
-			(at 162.56 62.2299 90)
+		(uuid "17497c2e-f891-42ae-930c-d95265e2e148")
+		(property "Reference" "J12"
+			(at 165.1 74.9299 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2292,8 +2298,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TestPoint"
-			(at 162.56 64.7699 90)
+		(property "Value" "Conn_01x01"
+			(at 165.1 77.4699 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2301,8 +2307,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 157.48 68.58 0)
+		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+			(at 162.56 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2311,7 +2317,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 157.48 68.58 0)
+			(at 162.56 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2319,8 +2325,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "test point"
-			(at 157.48 63.5 0)
+		(property "Description" "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 162.56 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2329,12 +2335,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "72ea71a7-d5f7-4194-b829-48a90dcc7b0c")
+			(uuid "d7c4bc39-1a23-41e3-b744-45d1779a843c")
 		)
 		(instances
 			(project "tlc5940"
 				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
-					(reference "TP5")
+					(reference "J12")
 					(unit 1)
 				)
 			)
@@ -2408,17 +2414,17 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 157.48 71.12 270)
+		(lib_id "Connector_Generic:Conn_01x01")
+		(at 162.56 68.58 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "29c563de-a2a0-4dd8-8a02-2380ad54240c")
-		(property "Reference" "TP8"
-			(at 162.56 69.8499 90)
+		(uuid "25b0e226-11d8-44bb-b917-0c4b56c580c9")
+		(property "Reference" "J9"
+			(at 165.1 67.3099 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2426,8 +2432,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TestPoint"
-			(at 162.56 72.3899 90)
+		(property "Value" "Conn_01x01"
+			(at 165.1 69.8499 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2435,8 +2441,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 157.48 76.2 0)
+		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+			(at 162.56 68.58 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2445,7 +2451,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 157.48 76.2 0)
+			(at 162.56 68.58 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2453,75 +2459,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "test point"
-			(at 157.48 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "1154ed7d-eb48-4675-bb2d-e32f5f0bc3a1")
-		)
-		(instances
-			(project "tlc5940"
-				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
-					(reference "TP8")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 157.48 68.58 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "2a78b441-bd0f-4935-91d2-511b1f0e9d0c")
-		(property "Reference" "TP7"
-			(at 162.56 67.3099 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 162.56 69.8499 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 157.48 73.66 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 157.48 73.66 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 157.48 68.58 0)
+		(property "Description" "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 162.56 68.58 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2530,12 +2469,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "0415021a-ec65-484a-a692-b95a170ec960")
+			(uuid "b6ced2f6-fefa-4c66-8e4e-169ce21bc86a")
 		)
 		(instances
 			(project "tlc5940"
 				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
-					(reference "TP7")
+					(reference "J9")
 					(unit 1)
 				)
 			)
@@ -2608,17 +2547,17 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 157.48 78.74 270)
+		(lib_id "Connector_Generic:Conn_01x01")
+		(at 162.56 81.28 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "3010a3bc-0fc1-4d61-820a-2d69229680e6")
-		(property "Reference" "TP11"
-			(at 162.56 77.4699 90)
+		(uuid "35257b85-5e18-49de-a862-75eff64b2470")
+		(property "Reference" "J14"
+			(at 165.1 80.0099 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2626,8 +2565,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TestPoint"
-			(at 162.56 80.0099 90)
+		(property "Value" "Conn_01x01"
+			(at 165.1 82.5499 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2635,8 +2574,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 157.48 83.82 0)
+		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+			(at 162.56 81.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2645,7 +2584,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 157.48 83.82 0)
+			(at 162.56 81.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2653,8 +2592,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "test point"
-			(at 157.48 78.74 0)
+		(property "Description" "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 162.56 81.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2663,29 +2602,29 @@
 			)
 		)
 		(pin "1"
-			(uuid "5731e444-6c59-45ba-81a4-0e7b34692fc3")
+			(uuid "8171042d-8bb1-4feb-a489-0649283c4015")
 		)
 		(instances
 			(project "tlc5940"
 				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
-					(reference "TP11")
+					(reference "J14")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 157.48 55.88 270)
+		(lib_id "Connector_Generic:Conn_01x01")
+		(at 162.56 63.5 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "4fd0616b-8e2d-4b9a-a5cd-c7c93a31503d")
-		(property "Reference" "TP1"
-			(at 162.56 54.6099 90)
+		(uuid "3d7ead28-758c-4efe-aef0-9de73e981a71")
+		(property "Reference" "J7"
+			(at 165.1 62.2299 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2693,8 +2632,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TestPoint"
-			(at 162.56 57.1499 90)
+		(property "Value" "Conn_01x01"
+			(at 165.1 64.7699 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2702,8 +2641,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 157.48 60.96 0)
+		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+			(at 162.56 63.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2712,7 +2651,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 157.48 60.96 0)
+			(at 162.56 63.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2720,8 +2659,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "test point"
-			(at 157.48 55.88 0)
+		(property "Description" "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 162.56 63.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2730,12 +2669,79 @@
 			)
 		)
 		(pin "1"
-			(uuid "6d6bb56c-d2d4-4828-8a1c-ec980f32cb85")
+			(uuid "ae08ae7d-8c67-4efc-b29c-f48167138165")
 		)
 		(instances
 			(project "tlc5940"
 				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
-					(reference "TP1")
+					(reference "J7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x01")
+		(at 162.56 88.9 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "5cf7a4a3-da4e-4d28-a1b0-a186d4cfbbf1")
+		(property "Reference" "J17"
+			(at 165.1 87.6299 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Conn_01x01"
+			(at 165.1 90.1699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+			(at 162.56 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 162.56 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 162.56 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0501e1ae-6896-40c8-bee5-5624e535f59d")
+		)
+		(instances
+			(project "tlc5940"
+				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
+					(reference "J17")
 					(unit 1)
 				)
 			)
@@ -2802,73 +2808,6 @@
 			(project "tlc5940"
 				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
 					(reference "#PWR01")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 157.48 83.82 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "6de1706a-bc0e-493a-b11d-e450df3aaa28")
-		(property "Reference" "TP13"
-			(at 162.56 82.5499 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 162.56 85.0899 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 157.48 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 157.48 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 157.48 83.82 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "9d34703b-487e-4953-a6f8-f2396cc34f09")
-		)
-		(instances
-			(project "tlc5940"
-				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
-					(reference "TP13")
 					(unit 1)
 				)
 			)
@@ -2944,17 +2883,17 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 157.48 88.9 270)
+		(lib_id "Connector_Generic:Conn_01x01")
+		(at 162.56 91.44 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "742d173d-7e16-4e15-8dbb-f523d26e2735")
-		(property "Reference" "TP15"
-			(at 162.56 87.6299 90)
+		(uuid "76700551-c07e-432a-9636-0b926fa3f204")
+		(property "Reference" "J18"
+			(at 165.1 90.1699 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2962,8 +2901,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TestPoint"
-			(at 162.56 90.1699 90)
+		(property "Value" "Conn_01x01"
+			(at 165.1 92.7099 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2971,8 +2910,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 157.48 93.98 0)
+		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+			(at 162.56 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2981,7 +2920,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 157.48 93.98 0)
+			(at 162.56 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2989,8 +2928,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "test point"
-			(at 157.48 88.9 0)
+		(property "Description" "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 162.56 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2999,12 +2938,213 @@
 			)
 		)
 		(pin "1"
-			(uuid "2e5f405c-4e31-4172-a4c9-47a1101ac71d")
+			(uuid "a95f2ca9-10f6-40ee-98fc-2811f85814f5")
 		)
 		(instances
 			(project "tlc5940"
 				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
-					(reference "TP15")
+					(reference "J18")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x01")
+		(at 162.56 55.88 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "78f756ca-2e0b-48ee-bec3-774cf1e25f11")
+		(property "Reference" "J2"
+			(at 165.1 54.6099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Conn_01x01"
+			(at 165.1 57.1499 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+			(at 162.56 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 162.56 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 162.56 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2db19a1f-74b3-4c2e-a96d-e1d552c338ff")
+		)
+		(instances
+			(project "tlc5940"
+				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
+					(reference "J2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x01")
+		(at 162.56 73.66 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7acd24e1-74d3-431d-835f-702ba8619c09")
+		(property "Reference" "J11"
+			(at 165.1 72.3899 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Conn_01x01"
+			(at 165.1 74.9299 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+			(at 162.56 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 162.56 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 162.56 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "fa1bbdd2-e746-4df2-b36f-50c39edd403d")
+		)
+		(instances
+			(project "tlc5940"
+				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
+					(reference "J11")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x01")
+		(at 162.56 78.74 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "863ddb02-aa96-4a65-b21e-283dad64d0b5")
+		(property "Reference" "J13"
+			(at 165.1 77.4699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Conn_01x01"
+			(at 165.1 80.0099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+			(at 162.56 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 162.56 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 162.56 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "ee5f9450-6853-4b1a-b424-2bb7e00ab2df")
+		)
+		(instances
+			(project "tlc5940"
+				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
+					(reference "J13")
 					(unit 1)
 				)
 			)
@@ -3107,17 +3247,17 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 157.48 91.44 270)
+		(lib_id "Connector_Generic:Conn_01x01")
+		(at 162.56 53.34 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "94657681-af61-412f-b84e-fdd550a225f3")
-		(property "Reference" "TP16"
-			(at 162.56 90.1699 90)
+		(uuid "9469a0f8-80c3-410b-a219-5030984ad69a")
+		(property "Reference" "J6"
+			(at 165.1 52.0699 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3125,8 +3265,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TestPoint"
-			(at 162.56 92.7099 90)
+		(property "Value" "Conn_01x01"
+			(at 165.1 54.6099 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3134,8 +3274,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 157.48 96.52 0)
+		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+			(at 162.56 53.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3144,7 +3284,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 157.48 96.52 0)
+			(at 162.56 53.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3152,75 +3292,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "test point"
-			(at 157.48 91.44 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "5a3d4d50-cb7a-40de-af70-2f991e68b30b")
-		)
-		(instances
-			(project "tlc5940"
-				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
-					(reference "TP16")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 157.48 81.28 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "96b91b06-ad97-45a8-bd8a-a2e0987fb6de")
-		(property "Reference" "TP12"
-			(at 162.56 80.0099 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 162.56 82.5499 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 157.48 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 157.48 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 157.48 81.28 0)
+		(property "Description" "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 162.56 53.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3229,12 +3302,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "03cfb9c2-e9a9-49ba-90a1-648d6910b521")
+			(uuid "5671a1a0-8499-4282-b8b1-b4462e9eb11b")
 		)
 		(instances
 			(project "tlc5940"
 				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
-					(reference "TP12")
+					(reference "J6")
 					(unit 1)
 				)
 			)
@@ -3307,17 +3380,17 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 157.48 60.96 270)
+		(lib_id "Connector_Generic:Conn_01x01")
+		(at 162.56 86.36 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "afaf1fb4-8016-48ef-acab-358cdac7dbd1")
-		(property "Reference" "TP4"
-			(at 162.56 59.6899 90)
+		(uuid "a8bd9b71-4985-4bbd-b58b-15919d7fb0b3")
+		(property "Reference" "J16"
+			(at 165.1 85.0899 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3325,8 +3398,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TestPoint"
-			(at 162.56 62.2299 90)
+		(property "Value" "Conn_01x01"
+			(at 165.1 87.6299 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3334,8 +3407,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 157.48 66.04 0)
+		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+			(at 162.56 86.36 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3344,7 +3417,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 157.48 66.04 0)
+			(at 162.56 86.36 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3352,75 +3425,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "test point"
-			(at 157.48 60.96 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "d823482c-8967-4e57-bc7f-21b758339811")
-		)
-		(instances
-			(project "tlc5940"
-				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
-					(reference "TP4")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 157.48 58.42 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "afcde790-a418-4696-9437-bc3495affccb")
-		(property "Reference" "TP2"
-			(at 162.56 57.1499 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 162.56 59.6899 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 157.48 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 157.48 63.5 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 157.48 58.42 0)
+		(property "Description" "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 162.56 86.36 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3429,12 +3435,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "89d52009-ee80-4d95-8412-000ceeaf789d")
+			(uuid "0b6f20ff-880d-40d5-9d8c-f9010ac41783")
 		)
 		(instances
 			(project "tlc5940"
 				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
-					(reference "TP2")
+					(reference "J16")
 					(unit 1)
 				)
 			)
@@ -3587,17 +3593,17 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 157.48 76.2 270)
+		(lib_id "Connector_Generic:Conn_01x01")
+		(at 162.56 58.42 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "c78768f3-5b9e-49d1-a2f6-5c34702a7314")
-		(property "Reference" "TP10"
-			(at 162.56 74.9299 90)
+		(uuid "c17b08e7-0e08-45f2-aebe-78e2ee9d30d9")
+		(property "Reference" "J3"
+			(at 165.1 57.1499 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3605,8 +3611,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TestPoint"
-			(at 162.56 77.4699 90)
+		(property "Value" "Conn_01x01"
+			(at 165.1 59.6899 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3614,8 +3620,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 157.48 81.28 0)
+		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+			(at 162.56 58.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3624,7 +3630,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 157.48 81.28 0)
+			(at 162.56 58.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3632,8 +3638,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "test point"
-			(at 157.48 76.2 0)
+		(property "Description" "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 162.56 58.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3642,29 +3648,29 @@
 			)
 		)
 		(pin "1"
-			(uuid "c31842ba-1bb8-4781-b2a3-43bcb2678b53")
+			(uuid "14c51d4a-b161-4087-b158-3b4a497d3ff4")
 		)
 		(instances
 			(project "tlc5940"
 				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
-					(reference "TP10")
+					(reference "J3")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 157.48 73.66 270)
+		(lib_id "Connector_Generic:Conn_01x01")
+		(at 162.56 83.82 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "d691269e-ef55-46a7-b376-7e2f6c52105f")
-		(property "Reference" "TP9"
-			(at 162.56 72.3899 90)
+		(uuid "c1a0fb84-4477-4b20-a6d7-9adb43e5fe41")
+		(property "Reference" "J15"
+			(at 165.1 82.5499 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3672,8 +3678,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TestPoint"
-			(at 162.56 74.9299 90)
+		(property "Value" "Conn_01x01"
+			(at 165.1 85.0899 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3681,8 +3687,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 157.48 78.74 0)
+		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+			(at 162.56 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3691,7 +3697,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 157.48 78.74 0)
+			(at 162.56 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3699,8 +3705,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "test point"
-			(at 157.48 73.66 0)
+		(property "Description" "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 162.56 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3709,12 +3715,79 @@
 			)
 		)
 		(pin "1"
-			(uuid "075f9f47-5b12-4774-b49e-c6829ad61ee2")
+			(uuid "b7538e39-0388-4331-9dc3-a40464fad956")
 		)
 		(instances
 			(project "tlc5940"
 				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
-					(reference "TP9")
+					(reference "J15")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x01")
+		(at 162.56 60.96 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d351ff5a-e306-4001-9494-8606c7895090")
+		(property "Reference" "J4"
+			(at 165.1 59.6899 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Conn_01x01"
+			(at 165.1 62.2299 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+			(at 162.56 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 162.56 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 162.56 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "e2f934f3-2f7e-4b2e-9bf5-90c521ed6838")
+		)
+		(instances
+			(project "tlc5940"
+				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
+					(reference "J4")
 					(unit 1)
 				)
 			)
@@ -3787,17 +3860,17 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 157.48 53.34 270)
+		(lib_id "Connector_Generic:Conn_01x01")
+		(at 162.56 71.12 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "e33fd754-9f9a-4a96-8921-ffdd8dd2ca22")
-		(property "Reference" "TP3"
-			(at 162.56 52.0699 90)
+		(uuid "de45a5cd-c38a-4fa4-971d-62d1f371a636")
+		(property "Reference" "J10"
+			(at 165.1 69.8499 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3805,8 +3878,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TestPoint"
-			(at 162.56 54.6099 90)
+		(property "Value" "Conn_01x01"
+			(at 165.1 72.3899 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3814,8 +3887,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 157.48 58.42 0)
+		(property "Footprint" "Connector_PinHeader_1.00mm:PinHeader_1x01_P1.00mm_Vertical"
+			(at 162.56 71.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3824,7 +3897,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 157.48 58.42 0)
+			(at 162.56 71.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3832,8 +3905,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "test point"
-			(at 157.48 53.34 0)
+		(property "Description" "Generic connector, single row, 01x01, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 162.56 71.12 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3842,12 +3915,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "974c7930-52f8-420a-b1b2-cb0329bffd64")
+			(uuid "875c605c-00be-4885-b2d1-2d42b2abb319")
 		)
 		(instances
 			(project "tlc5940"
 				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
-					(reference "TP3")
+					(reference "J10")
 					(unit 1)
 				)
 			)
@@ -3995,73 +4068,6 @@
 			(project ""
 				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
 					(reference "J1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 157.48 86.36 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "ee528124-24a3-4a7f-ac27-2b1544629125")
-		(property "Reference" "TP14"
-			(at 162.56 85.0899 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 162.56 87.6299 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Pad_1.0x1.0mm"
-			(at 157.48 91.44 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 157.48 91.44 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 157.48 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "8096056f-ea2f-426b-8485-40467468c3c0")
-		)
-		(instances
-			(project "tlc5940"
-				(path "/9d64b1b8-57eb-4218-8a7c-add3e4ef813a"
-					(reference "TP14")
 					(unit 1)
 				)
 			)
