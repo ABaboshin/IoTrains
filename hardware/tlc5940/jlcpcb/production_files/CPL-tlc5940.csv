@@ -1,0 +1,22 @@
+Designator,Val,Package,Mid X,Mid Y,Rotation,Layer
+C18,10u,C_0603_1608Metric,112.0,-63.775,-90.0,top
+J10,Conn_01x01,PinHeader_1x01_P1.00mm_Vertical,108.0,-77.5,0.0,top
+J11,Conn_01x01,PinHeader_1x01_P1.00mm_Vertical,112.0,-77.5,0.0,top
+J12,Conn_01x01,PinHeader_1x01_P1.00mm_Vertical,114.5,-77.5,0.0,top
+J13,Conn_01x01,PinHeader_1x01_P1.00mm_Vertical,117.0,-77.5,0.0,top
+J14,Conn_01x01,PinHeader_1x01_P1.00mm_Vertical,117.0,-75.0,0.0,top
+J15,Conn_01x01,PinHeader_1x01_P1.00mm_Vertical,117.0,-73.0,0.0,top
+J16,Conn_01x01,PinHeader_1x01_P1.00mm_Vertical,117.0,-71.0,0.0,top
+J17,Conn_01x01,PinHeader_1x01_P1.00mm_Vertical,117.0,-69.0,0.0,top
+J18,Conn_01x01,PinHeader_1x01_P1.00mm_Vertical,117.0,-67.0,0.0,top
+J19,Conn_01x08,JST_SHL_SM08B-SHLS-TF_1x08-1MP_P1.00mm_Horizontal,104.45,-58.0,180.0,top
+J2,Conn_01x01,PinHeader_1x01_P1.00mm_Vertical,100.5,-71.5,0.0,top
+J3,Conn_01x01,PinHeader_1x01_P1.00mm_Vertical,100.5,-73.5,0.0,top
+J4,Conn_01x01,PinHeader_1x01_P1.00mm_Vertical,100.5,-75.5,0.0,top
+J5,Conn_01x02,JST_ZH_S2B-ZR-SM4A-TF_1x02-1MP_P1.50mm_Horizontal,114.2,-58.55,180.0,top
+J6,Conn_01x01,PinHeader_1x01_P1.00mm_Vertical,100.5,-69.5,0.0,top
+J7,Conn_01x01,PinHeader_1x01_P1.00mm_Vertical,100.5,-77.5,0.0,top
+J8,Conn_01x01,PinHeader_1x01_P1.00mm_Vertical,103.0,-77.5,0.0,top
+J9,Conn_01x01,PinHeader_1x01_P1.00mm_Vertical,105.5,-77.5,0.0,top
+R2,1.92k,R_0402_1005Metric,115.0,-66.01,-90.0,top
+U1,TLC5940PWP,HTSSOP-28-1EP_4.4x9.7mm_P0.65mm_EP3.4x9.5mm_Mask2.4x6.17mm_ThermalVias,109.15,-70.775,0.0,top
