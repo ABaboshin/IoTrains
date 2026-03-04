@@ -3549,7 +3549,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_SHL_SM10B-SHLS-TF_1x10-1MP_P1.00mm_Horizontal"
+		(property "Footprint" "LIB_SM10B-SRSS-TB_LF__SN_:SM10B-SRSS-TB"
 			(at 147.32 121.92 0)
 			(effects
 				(font
@@ -3568,6 +3568,15 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x10, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 147.32 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C160409"
 			(at 147.32 121.92 0)
 			(effects
 				(font
@@ -5033,7 +5042,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_ZH_S2B-ZR-SM4A-TF_1x02-1MP_P1.50mm_Horizontal"
+		(property "Footprint" "LIB_S2B-ZR_LF__SN_:S2BZRLFSN"
 			(at 113.03 55.88 0)
 			(effects
 				(font

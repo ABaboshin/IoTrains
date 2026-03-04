@@ -3,14 +3,14 @@ C17,10u,C_0603_1608Metric,108.275,-67.5,0.0,top
 C18,10u,C_0603_1608Metric,100.5,-69.775,-90.0,top
 C2,100n,C_0402_1005Metric_Pad0.74x0.62mm_HandSolder,107.9825,-69.0,0.0,top
 C3,100nF,C_0603_1608Metric,108.275,-70.5,0.0,top
-D1,1N5817,D_SOD-123,107.0,-75.45,-90.0,top
+D1,1N5817,SOD2613X110N,106.5,-75.675,-90.0,top
 F1,Polyfuse 1A,Fuse_1206_3216Metric,111.0,-76.4,90.0,top
 FB1,BLM21PG220,L_0805_2012Metric,109.0,-76.0625,-90.0,top
 J1,Conn_01x04,PinHeader_1x04_P1.00mm_Vertical,112.5,-80.5,90.0,top
-J2,Conn_01x02,JST_ZH_S2B-ZR-SM4A-TF_1x02-1MP_P1.50mm_Horizontal,99.75,-77.15,0.0,top
+J2,Conn_01x02,S2BZRLFSN,95.5,-69.75,-90.0,top
 J3,Conn_01x02,JST_SHL_SM02B-SHLS-TF_1x02-1MP_P1.00mm_Horizontal,113.45,-68.95,180.0,top
 J4,Conn_01x01,PinHeader_1x01_P1.00mm_Vertical,91.5,-76.0,0.0,top
-J5,Conn_01x02,JST_ZH_S2B-ZR-SM4A-TF_1x02-1MP_P1.50mm_Horizontal,94.85,-69.75,-90.0,top
+J5,Conn_01x02,S2BZRLFSN,99.75,-76.0,0.0,top
 J6,Conn_01x01,PinHeader_1x01_P1.00mm_Vertical,94.5,-76.0,0.0,top
 J7,Conn_01x01,PinHeader_1x01_P1.00mm_Vertical,91.5,-79.0,0.0,top
 J8,Conn_01x01,PinHeader_1x01_P1.00mm_Vertical,94.5,-79.0,0.0,top
