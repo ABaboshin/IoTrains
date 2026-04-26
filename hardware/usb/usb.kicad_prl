@@ -58,7 +58,7 @@
     "ssh_key": ""
   },
   "meta": {
-    "filename": "esp32.kicad_prl",
+    "filename": "usb.kicad_prl",
     "version": 5
   },
   "net_inspector_panel": {
