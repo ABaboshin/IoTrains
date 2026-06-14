@@ -1,4 +1,10 @@
-import { JSONSchema, JSONSchemaAttributes, JSONSchemaType, Ref, TypeAttributeKind } from "quicktype-core";
+import {
+  JSONSchema,
+  JSONSchemaAttributes,
+  JSONSchemaType,
+  Ref,
+  TypeAttributeKind,
+} from "quicktype-core";
 
 class ResponseTypeAttributeKind extends TypeAttributeKind<boolean> {
   constructor() {
@@ -6,7 +12,7 @@ class ResponseTypeAttributeKind extends TypeAttributeKind<boolean> {
   }
 
   combine(attrs: boolean[]): boolean {
-    return attrs.some(x => x);
+    return attrs.some((x) => x);
   }
 
   makeInferred(_: boolean): undefined {

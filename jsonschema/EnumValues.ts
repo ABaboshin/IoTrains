@@ -1,24 +1,43 @@
 // https://github.com/glideapps/quicktype/blob/master/packages/quicktype-core/src/attributes/EnumValues.ts
 import { mapMap } from "collection-utils";
-import { EnumType, JSONSchema, JSONSchemaAttributes, JSONSchemaType, Ref, TypeAttributeKind } from "quicktype-core";
-import { AccessorNames, lookupKey, makeAccessorNames } from "./AccessorNames";
 
+import {
+  type AccessorNames,
+  lookupKey,
+  makeAccessorNames,
+} from "./AccessorNames";
+import { TypeAttributeKind } from "quicktype-core/dist/attributes/TypeAttributes";
+import { EnumType } from "quicktype-core/dist/Type/Type";
+import { JSONSchema } from "quicktype-core/dist/input/JSONSchemaStore";
+import {
+  JSONSchemaAttributes,
+  JSONSchemaType,
+  Ref,
+} from "quicktype-core/dist/input/JSONSchemaInput";
 
 class EnumValuesTypeAttributeKind extends TypeAttributeKind<AccessorNames> {
-  constructor() {
+  public constructor() {
     super("enumValues");
   }
-  makeInferred(_: AccessorNames) {
+
+  public makeInferred(_: AccessorNames): undefined {
     return undefined;
   }
 }
 
-export const enumValuesTypeAttributeKind: TypeAttributeKind<AccessorNames> = new EnumValuesTypeAttributeKind();
+export const enumValuesTypeAttributeKind: TypeAttributeKind<AccessorNames> =
+  new EnumValuesTypeAttributeKind();
 
-export function enumCaseValues(e: EnumType, language: string): Map<string, [string, boolean] | undefined> {
-  const enumValues = enumValuesTypeAttributeKind.tryGetInAttributes(e.getAttributes());
-  if (enumValues === undefined) return mapMap(e.cases.entries(), _ => undefined);
-  return mapMap(e.cases.entries(), c => lookupKey(enumValues, c, language));
+export function enumCaseValues(
+  e: EnumType,
+  language: string
+): Map<string, [string, boolean] | undefined> {
+  const enumValues = enumValuesTypeAttributeKind.tryGetInAttributes(
+    e.getAttributes()
+  );
+  if (enumValues === undefined)
+    return mapMap(e.cases.entries(), (_) => undefined);
+  return mapMap(e.cases.entries(), (c) => lookupKey(enumValues, c, language));
 }
 
 export function enumValuesAttributeProducer(
@@ -32,5 +51,9 @@ export function enumValuesAttributeProducer(
 
   if (maybeEnumValues === undefined) return undefined;
 
-  return { forType: enumValuesTypeAttributeKind.makeAttributes(makeAccessorNames(maybeEnumValues)) };
+  return {
+    forType: enumValuesTypeAttributeKind.makeAttributes(
+      makeAccessorNames(maybeEnumValues)
+    ),
+  };
 }

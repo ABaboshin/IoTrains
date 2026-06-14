@@ -222,41 +222,41 @@ namespace railschema {
 }
 
 namespace railschema {
-    void from_json(const json & j, Capability * x);
-    void to_json(json & j, const Capability * x);
+    void from_json(const json & j, Capability & x);
+    void to_json(json & j, const Capability & x);
 
-    void from_json(const json & j, Device * x);
-    void to_json(json & j, const Device * x);
+    void from_json(const json & j, Device & x);
+    void to_json(json & j, const Device & x);
 
-    void from_json(const json & j, ControlUnit * x);
-    void to_json(json & j, const ControlUnit * x);
+    void from_json(const json & j, ControlUnit & x);
+    void to_json(json & j, const ControlUnit & x);
 
-    void from_json(const json & j, Command * x);
-    void to_json(json & j, const Command * x);
+    void from_json(const json & j, Command & x);
+    void to_json(json & j, const Command & x);
 
-    void from_json(const json & j, State * x);
-    void to_json(json & j, const State * x);
+    void from_json(const json & j, State & x);
+    void to_json(json & j, const State & x);
 
-    void from_json(const json & j, DeviceInfo * x);
-    void to_json(json & j, const DeviceInfo * x);
+    void from_json(const json & j, DeviceInfo & x);
+    void to_json(json & j, const DeviceInfo & x);
 
-    void from_json(const json & j, TrainState * x);
-    void to_json(json & j, const TrainState * x);
+    void from_json(const json & j, TrainState & x);
+    void to_json(json & j, const TrainState & x);
 
-    void from_json(const json & j, Event * x);
-    void to_json(json & j, const Event * x);
+    void from_json(const json & j, Event & x);
+    void to_json(json & j, const Event & x);
 
-    void from_json(const json & j, TrainCommand * x);
-    void to_json(json & j, const TrainCommand * x);
+    void from_json(const json & j, TrainCommand & x);
+    void to_json(json & j, const TrainCommand & x);
 
-    void from_json(const json & j, Mp3Command * x);
-    void to_json(json & j, const Mp3Command * x);
+    void from_json(const json & j, Mp3Command & x);
+    void to_json(json & j, const Mp3Command & x);
 
-    void from_json(const json & j, LightCommand * x);
-    void to_json(json & j, const LightCommand * x);
+    void from_json(const json & j, LightCommand & x);
+    void to_json(json & j, const LightCommand & x);
 
-    void from_json(const json & j, OtaCommand * x);
-    void to_json(json & j, const OtaCommand * x);
+    void from_json(const json & j, OtaCommand & x);
+    void to_json(json & j, const OtaCommand & x);
 
     void from_json(const json & j, CapabilityType & x);
     void to_json(json & j, const CapabilityType & x);
@@ -447,7 +447,7 @@ namespace railschema {
             case CapabilityType::STOP_PLAY: j = "stop_play"; break;
             case CapabilityType::TRAIN: j = "train"; break;
             case CapabilityType::TURNOUT: j = "turnout"; break;
-            default: throw std::runtime_error("This should not happen");
+            default: throw std::runtime_error("Unexpected value in enumeration \"CapabilityType\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -479,7 +479,7 @@ namespace railschema {
             case Function::TURNOUT_POS1: j = "turnout_pos1"; break;
             case Function::TURNOUT_POS2: j = "turnout_pos2"; break;
             case Function::UPDATE: j = "update"; break;
-            default: throw std::runtime_error("This should not happen");
+            default: throw std::runtime_error("Unexpected value in enumeration \"Function\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -495,7 +495,7 @@ namespace railschema {
             case Direction::BACKWARD: j = "backward"; break;
             case Direction::FORWARD: j = "forward"; break;
             case Direction::STOP: j = "stop"; break;
-            default: throw std::runtime_error("This should not happen");
+            default: throw std::runtime_error("Unexpected value in enumeration \"Direction\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -507,7 +507,7 @@ namespace railschema {
     inline void to_json(json & j, const EventType & x) {
         switch (x) {
             case EventType::TRAIN: j = "train"; break;
-            default: throw std::runtime_error("This should not happen");
+            default: throw std::runtime_error("Unexpected value in enumeration \"EventType\": " + std::to_string(static_cast<int>(x)));
         }
     }
     

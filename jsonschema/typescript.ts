@@ -1,4 +1,12 @@
-import { ClassType, Name, RenderContext, TypeScriptRenderer, TypeScriptTargetLanguage, getOptionValues, tsFlowOptions } from "quicktype-core";
+import {
+  ClassType,
+  Name,
+  RenderContext,
+  TypeScriptRenderer,
+  TypeScriptTargetLanguage,
+  getOptionValues,
+  tsFlowOptions,
+} from "quicktype-core";
 import { extendsTypeAttributeKind } from "./extendattribute";
 
 // https://github.com/glideapps/quicktype/blob/master/packages/quicktype-core/src/language/TypeScriptFlow.ts
@@ -20,9 +28,7 @@ export class CustomTypeScriptTargetLanguage extends TypeScriptTargetLanguage {
 // import * as util from 'util'
 
 class CustomTypeScriptRenderer extends TypeScriptRenderer {
-
   protected emitClassBlock(c: ClassType, className: Name): void {
-
     const attributes = c.getAttributes();
     const baseclass = extendsTypeAttributeKind.tryGetInAttributes(attributes);
     const suffix = baseclass !== undefined ? ` extends ${baseclass} ` : "";
@@ -36,32 +42,5 @@ class CustomTypeScriptRenderer extends TypeScriptRenderer {
         this.emitClassBlockBody(c);
       }
     );
-
-    // this.emitBlock(
-    //   ["export class ", className, "Impl implements ", className],
-    //   "",
-    //   () => {
-    //     this.emitLine([`
-    //     constructor(){
-    //     `]);
-    //     this.forEachClassProperty(c, "none", (name, jsonName, p) => {
-    //       console.log(jsonName);
-    //       console.log(util.inspect(name));
-    //       console.log(util.inspect(p));
-    //     });
-    //     // this.emitPropertyTable(c, (name, _jsonName, p) => {
-    //     //   const t = p.type;
-    //     //   this.emitLine([
-    //     //     `this.${modifySource(x => x, name)} = new ${this.sourceFor(t).source}Impl();`
-    //     //   ]);
-
-    //     //   return [
-    //     //   ];
-    //     // });
-    //     this.emitLine([`
-    //     }
-    //     `]);
-    //   }
-    // );
   }
 }
