@@ -10,11 +10,11 @@
     "start": "cd server && npm run start"
   },
   "devDependencies": {
-    "@types/node": "24.1.0",
-    "@types/readable-stream": "4.0.21",
-    "nodemon": "^3.1.10",
+    "@types/node": "25.9.3",
+    "@types/readable-stream": "4.0.23",
+    "nodemon": "^3.1.14",
     "ts-node": "^10.9.2",
-    "typescript": "5.8.3"
+    "typescript": "6.0.3"
   },
   "version": "0.0.1"
 }
