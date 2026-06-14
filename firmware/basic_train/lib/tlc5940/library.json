@@ -1,0 +1,12 @@
+{
+  "name": "tlc5940",
+  "version": "1.0.1-local",
+  "description": "Local fork of TLC5940 driver patched for ESP32-S3 (explicit SPI pins, S3-MINI-safe GPIOs, MISO disabled).",
+  "keywords": "tlc5940, led, spi, esp32s3",
+  "frameworks": ["arduino"],
+  "platforms": ["espressif32"],
+  "build": {
+    "srcDir": "src",
+    "includeDir": "src"
+  }
+}
