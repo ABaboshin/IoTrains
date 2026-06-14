@@ -26,13 +26,4 @@ The train's STL files are licensed under CC BY-NC-SA 4.0.
  - responsive ui / refresh on update
  - process rfid events
  - sqlite3
- - schematic
- - bogie
- - gears
- - 817-814
-  - face
- - esp32c3 - 25x19x4.3mm
- - motor driver - 20x24x7 mm
-
- - tlc5940
- - https://www.youtube.com/watch?v=EdEwRXiQsfc + https://github.com/MakersFunDuck/Ducky-Board-ESP32-S3https://github.com/MakersFunDuck/Ducky-Board-ESP32-S3
+ - main board max 4 x 2.3 c

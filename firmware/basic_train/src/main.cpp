@@ -9,8 +9,16 @@
 // #include "mp3.h"
 #include "ESP32MX1508.h"
 #include "Tlc5940.h"
+#include "ESP32MX1508.h"
 
 ControlUnit cu(wifiNetwork, wifiPassword, mqttServer, mqttClientId, mqttLogin, mqttPassword, 1000 * 5);
+
+inline int calculateSpeed(int speed100)
+{
+  double devider = 255;
+  auto newSpeed = speed100 * devider / 100;
+  return (int)std::abs(newSpeed);
+}
 
 void setup()
 {
@@ -20,34 +28,63 @@ void setup()
 
   for (int i = 0; i < 5; i++)
   {
-  Serial.println("train");
+    Serial.println("train");
     delay(1000);
   }
 
-  Serial.println("init tlc5940");
-  delay(1000);
-  Tlc5940 *tlc = new Tlc5940();
-  tlc->init();
-  Serial.println("init tlc5940 done");
-  delay(1000);
 
-for (int i = 0; i < 10000; i++)
+
+  // pinMode(17, OUTPUT);
+  // pinMode(18, OUTPUT);
+
+  // digitalWrite(17, 1);
+  // digitalWrite(18, 0);
+  // delay(300000);
+
+  MX1508 drv(11, 12, 2, 3);
+  for (int j = 0; j < 10000; j++)
   {
-  Serial.println("led off");
-    for (int j = 0; j < 16; j++)
-    {
-      tlc->set(j, 0);
-    }
-    tlc->update();
-    delay(10000);
-  Serial.println("led on");
-    for (int j = 0; j < 16; j++)
-    {
-      tlc->set(j, 4095);
-    }
-    tlc->update();
-    delay(10000);
+    Serial.println("motor go");
+    drv.motorGo(255);
+
+    delay(3000);
+
+    Serial.println("motor brake");
+    drv.motorBrake();
+    drv.motorBrake();
+    delay(3000);
+    Serial.println("motor reverse");
+    drv.motorRev(255);
+    delay(3000);
+    Serial.println("motor brake");
+    drv.motorBrake();
+    delay(3000);
   }
+
+  // light
+  // Serial.println("init tlc5940");
+  // delay(1000);
+  // Tlc5940 *tlc = new Tlc5940();
+  // tlc->init();
+  // Serial.println("init tlc5940 done");
+  // delay(1000);
+  // for (int i = 0; i < 10000; i++)
+  // {
+  //   Serial.println("led off");
+  //   for (int j = 0; j < 16; j++)
+  //   {
+  //     tlc->set(j, 0);
+  //   }
+  //   tlc->update();
+  //   delay(10000);
+  //   Serial.println("led on");
+  //   for (int j = 0; j < 16; j++)
+  //   {
+  //     tlc->set(j, 4095);
+  //   }
+  //   tlc->update();
+  //   delay(10000);
+  // }
 
   /*
 
