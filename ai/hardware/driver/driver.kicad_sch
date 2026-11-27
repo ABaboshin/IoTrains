@@ -3144,6 +3144,17 @@
 		)
 		(uuid "74182573-3a91-5b96-aae9-82efacc68655")
 	)
+	(text "3V3: 1 GND, 2 +3V3. Only for powering the boards without 12 V."
+		(exclude_from_sim no)
+		(at 300 150 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+			(justify left bottom)
+		)
+		(uuid "830eb61a-806e-5cdf-87c1-a1cb5e875bde")
+	)
 	(text "BDR6133: INA/INB from ESP32 (100k pull-downs keep the motor off during boot)"
 		(exclude_from_sim no)
 		(at 35 105 0)
@@ -3360,6 +3371,16 @@
 			(type default)
 		)
 		(uuid "29573659-c177-5672-b107-248c47ca1455")
+	)
+	(wire
+		(pts
+			(xy 325.12 165.1) (xy 322.58 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3192dc75-c704-5ebe-88f0-99add9991e78")
 	)
 	(wire
 		(pts
@@ -3820,6 +3841,16 @@
 			(type default)
 		)
 		(uuid "ae4d714f-a4b5-5078-82d7-d6e2b65643f5")
+	)
+	(wire
+		(pts
+			(xy 325.12 162.56) (xy 322.58 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "af09af29-aa90-5d1b-8a89-b7b1173c7a41")
 	)
 	(wire
 		(pts
@@ -6315,8 +6346,8 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 66.04 182.88 0)
+		(lib_id "power:+3V3")
+		(at 322.58 165.1 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6326,7 +6357,7 @@
 		(dnp no)
 		(uuid "49a7c557-d4e4-50b5-b464-24823664b42c")
 		(property "Reference" "#PWR029"
-			(at 66.04 180.34 0)
+			(at 322.58 162.56 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6336,8 +6367,8 @@
 				)
 			)
 		)
-		(property "Value" "GND"
-			(at 66.04 185.42 0)
+		(property "Value" "+3V3"
+			(at 322.58 167.64 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6348,7 +6379,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 66.04 182.88 0)
+			(at 322.58 165.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6359,7 +6390,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 66.04 182.88 0)
+			(at 322.58 165.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6370,7 +6401,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 66.04 182.88 0)
+			(at 322.58 165.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6485,6 +6516,98 @@
 			(project "driver"
 				(path "/5ced691d-4439-5196-b3b5-841cb82e165c"
 					(reference "D1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector_Generic:Conn_01x02")
+		(at 330.2 162.56 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "537efdff-40bb-51ac-9cb2-c7e66476bb34")
+		(property "Reference" "J5"
+			(at 327.66 157.48 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "3V3"
+			(at 327.66 170.18 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "LIB_S2B-ZR_LF__SN_:S2BZRLFSN"
+			(at 330.2 162.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 330.2 162.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 330.2 162.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC" "C157930"
+			(at 330.2 162.56 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "00d0ed7b-d8ff-5cc9-8e64-36a4fe6dcf56")
+		)
+		(pin "2"
+			(uuid "fd7ed36e-69ab-565b-8dbc-58fe7a14a355")
+		)
+		(instances
+			(project "driver"
+				(path "/5ced691d-4439-5196-b3b5-841cb82e165c"
+					(reference "J5")
 					(unit 1)
 				)
 			)
@@ -7348,6 +7471,84 @@
 			(project "driver"
 				(path "/5ced691d-4439-5196-b3b5-841cb82e165c"
 					(reference "R4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 53.34 182.88 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "7f0abe09-286f-5ea1-af1b-5b4e9f5d9f6e")
+		(property "Reference" "#PWR030"
+			(at 53.34 180.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 53.34 185.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 53.34 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 53.34 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 53.34 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f8219214-387e-5e9a-9741-0b77df72e168")
+		)
+		(instances
+			(project "driver"
+				(path "/5ced691d-4439-5196-b3b5-841cb82e165c"
+					(reference "#PWR030")
 					(unit 1)
 				)
 			)
@@ -8438,8 +8639,8 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+3V3")
-		(at 53.34 182.88 180)
+		(lib_id "power:GND")
+		(at 322.58 162.56 270)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8449,7 +8650,7 @@
 		(dnp no)
 		(uuid "be2b81ff-5cc2-572e-95cf-df79af58595c")
 		(property "Reference" "#PWR028"
-			(at 53.34 180.34 0)
+			(at 322.58 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8459,8 +8660,8 @@
 				)
 			)
 		)
-		(property "Value" "+3V3"
-			(at 53.34 185.42 0)
+		(property "Value" "GND"
+			(at 322.58 165.1 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8471,7 +8672,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 53.34 182.88 0)
+			(at 322.58 162.56 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8482,7 +8683,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 53.34 182.88 0)
+			(at 322.58 162.56 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8493,7 +8694,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 53.34 182.88 0)
+			(at 322.58 162.56 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8860,6 +9061,84 @@
 			(project "driver"
 				(path "/5ced691d-4439-5196-b3b5-841cb82e165c"
 					(reference "#PWR006")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 66.04 182.88 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "ddd0a40b-e627-56ba-bb78-5f2aa4741b7e")
+		(property "Reference" "#PWR031"
+			(at 66.04 180.34 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 66.04 185.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 66.04 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 66.04 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 66.04 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d36e1732-2efd-574a-ae07-f0cefdbd2e1d")
+		)
+		(instances
+			(project "driver"
+				(path "/5ced691d-4439-5196-b3b5-841cb82e165c"
+					(reference "#PWR031")
 					(unit 1)
 				)
 			)

@@ -2,7 +2,7 @@
 
 Two 23 x 40 mm, 2-layer KiCad 10 boards for controlling a model train from an ESP32, joined by a 10-wire cable.
 
-**Status:** schematics and PCBs are complete and pass KiCad DRC, but nothing has been built or reviewed by a person. Routing is autorouted (Freerouting) except the buck converter, which is laid out by hand. Review both boards in KiCad before ordering.
+**Status:** schematics and PCBs are complete and fully routed, but nothing has been built or reviewed by a person. Routing is autorouted (Freerouting) except the buck converter, which is laid out by hand. Review both boards in KiCad before ordering.
 
 | Board | Project | Contents |
 |---|---|---|
@@ -11,6 +11,13 @@ Two 23 x 40 mm, 2-layer KiCad 10 boards for controlling a model train from an ES
 
 All parts are on the top side. Connector labels are on the bottom silkscreen. There are no mounting holes.
 
+Every connector sits on a short edge, so all cables leave along the length of the board:
+
+| Board | Top edge | Bottom edge (left to right) |
+|---|---|---|
+| MCU | Antenna, no connectors | `LINK`, `USB`, `SPK` |
+| Driver | `LINK`, `3V3` | `12V`, `LED`, `MOTOR` |
+
 ## Requirements and how they are met
 
 | Requirement | Result |
@@ -18,6 +25,7 @@ All parts are on the top side. Connector labels are on the bottom silkscreen. Th
 | Max 23 x 40 mm, up to 3 boards | 2 boards, each 23 x 40 mm |
 | ESP32, module or bare chip, whichever is cheaper | ESP32-S3-MINI-1-N8 module (see below) |
 | S2B-ZR and SM10B-SRSS-TB connectors | Used for every connector |
+| Cables must run parallel to the long side | Every connector is on a short edge |
 | 12 V DC input, unknown polarity | ABS210 bridge rectifier on the input |
 | USB pins on an S2B connector | `USB` on the MCU board (IO19/IO20) |
 | One BDR6133 motor driver, outputs exposed | On the driver board, `MOTOR` connector |
@@ -34,8 +42,9 @@ All parts are on the top side. Connector labels are on the bottom silkscreen. Th
 |---|---|---|
 | `LINK` (J1) | SM10B | See link pinout below |
 | `USB` (J2) | S2B | 1 = D+ (IO20), 2 = D- (IO19) |
-| `3V3` (J3) | S2B | 1 = GND, 2 = +3V3 |
 | `SPK` (J4) | S2B | 1 = SPK+, 2 = SPK- |
+
+The MCU board has no power connector of its own. It gets 3.3 V over `LINK` pin 2.
 
 ### Driver board
 
@@ -45,6 +54,7 @@ All parts are on the top side. Connector labels are on the bottom silkscreen. Th
 | `MOTOR` (J2) | S2B | 1 = OUTA, 2 = OUTB |
 | `LINK` (J3) | SM10B | See link pinout below |
 | `LED` (J4) | SM10B | 1 and 10 = LED anodes (bridge output, about 10 V), 2-9 = OUT0-OUT7 |
+| `3V3` (J5) | S2B | 1 = GND, 2 = +3V3 |
 
 ### Link cable
 
@@ -73,7 +83,7 @@ The TLC5940 pins match the mapping in the comment in `firmware/basic_train/src/m
 - A TPS629210 makes 3.3 V. It is configured the same way as the existing `hardware/tps6292` board: 249k on VSET (3.3 V) and 52.3k on S-CONF (2.5 MHz, forced PWM, output discharge off).
 - Keep the input at 16 V or below. The buck converter and the TLC5940 outputs are rated to 17 V.
 - The S2B connectors are rated 1 A, which limits motor current.
-- The `3V3` connector on the MCU board is for powering the MCU board on its own. Do not feed 3.3 V into it while the driver board is connected and powered.
+- The `3V3` connector on the driver board is for powering both boards without 12 V, for example from a USB adapter while flashing. Do not feed 3.3 V into it while 12 V is connected.
 
 ### Motor
 
@@ -104,7 +114,7 @@ The TLC5940 pins match the mapping in the comment in `firmware/basic_train/src/m
 
 ### ESP32
 
-- BOOT button on IO0, RESET button on EN.
+- BOOT button on IO0 (left of the module), RESET button on EN (right of the module).
 - No copper is placed under the module's antenna (top 5.3 mm of the board).
 
 ## Bill of materials
@@ -124,7 +134,7 @@ Every part carries an `LCSC` field in the schematic and on the PCB footprint.
 | C2, C5 | 100 nF | 0402 | C1525 |
 | C3 | 1 uF | 0402 | C52923 |
 | J1 | SM10B-SRSS-TB | | C160409 |
-| J2, J3, J4 | S2B-ZR | | C157930 |
+| J2, J4 | S2B-ZR | | C157930 |
 
 ### Driver board
 
@@ -143,7 +153,7 @@ Every part carries an `LCSC` field in the schematic and on the PCB footprint.
 | R3, R4 | 100k | 0402 | C25741 |
 | R5 | 4.7k | 0402 | C25900 |
 | R6, R7 | 10k | 0402 | C25744 |
-| J1, J2 | S2B-ZR | | C157930 |
+| J1, J2, J5 | S2B-ZR | | C157930 |
 | J3, J4 | SM10B-SRSS-TB | | C160409 |
 
 ## Verification
@@ -152,11 +162,12 @@ Checked with `kicad-cli` (KiCad 10.0.1):
 
 | Board | ERC | DRC | Unconnected | Schematic parity |
 |---|---|---|---|---|
-| MCU | 1 warning | 1 warning | 0 | OK |
-| Driver | 0 | 0 | 0 | OK |
+| MCU | 1 warning | 1 error, 10 warnings | 0 | OK |
+| Driver | 0 | 8 warnings | 0 | OK |
 
 - The MCU ERC warning is a pin-type mismatch on the exposed pad of the stock MAX98357A symbol.
-- The MCU DRC warning is a silkscreen overlap between J1 and J3.
+- The MCU DRC error is a courtyard overlap between `USB` (J2) and `SPK` (J4). It is expected: the three connectors only fit on the 23 mm edge with their bodies about 0.2 mm apart.
+- All DRC warnings are silkscreen overlaps between neighbouring connectors, for the same reason.
 - IC pinouts were checked against the datasheets for the BDR6133, TPS629210, TLC5940 and MAX98357A.
 - Design rules: 0.2 mm tracks (0.3-0.6 mm for power, motor and speaker), 0.15 mm clearance, 0.6 / 0.3 mm vias, 0.3 mm copper-to-edge.
 
@@ -166,6 +177,8 @@ Checked with `kicad-cli` (KiCad 10.0.1):
 - **ESP32 module:** JLCPCB lists it as "Standard PCBA only", not Economic.
 - **100 nF capacitor (C1525):** LCSC's own site showed 0 stock on 2026-11-27. JLCPCB's assembly stock for it was not checked.
 - **Production files:** gerbers, BOM and placement files have not been generated. Use the Fabrication Toolkit plugin as on the other boards in `hardware/`.
+- **Connector spacing:** neighbouring connectors are 0.2-0.25 mm apart, and the outer ones on the bottom edges are 0.2-0.25 mm from the board edge. Check this against real parts before ordering in quantity.
+- **LED tracks:** on the driver board the eight LED tracks run under the body of the bridge rectifier, between its pads.
 - **Review:** look over the autorouted tracks, especially the motor and power paths.
 
 ## Regenerating the design

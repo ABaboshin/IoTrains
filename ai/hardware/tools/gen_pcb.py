@@ -50,7 +50,7 @@ def rect(board, layer, x0, y0, x1, y1, width=0.1):
     board.Add(shape)
 
 
-def zone(board, x0, y0, x1, y1, layers, net=None):
+def zone(board, x0, y0, x1, y1, layers, net=None, fills=False):
     z = pcbnew.ZONE(board)
     lset = pcbnew.LSET()
     for layer in layers:
@@ -65,7 +65,7 @@ def zone(board, x0, y0, x1, y1, layers, net=None):
         z.SetIsRuleArea(True)
         z.SetDoNotAllowTracks(True)
         z.SetDoNotAllowVias(True)
-        z.SetDoNotAllowZoneFills(True)
+        z.SetDoNotAllowZoneFills(not fills)
         z.SetDoNotAllowPads(False)
         z.SetDoNotAllowFootprints(False)
     else:
@@ -95,6 +95,8 @@ def place(name):
     rect(board, pcbnew.Edge_Cuts, 0, 0, w, h)
     for x0, y0, x1, y1 in spec["keepouts"]:
         zone(board, x0, y0, x1, y1, (pcbnew.F_Cu, pcbnew.B_Cu))
+    for x0, y0, x1, y1 in spec.get("route_keepouts", []):
+        zone(board, x0, y0, x1, y1, (pcbnew.B_Cu,), fills=True)
 
     fps = {}
     for p in spec["parts"]:
