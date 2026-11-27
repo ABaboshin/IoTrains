@@ -3311,7 +3311,7 @@
 	)
 	(gr_rect
 		(start 100.5 32.5)
-		(end 123.5 67.5)
+		(end 123.5 62)
 		(stroke
 			(width 0.1)
 			(type solid)
